@@ -1,0 +1,7 @@
+RewriteEngine On
+# Si el archivo o carpeta existe físicamente (imágenes, CSS, JS), no lo redirijas
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+
+# Todo lo demás envíalo a index.php
+RewriteRule ^ index.php [QSA,L]
