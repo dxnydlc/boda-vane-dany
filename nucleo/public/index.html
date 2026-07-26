@@ -1,0 +1,367 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <title>Documentación API REST - Mi Servicio</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <style>
+    body {
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      margin: 0;
+      padding: 0;
+      background: #f5f5f7;
+      color: #222;
+    }
+    header {
+      background: #1f2933;
+      color: #fff;
+      padding: 20px 40px;
+    }
+    header h1 {
+      margin: 0;
+      font-size: 26px;
+    }
+    header p {
+      margin: 5px 0 0;
+      font-size: 14px;
+      opacity: 0.8;
+    }
+    main {
+      padding: 30px 40px 60px;
+      max-width: 1100px;
+      margin: 0 auto;
+    }
+    h2 {
+      margin-top: 30px;
+      border-bottom: 1px solid #ddd;
+      padding-bottom: 6px;
+      font-size: 20px;
+    }
+    h3 {
+      margin-top: 20px;
+      font-size: 16px;
+    }
+    .tag {
+      display: inline-block;
+      padding: 2px 8px;
+      border-radius: 4px;
+      font-size: 11px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+    }
+    .get  { background: #e0f2fe; color: #0369a1; }
+    .post { background: #dcfce7; color: #166534; }
+    .put  { background: #fef9c3; color: #854d0e; }
+    .del  { background: #fee2e2; color: #b91c1c; }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 10px;
+      font-size: 14px;
+    }
+    th, td {
+      border: 1px solid #ddd;
+      padding: 8px 10px;
+      vertical-align: top;
+    }
+    th {
+      background: #f3f4f6;
+      text-align: left;
+    }
+    code {
+      background: #111827;
+      color: #e5e7eb;
+      padding: 10px 12px;
+      border-radius: 6px;
+      display: block;
+      white-space: pre;
+      overflow-x: auto;
+      font-size: 13px;
+    }
+    .badge {
+      display: inline-block;
+      padding: 2px 6px;
+      border-radius: 4px;
+      background: #e5e7eb;
+      font-size: 11px;
+    }
+    .section-note {
+      font-size: 13px;
+      color: #555;
+    }
+    footer {
+      margin-top: 40px;
+      font-size: 12px;
+      color: #777;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>Documentación API REST - Mi Servicio</h1>
+    <p>Versión 1.0 · Base URL: <code>https://api.mi-dominio.com/v1</code></p>
+  </header>
+
+  <main>
+    <!-- Introducción -->
+    <section id="intro">
+      <h2>Introducción</h2>
+      <p>
+        Esta API REST permite gestionar <strong>recurso principal</strong> (por ejemplo, usuarios, pedidos, productos).
+        Está diseñada para integrarse fácilmente con aplicaciones web, móviles y servicios de terceros.
+      </p>
+      <p class="section-note">
+        Reemplaza este texto con una descripción corta de tu negocio, casos de uso principales y cualquier restricción
+        importante (límites de rate, tamaños máximos, etc.).
+      </p>
+    </section>
+
+    <!-- Autenticación -->
+    <section id="auth">
+      <h2>Autenticación</h2>
+      <p>
+        La API utiliza autenticación basada en <strong>Bearer Token</strong>. Debes enviar el encabezado:
+      </p>
+      <code>
+Authorization: Bearer &lt;tu_token_aquí&gt;
+      </code>
+      <p class="section-note">
+        Puedes cambiar esto si usas API keys, JWT, OAuth2, etc. Explica cómo obtener el token y su tiempo de vida.
+      </p>
+    </section>
+
+    <!-- Recursos / Endpoints -->
+    <section id="endpoints">
+      <h2>Recursos y endpoints</h2>
+
+      <!-- Ejemplo: Usuarios -->
+      <h3>/users</h3>
+      <p class="section-note">
+        Recurso para gestionar usuarios del sistema (crear, listar, actualizar, eliminar).
+      </p>
+
+      <table>
+        <thead>
+          <tr>
+            <th>Método</th>
+            <th>Ruta</th>
+            <th>Descripción</th>
+            <th>Parámetros</th>
+            <th>Respuesta (200)</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><span class="tag get">GET</span></td>
+            <td><code>/users</code></td>
+            <td>Lista todos los usuarios.</td>
+            <td>
+              <span class="badge">query</span> <strong>page</strong> (opcional) · número de página<br />
+              <span class="badge">query</span> <strong>limit</strong> (opcional) · tamaño de página
+            </td>
+            <td>
+              <span class="badge">JSON</span><br />
+              <code>
+[
+  {
+    "id": 1,
+    "name": "Juan Pérez",
+    "email": "juan@example.com"
+  }
+]
+              </code>
+            </td>
+          </tr>
+
+          <tr>
+            <td><span class="tag get">GET</span></td>
+            <td><code>/users/{id}</code></td>
+            <td>Obtiene el detalle de un usuario por ID.</td>
+            <td>
+              <span class="badge">path</span> <strong>id</strong> (requerido) · ID del usuario
+            </td>
+            <td>
+              <span class="badge">JSON</span><br />
+              <code>
+{
+  "id": 1,
+  "name": "Juan Pérez",
+  "email": "juan@example.com"
+}
+              </code>
+            </td>
+          </tr>
+
+          <tr>
+            <td><span class="tag post">POST</span></td>
+            <td><code>/users</code></td>
+            <td>Crea un nuevo usuario.</td>
+            <td>
+              <span class="badge">body</span> (JSON)<br />
+              <code>
+{
+  "name": "Nuevo Usuario",
+  "email": "nuevo@example.com",
+  "password": "********"
+}
+              </code>
+            </td>
+            <td>
+              <span class="badge">JSON</span><br />
+              <code>
+{
+  "id": 2,
+  "name": "Nuevo Usuario",
+  "email": "nuevo@example.com"
+}
+              </code>
+            </td>
+          </tr>
+
+          <tr>
+            <td><span class="tag put">PUT</span></td>
+            <td><code>/users/{id}</code></td>
+            <td>Actualiza un usuario existente.</td>
+            <td>
+              <span class="badge">path</span> <strong>id</strong> (requerido)<br />
+              <span class="badge">body</span> (JSON) · campos a actualizar
+            </td>
+            <td>
+              <span class="badge">JSON</span><br />
+              <code>
+{
+  "id": 1,
+  "name": "Nombre Actualizado",
+  "email": "nuevo-correo@example.com"
+}
+              </code>
+            </td>
+          </tr>
+
+          <tr>
+            <td><span class="tag del">DELETE</span></td>
+            <td><code>/users/{id}</code></td>
+            <td>Elimina un usuario.</td>
+            <td>
+              <span class="badge">path</span> <strong>id</strong> (requerido)
+            </td>
+            <td>
+              <span class="badge">JSON</span><br />
+              <code>
+{
+  "deleted": true
+}
+              </code>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+
+      <!-- Aquí puedes repetir bloques similares para otros recursos -->
+      <h3>/products</h3>
+      <p class="section-note">
+        Describe aquí tus endpoints de productos, pedidos, etc. Copia la tabla anterior y ajusta rutas, parámetros y ejemplos.
+      </p>
+    </section>
+
+    <!-- Errores -->
+    <section id="errors">
+      <h2>Manejo de errores</h2>
+      <p>
+        La API utiliza códigos de estado HTTP estándar. Algunos ejemplos:
+      </p>
+      <table>
+        <thead>
+          <tr>
+            <th>Código</th>
+            <th>Significado</th>
+            <th>Ejemplo de respuesta</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><code>400 Bad Request</code></td>
+            <td>Solicitud inválida (parámetros incorrectos, JSON mal formado).</td>
+            <td>
+              <code>
+{
+  "error": "VALIDATION_ERROR",
+  "message": "El campo 'email' es obligatorio."
+}
+              </code>
+            </td>
+          </tr>
+          <tr>
+            <td><code>401 Unauthorized</code></td>
+            <td>Token inválido o ausente.</td>
+            <td>
+              <code>
+{
+  "error": "UNAUTHORIZED",
+  "message": "Token de acceso requerido."
+}
+              </code>
+            </td>
+          </tr>
+          <tr>
+            <td><code>404 Not Found</code></td>
+            <td>Recurso no encontrado.</td>
+            <td>
+              <code>
+{
+  "error": "NOT_FOUND",
+  "message": "Usuario no encontrado."
+}
+              </code>
+            </td>
+          </tr>
+          <tr>
+            <td><code>500 Internal Server Error</code></td>
+            <td>Error inesperado en el servidor.</td>
+            <td>
+              <code>
+{
+  "error": "SERVER_ERROR",
+  "message": "Ha ocurrido un error inesperado."
+}
+              </code>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </section>
+
+    <!-- Ejemplos de uso -->
+    <section id="examples">
+      <h2>Ejemplos de uso</h2>
+
+      <h3>curl</h3>
+      <code>
+curl -X GET "https://api.mi-dominio.com/v1/users" \
+  -H "Authorization: Bearer &lt;tu_token&gt;" \
+  -H "Content-Type: application/json"
+      </code>
+
+      <h3>JavaScript (fetch)</h3>
+      <code>
+fetch("https://api.mi-dominio.com/v1/users", {
+  method: "GET",
+  headers: {
+    "Authorization": "Bearer &lt;tu_token&gt;",
+    "Content-Type": "application/json"
+  }
+})
+  .then(res =&gt; res.json())
+  .then(data =&gt; console.log(data))
+  .catch(err =&gt; console.error(err));
+      </code>
+    </section>
+
+    <footer>
+      Última actualización: 24/07/2026 · Autor: Dany
+    </footer>
+  </main>
+</body>
+</html>
