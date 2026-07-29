@@ -139,6 +139,34 @@ export class UsersService {
   }
   // ...................................................................
   // ...................................................................
+  async getActivos() {
+    
+    try {
+      
+      let data = await this.datosModel.createQueryBuilder('c')
+      .select([ 'id as id' , 'uu_id as uu_id' , 'Nombre as Nombre' , 'DNI as DNI' , 'Email as Email' , 'Rol as Rol' , 'Estado as Estado' ])
+      .getRawMany();
+  
+      return {
+        data , 
+        version : '1' , 
+        msg : { titulo : 'Correcto' , texto : 'Registros cargados' , clase : 'success' , call : 'tostada2' }
+      }
+
+    } catch (error) {
+
+      varDump( error );
+      throw new HttpException(
+        'Error en el servicio', 
+        HttpStatus.INTERNAL_SERVER_ERROR,
+        { cause: error } // Optional: passes the original error for debugging logs
+      );
+
+    }
+
+  }
+  // ...................................................................
+  // ...................................................................
   async getbyId( id : number ) {
     try {
 
@@ -250,13 +278,13 @@ export class UsersService {
   // ...................................................................
   // ...................................................................
   // ...................................................................
-  async login( dto : LoginAuthDto ) {
+  async login( Email : string , DNI : string ) {
     
     try {
       
       let data = await this.datosModel.findOne({
         where : {
-          Email : dto.Email , DNI : dto.DNI
+          Email : Email , DNI : DNI
         }
       });
   
@@ -264,7 +292,7 @@ export class UsersService {
 
     } catch (error) {
 
-      //varDump( error );
+      varDump( error );
       throw new HttpException( 'Error' , HttpStatus.CONFLICT );
 
     }

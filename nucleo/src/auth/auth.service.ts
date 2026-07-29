@@ -1,4 +1,4 @@
-import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
+import { BadRequestException, HttpException, HttpStatus, Injectable, InternalServerErrorException } from '@nestjs/common';
 import { CreateAuthDto } from './dto/create-auth.dto';
 import { UpdateAuthDto } from './dto/update-auth.dto';
 import { LoginAuthDto } from './dto/login-auth.dto';
@@ -22,57 +22,64 @@ export class AuthService {
   // ...................................................................
   // ...................................................................
   // ...................................................................
-  async login(dto : LoginAuthDto) {
+  async login(dto: LoginAuthDto) {
+  try {
+    const { Password_hash, Email, DNI } = dto;
 
-    try {
-
-      let { Password_hash , Email , DNI } = dto;
-
-      let dataUsuario = await this.srvUser.login( dto );
-
-      if(! dataUsuario ) throw new HttpException( 'Usuario no existe' , HttpStatus.BAD_REQUEST );
-
-      const isCheck = await comprareHash( Password_hash , dataUsuario.Password_hash );
-      if(! isCheck ) throw new HttpException( 'Contraseña incorrecta' , HttpStatus.BAD_REQUEST );
-
-      let userFlat = dataUsuario;
-      if( dataUsuario ){
-        //
-      }
-
-      // Payload
-      const payLoad = {
-        id        : dataUsuario.id ,
-        DNI       : dataUsuario.DNI ,
-
-        Nombre    : `${dataUsuario.Nombre.toUpperCase()}` ,
-        Roles     : dataUsuario.Rol
-      };
-      const token = this.jwtService.sign( payLoad );
-      const data = {
-        token ,
-        user : {
-          id        : dataUsuario.id ,
-          DNI       : dataUsuario.DNI ,
-          Nombre    : `${dataUsuario.Nombre.toUpperCase()}` ,
-          Roles     : dataUsuario.Rol
-        }
-      };
-
-      return {
-        data : data ,
-        version : '1' ,
-        msg : { titulo : 'Correcto' , texto : 'Registros cargados' , clase : 'success' , call : 'tostada2' }
-      }
-
-    } catch (error) {
-
-      varDump( error );
-      throw new HttpException( 'error' , HttpStatus.CONFLICT );
-
+    // 1. Buscar usuario
+    const dataUsuario = await this.srvUser.login(Email, DNI);
+    if (!dataUsuario) {
+      throw new BadRequestException('Usuario no existe');
     }
 
+    // 2. Verificar contraseña
+    const isCheck = await comprareHash(Password_hash, dataUsuario.Password_hash);
+    if (!isCheck) {
+      throw new BadRequestException('Contraseña incorrecta');
+    }
+
+    // 3. Generar Payload y Token
+    const nombreMayuscula = dataUsuario.Nombre.toUpperCase();
+    const payLoad = {
+      id: dataUsuario.id,
+      DNI: dataUsuario.DNI,
+      Nombre: nombreMayuscula,
+      Roles: dataUsuario.Rol
+    };
+    
+    const token = this.jwtService.sign(payLoad);
+
+    // 4. Retornar respuesta exitosa..
+    return {
+      data: {
+        token,
+        user: {
+          id: dataUsuario.id,
+          DNI: dataUsuario.DNI,
+          Nombre: nombreMayuscula,
+          Roles: dataUsuario.Rol
+        }
+      },
+      version: '1',
+      msg: { titulo: 'Correcto', texto: 'Acceso correcto', clase: 'success', call: 'tostada2' }
+    };
+
+  } catch (error) {
+    // Para depuración local
+    varDump(error); 
+
+    // SI EL ERROR YA ES DE NESTJS (ej. BadRequestException), LO RELANZAMOS DIRECTO
+    if (error instanceof HttpException) {
+      throw error;
+    }
+
+    // SI ES UN ERROR INESPERADO (ej. caída de BD, error de sintaxis), ENVIAMOS UN 500
+    throw new InternalServerErrorException({
+      message: 'Error en el servicio de autenticación',
+      cause: error // Mantiene el rastro del error original en logs internos
+    });
   }
+}
   // ...................................................................
   // ...................................................................
   async registrar( dto : CreateAuthDto ) {

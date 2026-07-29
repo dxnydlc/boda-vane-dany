@@ -15,6 +15,25 @@
     <link rel="stylesheet" type="text/css" href="/assets/vendor/libs/perfect-scrollbar/perfect-scrollbar.css">
     <link rel="stylesheet" type="text/css" href="/assets/css/conca.css">
 
+
+    
+    <!-- page level styles -->
+    <link href="assets/vendor/libs/toastr/toastr.css" rel="stylesheet">
+
+    <!-- select2 -->
+    <link href="/assets/vendor/libs/select2/select2.css" rel="stylesheet">
+    <link href="/assets/css/elegant-icon.css" rel="stylesheet">
+
+    <link rel="stylesheet" href="https://cdn.datatables.net/3.0.0/css/dataTables.dataTables.min.css" />
+    
+    <script type="text/javascript">
+    let URL_API         = '<?php echo $API; ?>';
+    // Leer el token guardado
+    const tokenBackend  = localStorage.getItem('auth_token');
+    </script>
+
+    <?php echo $archivoCSS ?>
+
 </head>
 
 <body>
@@ -135,7 +154,7 @@
                                 <div class="dropdown-body py-1">
                                     <ul class="list-unstyled dropdown-list">
                                         <li>
-                                            <a class="dropdown-item fz-14px d-flex align-items-center gap-2 px-5" href="auth-login-basic.html">
+                                            <a id="btnGeneral-Sali01" class="dropdown-item fz-14px d-flex align-items-center gap-2 px-5" href="auth-login-basic.html">
                                                 <svg width="17" height="17" viewBox="0 0 17 17" fill="none" xmlns="http://www.w3.org/2000/svg">
                                                     <path d="M10.75 12.9375C10.6887 14.4808 9.40258 15.7912 7.6797 15.749C7.27887 15.7392 6.78344 15.5995 5.7926 15.32C3.40801 14.6474 1.33796 13.517 0.841296 10.9846C0.75 10.5191 0.75 9.99532 0.75 8.94771L0.75 7.55229C0.75 6.50468 0.75 5.98087 0.841296 5.51538C1.33796 2.98304 3.40801 1.85263 5.7926 1.18002C6.78345 0.900537 7.27887 0.760795 7.6797 0.750989C9.40257 0.708841 10.6887 2.01923 10.75 3.56251" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" />
                                                     <path d="M15.7499 8.25008H6.58325M15.7499 8.25008C15.7499 7.66656 14.088 6.57636 13.6666 6.16675M15.7499 8.25008C15.7499 8.8336 14.088 9.92381 13.6666 10.3334" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
