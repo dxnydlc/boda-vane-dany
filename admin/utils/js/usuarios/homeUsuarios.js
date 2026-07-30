@@ -4,7 +4,7 @@
 let urlServicio = `${URL_API}v1/users/`;
 /* ------------------------------------------------------------- */
 /* ------------------------------------------------------------- */
-var _AuthFormulario = 'MIP-SISTEMAS';
+var _AuthFormulario = 'ADMIN-USUARIOS';
 /* ------------------------------------------------------------- */
 /* ------------------------------------------------------------- */
 /* ------------------------------------------------------------- */
@@ -39,26 +39,28 @@ let dataJson = [];
 // ======================================================
 //  , "Estado"
 let columnasOcultas     = [ "uu_id" , "id"  ]; // hidden + enviado
-let columnasIgnoradas   = [ "id", "id_empresa" , "empresa", "created_at", "updated_at", "deleted_at"];  // no visible + no enviado
+let columnasIgnoradas   = [ "uu_id","created_at", "updated_at", "deleted_at"];  // no visible + no enviado
 let fechaKeys           = [ "created_at", "updated_at", "deleted_at" ];
 
-let columnasReadonly    = [ "IdSistema" ];
-let columnasNumericas   = [ "IdSistema" ];
+let columnasReadonly    = [ "id" ];
+let columnasNumericas   = [ "DNI" ];
 let columnasTexto       = [ "Nombre" ];
 let columnasFecha       = [ "created_at", "updated_at" ];
-let columnasHora        = [ "hora_inicio", "hora_fin" ];
+let columnasHora        = [ "DNI" ];
 
 let columnasDefault     = {
-  "IdSistema"           : 0
+  "id"           : 0
 };
+
+let eventFormulario, formDataGeneral, xIdForm = ``;
 
 // ======================================================
 // MAPA DE COLORES PARA ESTADOS
 // ======================================================
 const estadoColors      = {
-  "Activo"              : "bg-success text-white",
-  "Anulado"             : "bg-danger text-white",
-  "Cerrado"             : "bg-warning text-dark"
+  "active"              : "bg-success text-white",
+  "suspended"           : "bg-danger text-white",
+  "revoked"             : "bg-warning text-dark"
 };
 /* ------------------------------------------------------------- */
 /* ------------------------------------------------------------- */
@@ -656,7 +658,7 @@ function ejecutarDoc( tipoReq ) {
 
         switch (tipoReq) {
             case 'listar-cab'  : objCargando = `#TablaHomePs`; break;
-            case 'guardar-cab' : objCargando = `#frmDocumento${dataEnviarPost.IdSistema}`; break;
+            case 'guardar-cab' : objCargando = `#${xIdForm}`; break;
             case 'anular-cab'  : objCargando = `#wrapper_form`; break;
             case 'cargar-cab'  : objCargando = `#frmDocumento`; break;
         }
@@ -701,7 +703,7 @@ function prepararRequest( tipoReq ) {
         // -------------------------------------------------------------
         case 'guardar-cab':
             data            = dataEnviarPost;       //$('#frmDocumento').serialize();
-            id              = dataEnviarPost.IdSistema;    //parseInt( $('#frmDocumento #id').val() );
+            id              = dataEnviarPost.id;    //parseInt( $('#frmDocumento #id').val() );
             uu_id           = dataEnviarPost.uu_id; //$('#frmDocumento #uu_id').val();
 
             idCab           = id;
@@ -785,53 +787,55 @@ function handleSuccess( json , textStatus , xhr , tipoReq ) {
             break;
             // -------------------------------------------------------------
             case 'guardar-cab':
-                const $form     = $('#frmDocumento');
-                $.each( data , function ( key , value ) {
-                    $form.find(`#${key}`).val(value);
+                const $form     = $('#'+xIdForm);
+                
+                Object.keys( data ).forEach(key => {
+
+                    const valor = data[key];
+
+                    // Buscar control por name
+                    const $ctrl = $('#'+xIdForm).find(`[name="${key}"]`);
+
+                    if ($ctrl.length === 0) {
+                        console.warn("Campo no encontrado en el formulario:", key);
+                        return;
+                    }
+
+                    // Input normal
+                    $ctrl.val(valor);
                 });
 
-                notifier.show( json.msg.texto , json.msg.clase );
-                //tostada2( json.msg );
+                toastr["success"]( json.msg.texto , 'Correcto' );
                 ejecutarDoc( 'listar-cab' );
-
-                // ******* NODE JS *******
-                socket.emit('accion:audit',{
-                    user  : $nomU,
-                    msg   : `GUARDAR ${_AuthFormulario} #${data.id}` ,
-                    dni   : $dniU,
-                    serie : 0,
-                    corr  : data.id,
-                    form  : _AuthFormulario,
-                    url   : window.location.href,
-                    token : data.uu_id
-                });
-                // ******* NODE JS *******
 
             break;
             // -------------------------------------------------------------
             case 'cargar-cab':
-                $.each( data , function ( key , value ) {
-                    $form.find(`#${key}`).val(value);
+                
+                const $form2     = $('#'+xIdForm);
+                
+                Object.keys( data ).forEach(key => {
+
+                    const valor = data[key];
+
+                    // Buscar control por name
+                    const $ctrl = $('#'+xIdForm).find(`[name="${key}"]`);
+
+                    if ($ctrl.length === 0) {
+                        console.warn("Campo no encontrado en el formulario:", key);
+                        return;
+                    }
+
+                    // Input normal
+                    $ctrl.val(valor);
                 });
-                tostada2( json.msg );
+                toastr["success"]( json.msg.texto , 'Correcto' );
 
                 //$('#frmDocumento #IdClienteProv').html(`<option value="${data.IdClienteProv}" >${data.Cliente}</option>`);
                 //$('#frmDocumento #IdClienteProv').trigger('change');
 
                 //getLocales( data.IdClienteProv , data.IdSucursal );
 
-                // ******* NODE JS *******
-                socket.emit('accion:audit',{
-                    user  : $nomU,
-                    msg   : `CARGAR ${_AuthFormulario} #${data.id}` ,
-                    dni   : $dniU,
-                    serie : 0,
-                    corr  : data.id,
-                    form  : _AuthFormulario,
-                    url   : window.location.href,
-                    token : data.uu_id
-                });
-                // ******* NODE JS *******
             break;
             // -------------------------------------------------------------
             case 'anular-cab':
@@ -1086,7 +1090,32 @@ function formatDate(value) {
 }
 /* ------------------------------------------------------------- */
 /* ------------------------------------------------------------- */
+/* ======================================================
+   DATA EJEMPLO
+====================================================== */
+function obtenerColumnasBase() {
 
+  // Si hay registros, usamos el primero
+  if ( dataJson && dataJson.length > 0) {
+    return Object.keys(dataJson[0]);
+  }
+
+  // Si no hay registros, definimos columnas base manualmente
+  // Ajusta esta lista según tu estructura real
+  return [
+    "id",
+    "uu_id",
+    "Nombre",
+    "Email",
+    "DNI",
+    "Password_hash",
+    "created_at",
+    "updated_at",
+    "deleted_at",
+    "Rol",
+    "Estado"
+  ];
+}
 /* ------------------------------------------------------------- */
 /* ------------------------------------------------------------- */
 // ======================================================
@@ -1107,7 +1136,8 @@ function generarTabla(json) {
     html += `<th>Editar</th><th>Anular</th>`;
     headers.forEach(h => {
         if (isIgnoredColumn(h)) return;
-        if (!isHiddenColumn(h)) html += `<th>${h}</th>`;
+        //if (!isHiddenColumn(h)) html += `<th>${h}</th>`;
+        html += `<th>${h}</th>`;
     });
     
     html += `</tr></thead>`;
@@ -1117,13 +1147,17 @@ function generarTabla(json) {
         html += `<tr>`;
 
         html += `
-        <td><button class="btn btn-primary btn-sm" onclick="abrirTab(${row.id})">Editar</button></td>
-        <td><button class="btn btn-danger btn-sm" onclick="anular(${row.id})">Anular</button></td>
+        <td>
+            <button onclick="abrirTab(${row.id})" type="button" class="btn btn-icon btn-label-primary" >E</button>
+        </td>
+        <td>
+            <button onclick="anular(${row.id})" type="button" class="btn btn-icon btn-label-danger">R</button>
+        </td>
         `;
 
         headers.forEach(h => {
             if (isIgnoredColumn(h)) return;
-            if (isHiddenColumn(h)) return;
+            //if (isHiddenColumn(h)) return;
 
             let value = row[h];
 
@@ -1175,7 +1209,10 @@ function abrirTab(id) {
     return;
   }
 
-  const item = dataJson.find(x => x.id === id);
+  varDump( id );
+  const item = dataJson.find(x => parseInt( x.id ) === id);
+  //
+  varDump( item );
   const chip = `<span class="badge ${estadoColors[item.Estado]} chip-glow">${item.Estado}</span>`;
 
   const tabHtml = `
@@ -1207,15 +1244,25 @@ function abrirTab(id) {
 // FORMULARIO EDITAR
 // ======================================================
 function generarFormulario(obj) {
-    let html = `<form onsubmit="guardar(event, ${obj.id})" id="frmDocumento${obj.id}" class="mt-3">`;
+    xIdForm         = `frmDocumento${obj.id}`;
+    let html = `
+    <div class="demo-card  rounded-xl mb-5">
+        <div class="demo-card-header d-flex align-items-center justify-content-between px-6 py-5 ">
+            <h3 class="demo-card-title m-0" >Editar</h3>
+        </div>
+        <div class="demo-card-body">
+            <form onsubmit="guardar(event, ${obj.id})" id="frmDocumento${obj.id}" class="mt-3">
+
+            <div class="demo-card-body-content row " >
+    `;
 
     Object.keys(obj).forEach(key => {
 
         if (isIgnoredColumn(key)) return;
 
         if (isHiddenColumn(key)) {
-        html += `<input type="hidden" name="${key}" value="${obj[key]}">`;
-        return;
+            html += `<input type="hidden" name="${key}" value="${obj[key]}">`;
+            return;
         }
 
         //let value = obj[key];
@@ -1225,15 +1272,6 @@ function generarFormulario(obj) {
         let type     = getInputType(key);
         let readonly = isReadonlyColumn(key) ? "readonly" : "";
 
-        if (key === "Estado") {
-            const cls = estadoColors[value] || "bg-secondary text-white";
-            html += `
-                <div class="mb-3">
-                <label>${key}</label><br>
-                <span class="badge ${cls} chip-glow p-2">${value}</span>
-                </div>`;
-            return;
-        }
 
         if (isDateColumn(key)) {
             type = "datetime-local";
@@ -1245,15 +1283,48 @@ function generarFormulario(obj) {
         varDump( `########${key}` );
         switch(key){
             // -------------------------------------
-            case 'Descripcion':
+            case 'Estado':
+                const cls = estadoColors[value] || "bg-secondary text-white";
+                html += `
+                    <div class="mb-5 col-lg-2 ">
+                        <label for="inputBasicEmail" class="form-label" >Estado</label>
+                        <span class="badge ${cls} chip-glow p-2">${value}</span>
+                    </div>`;
+            break;
+            // -------------------------------------
+            case 'Nombre':
                 html += `
                 <div class=" mb-6 col-lg-6 " >
-                    <label>Descri.</label>
-                    <input type="${type}" ${readonly} class="form-control" name="${key}" value="${value ?? ""}">
+                    <label for="Nombre" class="form-label" >Nombre</label>
+                    <input type="${type}" ${readonly} class="form-control" name="${key}" id="${key}" value="${value ?? ""}" />
                 </div>`;
             break;
             // -------------------------------------
             // *** ACA SE COLOCAN LOS NUEVOS INPUTS *** //
+            case 'Email':
+                html += `
+                <div class=" mb-6 col-lg-3 " >
+                    <label for="Email" class="form-label" >Email</label>
+                    <input type="${type}" ${readonly} class="form-control" name="${key}" id="${key}" value="${value ?? ""}" />
+                </div>`;
+            break;
+            // -------------------------------------
+            case 'DNI':
+                html += `
+                <div class=" mb-6 col-lg-2 " >
+                    <label for="DNI" class="form-label" >DNI</label>
+                    <input type="${type}" ${readonly} class="form-control" name="${key}" id="${key}" value="${value ?? ""}" />
+                </div>`;
+            break;
+            // -------------------------------------
+            case 'Rol':
+                html += `
+                <div class=" mb-6 col-lg-4 " >
+                    <label for="Rol" class="form-label" >Rol</label>
+                    <input type="${type}" ${readonly} class="form-control" name="${key}" id="${key}" value="${value ?? ""}" />
+                </div>`;
+            break;
+            // -------------------------------------
             default:
                 html += `
                 <div class=" mb-3 col-lg-3 " >
@@ -1268,7 +1339,13 @@ function generarFormulario(obj) {
 
     });
 
-    html += `<button class="btn btn-success btn-guardar1 " data-id="${obj.id}" >Guardar</button></form>`;
+    html += `
+            </div>
+            <button class="btn btn-success btn-guardar1 " data-id="${obj.id}" >Guardar</button>
+            </form>
+        </div>
+    </div>
+    `;
     return html;
 }
 /* ------------------------------------------------------------- */
@@ -1317,43 +1394,54 @@ function guardar(event, id) {
 // NUEVO
 // ======================================================
 function nuevoRegistro() {
-  const newId = "nuevo-" + Date.now();
-  const tabId = `tab-${newId}`;
-  const tabContentId = `tab-content-${newId}`;
+    const newId           = "nuevo-" + Date.now();
+    const tabId           = `tab-${newId}`;
+    const tabContentId    = `tab-content-${newId}`;
 
-  const tabHtml = `
-    <li class="nav-item" id="li-${tabId}">
-      <button class="nav-link" id="${tabId}" data-bs-toggle="tab" data-bs-target="#${tabContentId}">
-        Nuevo
-        <span class="badge bg-dangerxx " onclick="cerrarTab(event,'${tabId}','${tabContentId}')">✖</span>
-      </button>
-    </li>`;
+    $("#editorTabs").append(`
+        <li id="li-${tabId}">
+        <a href="#${tabContentId}" id="${tabId}" data-toggle="tab">
+            Nuevo
+            <span class="label label-danger" onclick="cerrarTab(event,'${tabId}','${tabContentId}')">✖</span>
+        </a>
+        </li>
+    `);
 
-  document.getElementById("editorTabs").insertAdjacentHTML("beforeend", tabHtml);
+    // 🔥 Corrección: columnas seguras
+    const columnas = obtenerColumnasBase();
 
-  const base = Object.keys(dataJson[0]).reduce((acc, key) => { 
-    acc[key] = "";
-    return acc;
-  }, {});
+    const base = columnas.reduce((acc, key) => {
+        acc[key] = getDefaultValue(key);
+        return acc;
+    }, {});
 
-  const formHtml = generarFormularioNuevo(base);
+    $("#editorTabsContent").append(`
+        <div class="tab-pane fade" id="${tabContentId}">
+        ${generarFormularioNuevo( base , `form-${newId}` )}
+        </div>
+    `);
 
-  const contentHtml = `
-    <div class="tab-pane fade" id="${tabContentId}">
-      ${formHtml}
-    </div>`;
+    $("#" + tabId).tab("show");
 
-  document.getElementById("editorTabsContent").insertAdjacentHTML("beforeend", contentHtml);
-
-  new bootstrap.Tab(document.getElementById(tabId)).show();
+    //setTimeout(() => inicializarSelect2(), 200);
 }
 /* ------------------------------------------------------------- */
 /* ------------------------------------------------------------- */
 // ======================================================
 // FORMULARIO NUEVO
 // ======================================================
-function generarFormularioNuevo(obj) {
-  let html = `<form onsubmit="guardarNuevo(event)" class="mt-3">`;
+function generarFormularioNuevo( obj , nidForm ) {
+    xIdForm     = nidForm;
+    let html = `
+    <div class="demo-card  rounded-xl mb-5">
+        <div class="demo-card-header d-flex align-items-center justify-content-between px-6 py-5 ">
+            <h3 class="demo-card-title m-0" >Editar</h3>
+        </div>
+        <div class="demo-card-body">
+            <form onsubmit="guardarNuevo(event)" id="frmDocumento${obj.id}" class="mt-3">
+
+            <div class="demo-card-body-content row " >
+    `;
 
   Object.keys(obj).forEach(key => {
 
@@ -1368,17 +1456,77 @@ function generarFormularioNuevo(obj) {
     let readonly = isReadonlyColumn(key) ? "readonly" : "";
     let value = getDefaultValue(key);
 
-    html += `
-     <div class=" mb-3 col-lg-3 " >
-        <label>${key}</label>
-        <input type="${type}" ${readonly} class="form-control" name="${key}" value="${value}">
-      </div>`;
       
       // *** ACA SE COLOCAN LOS NUEVOS INPUTS *** //
+    switch(key){
+        // -------------------------------------
+        case 'Estado':
+            const cls = estadoColors[value] || "bg-secondary text-white";
+            html += `
+                <div class="mb-5 col-lg-2 ">
+                    <label for="inputBasicEmail" class="form-label" >Estado</label>
+                    <span class="badge ${cls} chip-glow p-2">${value}</span>
+                </div>`;
+        break;
+        // -------------------------------------
+        case 'Nombre':
+            html += `
+            <div class=" mb-6 col-lg-6 " >
+                <label for="Nombre" class="form-label" >Nombre</label>
+                <input type="${type}" ${readonly} class="form-control" name="${key}" id="${key}" value="${value ?? ""}" />
+            </div>`;
+        break;
+        // -------------------------------------
+        // *** ACA SE COLOCAN LOS NUEVOS INPUTS *** //
+        case 'Email':
+            html += `
+            <div class=" mb-6 col-lg-3 " >
+                <label for="Email" class="form-label" >Email</label>
+                <input type="${type}" ${readonly} class="form-control" name="${key}" id="${key}" value="${value ?? ""}" />
+            </div>`;
+        break;
+        // -------------------------------------
+        case 'DNI':
+            html += `
+            <div class=" mb-6 col-lg-2 " >
+                <label for="DNI" class="form-label" >DNI</label>
+                <input type="${type}" ${readonly} class="form-control" name="${key}" id="${key}" value="${value ?? ""}" />
+            </div>`;
+        break;
+        // -------------------------------------
+        case 'Rol':
+            html += `
+            <div class=" mb-6 col-lg-4 " >
+                <label for="Rol" class="form-label" >Rol</label>
+                <input type="${type}" ${readonly} class="form-control" name="${key}" id="${key}" value="${value ?? ""}" />
+            </div>`;
+            // Password_hash
+            html += `
+            <div class=" mb-6 col-lg-4 " >
+                <label for="Password_hash" class="form-label" >Contraseña</label>
+                <input type="password" class="form-control" name="Password_hash" id="Password_hash" value="" />
+            </div>`;
+        break;
+        // -------------------------------------
+        default:
+            html += `
+            <div class=" mb-3 col-lg-3 " >
+                <label>${key}</label>
+                <input type="${type}" ${readonly} class="form-control" name="${key}" value="${value ?? ""}">
+            </div>`;
+        break;
+        // -------------------------------------
+    }
 
   });
 
-  html += `<button class="btn btn-primary">Guardar nuevo</button></form>`;
+  html += `
+            </div>
+            <button class="btn btn-primary">Guardar nuevo</button>
+            </form>
+        </div>
+    </div>
+  `;
   return html;
 }
 
@@ -1394,8 +1542,9 @@ function guardarNuevo(event) {
     const formData      = Object.fromEntries(new FormData(form));
 
     dataEnviarPost      = formData ;
-    varDump( dataEnviarPost.IdSistema );
+    varDump( dataEnviarPost.id );
     varDump( JSON.stringify(formData) );
+    ejecutarDoc( 'guardar-cab' );
 
   /*
   fetch("v1/req/guardar", {

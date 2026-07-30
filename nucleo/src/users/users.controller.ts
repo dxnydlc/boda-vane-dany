@@ -73,7 +73,6 @@ export class UsersController {
     
     const createdAt   = moment().format('YYYY-MM-DD HH:mm:ss');
     let Usuario       = '' , IdUsuario = '0';
-
     let a             = req.user;
     console.log('_____+++', a);
     if( a ){
@@ -85,11 +84,9 @@ export class UsersController {
 
     const bodyProocolo = {
       ...dto , 
-      created_at : createdAt , 
-      updated_at : createdAt , 
-      Estado: 'Activo',
-      DniUsuarioMod: IdUsuario,
-      UsuarioMod: Usuario,
+      created_at  : createdAt , 
+      updated_at  : createdAt , 
+      Estado      : 'active'
     };
 
     return this.elservicio.guardar( bodyProocolo );

@@ -9,37 +9,51 @@
 
         <div class="page-content">
 
-            <h4>Servicios</h4>
 
             <!-- TABS -->
-            <ul class=" nav nav-tabs nav-underline " id="editorTabs" role="tablist">
+            <ul class="nav nav-tabs" role="tablist" id="editorTabs" >
 
-                <!-- TAB FIJO (NO TIENE BOTÓN CERRAR) -->
                 <li class="nav-item" role="presentation">
-                <button class="nav-link active"
-                        id="tab-listado"
-                        data-bs-toggle="tab"
-                        data-bs-target="#tab-content-listado"
-                        type="button">
-                    Listado
-                </button>
+                    <button class="nav-link active"
+                            id="tab-listado"
+                            data-bs-toggle="tab"
+                            data-bs-target="#tab-content-listado"
+                            type="button">
+                        Listado
+                    </button>
                 </li>
 
             </ul>
+            <!--<ul class=" nav nav-tabs nav-underline " id="editorTabssss" role="tablist">
+                <li class="nav-item" role="presentationss">
+                </li>
+            </ul>-->
 
             <!-- CONTENIDO DE TABS -->
-            <div class="tab-content" id="editorTabsContent">
-
+            <div class="tab-content" id="editorTabsContent" >
                 <!-- CONTENIDO DEL TAB FIJO -->
+                <div class="tab-pane fade show active" id="tab-content-listado" role="tabpanel" aria-labelledby="home-tab" tabindex="0">
+                    
+                    <button class="btn btn-success my-3" onclick="nuevoRegistro()">Nuevo</button>
+
+                    <div id="tablaContainer"></div>
+
+                </div>
+            </div>
+
+
+            <!--<div class="tab-content" id="editorTabsContent">
+
+                
                 <div class="tab-pane fade show active" id="tab-content-listado" role="tabpanel">
 
-                <button class="btn btn-success my-3" onclick="nuevoRegistro()">Nuevo</button>
+                    <button class="btn btn-success my-3" onclick="nuevoRegistro()">Nuevo</button>
 
-                <div id="tablaContainer"></div>
+                    <div id="tablaContainer"></div>
 
                 </div>
 
-            </div>
+            </div>-->
             <!-- ....................................................... -->
 
         </div>

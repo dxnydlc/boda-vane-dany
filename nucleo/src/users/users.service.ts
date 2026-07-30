@@ -142,7 +142,7 @@ export class UsersService {
   async getActivos() {
     
     try {
-      
+      //
       let data = await this.datosModel.createQueryBuilder('c')
       .select([ 'id as id' , 'uu_id as uu_id' , 'Nombre as Nombre' , 'DNI as DNI' , 'Email as Email' , 'Rol as Rol' , 'Estado as Estado' ])
       .getRawMany();
