@@ -5,7 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <title>Input Basics | Conca - Bootstrap Admin Template</title>
+    <title><?php echo $title; ?> | Conca</title>
 
     <!-- favicon -->
     <link rel="shortcut icon" href="/assets/img/logo/favicon.png" type="image/x-icon">

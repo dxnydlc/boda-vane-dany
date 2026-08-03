@@ -56,7 +56,7 @@
                                             <path d="M8.25 15.75C12.3921 15.75 15.75 12.3921 15.75 8.25C15.75 4.10786 12.3921 0.75 8.25 0.75C4.10786 0.75 0.75 4.10786 0.75 8.25C0.75 12.3921 4.10786 15.75 8.25 15.75Z" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
                                         </svg>
                                     </span>
-                                    <span class="menu-title flex-grow-1">Proveedores</span>
+                                    <span class="menu-title flex-grow-1" >Operaciones</span>
                                     <span class="menu-arrow flex-shrink-0 d-flex align-items-center justify-content-center">
                                         <svg width="6" height="10" viewBox="0 0 6 10" fill="none" xmlns="http://www.w3.org/2000/svg">
                                             <path d="M1 9L5 5L1 1" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
@@ -71,8 +71,8 @@
                                         </a>
                                     </li>
                                     <li class="app-sidebar-menu-item">
-                                        <a href="./user-profile.html" class="menu-link d-flex align-items-center">
-                                            <span class="menu-title flex-grow-1" >Local</span>
+                                        <a href="/novios" class="menu-link d-flex align-items-center">
+                                            <span class="menu-title flex-grow-1" >Novios</span>
                                         </a>
                                     </li>
                                     <li class="app-sidebar-menu-item">

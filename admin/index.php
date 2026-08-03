@@ -56,13 +56,22 @@ elseif ($request === '/datos') {
     $content = 'pages/datos.php';
 }
 elseif ($request === '/usuario') {
-    $title                  = 'Datos';
+    $title                  = 'Usuarios';
     $content                = 'pages/usuarios/homeUsuario.php';
     $archivoJS              = "<script src='/utils/js/usuarios/homeUsuarios.js?v=$semilla'></script>";
 }
+elseif ($request === '/novios') {
+    $title                  = 'Novios';
+    $content                = 'pages/novios/homeNovios.php';
+    $archivoJS              = "<script src='/utils/js/novios/homeNovios.js?v=$semilla'></script>";
+}
+
+
+
+
 
 elseif ($request === '/login') {
-    $title = 'Datos';
+    $title = 'Login';
     include 'pages/login.php';
     return true;
 }

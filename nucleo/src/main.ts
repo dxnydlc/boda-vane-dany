@@ -25,6 +25,8 @@ async function bootstrap() {
     .setDescription('Boda.pe API description')
     .setVersion('1.0')
     .addTag('Usuarios')
+    .addTag('Novios')
+    .addTag('Boda')
     .addTag('Auth')
     .build();
   const documentFactory = () => SwaggerModule.createDocument(app, config);
