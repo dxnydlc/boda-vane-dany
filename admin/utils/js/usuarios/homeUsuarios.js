@@ -1082,29 +1082,68 @@ function renderFormInTab(rowData, formId) {
     const frm = $(`#${formId}`);
     frm.empty();
 
+    let htmlForm = `
+    <div class=" demo-card  rounded-xl mb-5 ">
+        <div class=" demo-card-header d-flex align-items-center justify-content-between px-6 py-5  " >
+            <h3 class="demo-card-title m-0">Tab Pill</h3>
+        </div>
+        <div class=" demo-card-body " >
+            <div class=" demo-card-body-content row " >
+    `;
+
     formFields.forEach(field => {
-        frm.append(`
-            <div class="col-md-6">
-                <label class="form-label">${field}</label>
-                <input type="text" class="form-control" name="${field}" 
-                    value="${rowData[field] || defaultValues[field] || ""}">
-            </div>
-        `);
+        switch ( field ) {
+            case 'Nombre':
+                htmlForm += `
+                <div class="col-md-6">
+                    <label class="form-label" >Nombre:</label>
+                    <input type="text" class="form-control" name="${field}" value="${rowData[field] || defaultValues[field] || ""}" />
+                </div>
+                `;
+                break;
+        
+            default:
+                htmlForm += `
+                <div class="col-md-6">
+                    <label class="form-label">${field}</label>
+                    <input type="text" class="form-control" name="${field}" 
+                        value="${rowData[field] || defaultValues[field] || ""}">
+                </div>
+                `;
+            break;
+        }
+        //frm.append( htmlForm );
     });
+    htmlForm += `
+            </div>
+        </div>
+    </div>
+    `;
+
 
     hiddenFields.forEach(field => {
-        frm.append(`
-            <input type="hidden" name="${field}" value="${rowData[field] || ""}">
-        `);
+        htmlForm += `<input type="hidden" name="${field}" value="${rowData[field] || ""}">`;
+        // frm.append(`
+        //     <input type="hidden" name="${field}" value="${rowData[field] || ""}">
+        // `);
     });
 
-    frm.append(`
+    htmlForm += `
         <div class="col-12">
             <button type="button" class="btn btn-success btn-guardar" data-form="${formId}">
                 Guardar
             </button>
         </div>
-    `);
+    `;
+    // frm.append(`
+    //     <div class="col-12">
+    //         <button type="button" class="btn btn-success btn-guardar" data-form="${formId}">
+    //             Guardar
+    //         </button>
+    //     </div>
+    // `);
+
+    frm.append( htmlForm );
 
     $.unblockUI();
 }
