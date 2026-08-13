@@ -1,26 +1,406 @@
-import { Injectable } from '@nestjs/common';
+import { BadRequestException, HttpException, HttpStatus, Injectable, InternalServerErrorException } from '@nestjs/common';
 import { CreateUsuariosBodaDto } from './dto/create-usuarios_boda.dto';
 import { UpdateUsuariosBodaDto } from './dto/update-usuarios_boda.dto';
 
+
+
+import { readFileSync, writeFileSync } from 'fs';
+const execShPromise = require("exec-sh").promise;
+
+//import * as moment from 'moment';
+//import 'moment/locale/pt-br';
+
+const moment = require('moment');
+
+import { v4 as uuidv4 } from 'uuid';
+import { InjectRepository } from '@nestjs/typeorm';
+import { UsuariosBodaModel } from './entities/usuarios_boda.entity';
+import { Repository } from 'typeorm';
+import { UtilidadesService } from 'src/utilidades/utilidades.service';
+
+require('colors');
+
+
+
+// CreateUsuariosBodaDto | UpdateUsuariosBodaDto
 @Injectable()
 export class UsuariosBodaService {
-  create(createUsuariosBodaDto: CreateUsuariosBodaDto) {
-    return 'This action adds a new usuariosBoda';
-  }
+  // ...................................................................
+  // ...................................................................
+  constructor(
+    @InjectRepository( UsuariosBodaModel )private readonly datosModel : Repository<UsuariosBodaModel> ,
+    private util : UtilidadesService , 
+  ){}
+  // ...................................................................
+  // ...................................................................
+  // ...................................................................
+  // ...................................................................
+  // ...................................................................
+  // ...................................................................
+  // ...................................................................
+  // ...................................................................
+  async demoFuncion() {
+    
 
-  findAll() {
-    return `This action returns all usuariosBoda`;
-  }
+    try {
+      
+      let data = await this.datosModel.find({
+        take : 200 ,
+        order : {
+          id : 'DESC'
+        }
+      });
+  
+      // throw new BadRequestException('Usuario no existe');
 
-  findOne(id: number) {
-    return `This action returns a #${id} usuariosBoda`;
-  }
+      return {
+        data , 
+        version : '1' , 
+        msg : { titulo : 'Correcto' , texto : 'Registros cargados' , clase : 'success' , call : 'tostada2' }
+      }
 
-  update(id: number, updateUsuariosBodaDto: UpdateUsuariosBodaDto) {
-    return `This action updates a #${id} usuariosBoda`;
-  }
+    } catch (error) {
 
-  remove(id: number) {
-    return `This action removes a #${id} usuariosBoda`;
+      // Para depuración local
+      varDump(error); 
+
+      // SI EL ERROR YA ES DE NESTJS (ej. BadRequestException), LO RELANZAMOS DIRECTO
+      if (error instanceof HttpException) {
+        throw error;
+      }
+
+      // SI ES UN ERROR INESPERADO (ej. caída de BD, error de sintaxis), ENVIAMOS UN 500
+      throw new InternalServerErrorException({
+        message: 'Error en el servicio de Usuarios boda',
+        cause: error // Mantiene el rastro del error original en logs internos
+      });
+
+    }
+
   }
+  // ...................................................................
+  // ...................................................................
+  async guardar( dto : CreateUsuariosBodaDto ) {
+
+    try {
+
+      //Comprobar si el codigo ya existe
+      const mipPlagaInit = await this.datosModel.findOne({
+        where: {
+          IdUsuario: dto.IdUsuario , IdBoda : dto.IdBoda
+        }
+      });
+
+      if (mipPlagaInit) throw new BadRequestException('El Usuario ya existe' );
+      
+      const newArea = await this.datosModel.create( dto );
+      let dataSave  = await this.datosModel.save( newArea );
+      //let Codigo = await this.util.addZeros( dataSave.id , 4 ); 
+      //await this.datosModel.update({ id : dataSave.id },{ Codigo : `RM${Codigo}` });
+
+      let data = await this.datosModel.findOne({
+        where : {
+          id : dataSave.id
+        }
+      });
+
+      return {
+        data , 
+        version : '1' , 
+        msg : { titulo : 'Correcto' , texto : 'Registro guardado' , clase : 'success' , call : 'tostada2' }
+      }
+
+    } catch (error) {
+      
+      // Para depuración local
+      varDump(error); 
+
+      // SI EL ERROR YA ES DE NESTJS (ej. BadRequestException), LO RELANZAMOS DIRECTO
+      if (error instanceof HttpException) {
+        throw error;
+      }
+
+      // SI ES UN ERROR INESPERADO (ej. caída de BD, error de sintaxis), ENVIAMOS UN 500
+      throw new InternalServerErrorException({
+        message: 'Error en el servicio de Usuarios boda',
+        cause: error // Mantiene el rastro del error original en logs internos
+      });
+
+    }
+
+  }
+  // ...................................................................
+  // ...................................................................
+  async getTodos() {
+
+    try {
+      
+      let data = await this.datosModel.find({
+        take : 200 ,
+        order : {
+          id : 'DESC'
+        }
+      });
+  
+      return {
+        data , 
+        version : '1' , 
+        msg : { titulo : 'Correcto' , texto : 'Registros cargados' , clase : 'success' , call : 'tostada2' }
+      }
+
+    } catch (error) {
+
+      // Para depuración local
+      varDump(error); 
+
+      // SI EL ERROR YA ES DE NESTJS (ej. BadRequestException), LO RELANZAMOS DIRECTO
+      if (error instanceof HttpException) {
+        throw error;
+      }
+
+      // SI ES UN ERROR INESPERADO (ej. caída de BD, error de sintaxis), ENVIAMOS UN 500
+      throw new InternalServerErrorException({
+        message: 'Error en el servicio de Usuarios boda',
+        cause: error // Mantiene el rastro del error original en logs internos
+      });
+
+    }
+
+  }
+  // ...................................................................
+  // ...................................................................
+  async getbyId( id : number ) {
+
+    try {
+
+      let data = await this.datosModel.findOne({
+        where : {
+          id
+        }
+      });
+
+      return {
+        data , 
+        version : '1' , 
+        msg : { titulo : 'Correcto' , texto : 'Registro recibido' , clase : 'success' , call : 'tostada2' }
+      }
+      
+    } catch (error) {
+      
+      // Para depuración local
+      varDump(error); 
+
+      // SI EL ERROR YA ES DE NESTJS (ej. BadRequestException), LO RELANZAMOS DIRECTO
+      if (error instanceof HttpException) {
+        throw error;
+      }
+
+      // SI ES UN ERROR INESPERADO (ej. caída de BD, error de sintaxis), ENVIAMOS UN 500
+      throw new InternalServerErrorException({
+        message: 'Error en el servicio de Usuarios boda',
+        cause: error // Mantiene el rastro del error original en logs internos
+      });
+
+    }
+  }
+  // ...................................................................
+  // ...................................................................
+  async Actualizar( uuID : string , dto : UpdateUsuariosBodaDto ) {
+
+    try {
+
+      // Primero ver si esta activo o no {-.-}
+      let data1 = await this.datosModel.findOne({
+        where: {
+          uu_id: uuID,
+        },
+      });
+
+      if( data1!.Estado != 'Activo' )throw new BadRequestException('Documento no disponible' );
+
+      await this.datosModel.update({ uu_id : uuID } , dto );
+      let dataP = await this.datosModel.findOne({
+        where : {
+          uu_id : uuID
+        }
+      });
+
+      return {
+        data : dataP , 
+        version : '1' , 
+        msg : { titulo : 'Correcto' , texto : 'Registro actualizado' , clase : 'success' , call : 'tostada2' }
+      }
+      
+    } catch (error) {
+
+      // Para depuración local
+      varDump(error); 
+
+      // SI EL ERROR YA ES DE NESTJS (ej. BadRequestException), LO RELANZAMOS DIRECTO
+      if (error instanceof HttpException) {
+        throw error;
+      }
+
+      // SI ES UN ERROR INESPERADO (ej. caída de BD, error de sintaxis), ENVIAMOS UN 500
+      throw new InternalServerErrorException({
+        message: 'Error en el servicio de Usuarios boda',
+        cause: error // Mantiene el rastro del error original en logs internos
+      });
+      
+    }
+
+  }
+  // ...................................................................
+  // ...................................................................
+  async AnularbyId( id : number ) {
+
+    try {
+
+      const updatedAt = moment().format('YYYY-MM-DD HH:mm:ss');
+
+      await this.datosModel.update({ id } , { Estado : 'Anulado' , deleted_at : updatedAt , updated_at : updatedAt } );
+      let data = await this.datosModel.findOne({
+        where : {
+          id 
+        }
+      });
+
+      return {
+        data , 
+        version : '1' , 
+        msg : { titulo : 'Correcto' , texto : 'Registro anulado' , clase : 'success' , call : 'tostada2' }
+      }
+      
+    } catch (error) {
+      
+      // Para depuración local
+      varDump(error); 
+
+      // SI EL ERROR YA ES DE NESTJS (ej. BadRequestException), LO RELANZAMOS DIRECTO
+      if (error instanceof HttpException) {
+        throw error;
+      }
+
+      // SI ES UN ERROR INESPERADO (ej. caída de BD, error de sintaxis), ENVIAMOS UN 500
+      throw new InternalServerErrorException({
+        message: 'Error en el servicio de Usuarios boda',
+        cause: error // Mantiene el rastro del error original en logs internos
+      });
+
+    }
+  }
+  // ...................................................................
+  // ...................................................................
+  // ...................................................................
+  // ...................................................................
+  // ...................................................................
+  async agregar( dataW : any ) {
+    
+
+    try {
+      
+      let data = await this.datosModel.save( dataW );
+  
+      // throw new BadRequestException('Usuario no existe');
+
+      return {
+        data , 
+        version : '1' , 
+        msg : { titulo : 'Correcto' , texto : 'Registros cargados' , clase : 'success' , call : 'tostada2' }
+      }
+
+    } catch (error) {
+
+      // Para depuración local
+      varDump(error); 
+
+      // SI EL ERROR YA ES DE NESTJS (ej. BadRequestException), LO RELANZAMOS DIRECTO..
+      if (error instanceof HttpException) {
+        throw error;
+      }
+
+      // SI ES UN ERROR INESPERADO (ej. caída de BD, error de sintaxis), ENVIAMOS UN 500
+      throw new InternalServerErrorException({
+        message: 'Error en el servicio de Usuarios boda',
+        cause: error // Mantiene el rastro del error original en logs internos
+      });
+
+    }
+
+  }
+  // ...................................................................
+  // ...................................................................
+  // ...................................................................
+  // ...................................................................
+  // ...................................................................
+  // ...................................................................
+  // ...................................................................
+  // ...................................................................
+  // ...................................................................
+  // ...................................................................
+  // ...................................................................
+  // ...................................................................
+  // ...................................................................
+  // ...................................................................
+  // ...................................................................
+  // ...................................................................
+  // ...................................................................
+  // ...................................................................
+  // ...................................................................
+  // ...................................................................
+  // ...................................................................
+  // ...................................................................
+  // ...................................................................
+  // ...................................................................
+  async maxId()
+  {
+    let MaxId = await this.datosModel.createQueryBuilder('areas').select("MAX(areas.CodArea)", "max").getRawOne();
+    return MaxId.max + 1;
+  }
+  // ...................................................................
+  // ...................................................................
+  // ...................................................................
+  // ...................................................................
+  // ...................................................................
+  // ...................................................................
+  // ...................................................................
+  // ...................................................................
+  // ...................................................................
+  // ...................................................................
+  // ...................................................................
+  // ...................................................................
 }
+// ...................................................................
+function varDump( e ){
+  console.log( e );
+}
+// ...................................................................
+function sleep(ms) {
+  return new Promise((resolve) => setTimeout(resolve, ms));
+}
+// ...................................................................
+function Dump1( e , color )
+{
+// rojo, verde, amarillo, negrita_verde, negrita_verde_u
+switch ( color ) {
+    case 'rojo':
+    console.log(  e.red );
+    break;
+    case 'verde':
+    console.log(  e.green );
+    break;
+    case 'amarillo':
+    console.log(  e.yellow );
+    break;
+    case 'negrita_verde':
+    console.log(  e.green );
+    break;
+    case 'negrita_verde_u':
+    console.log(  e.green.bold );
+    break;
+    default:
+    //
+    break;
+}
+}
+// ..............................................................................

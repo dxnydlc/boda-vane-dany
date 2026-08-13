@@ -1,34 +1,155 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, ValidationPipe, UseGuards, UsePipes, HttpCode, Req } from '@nestjs/common';
 import { UsuariosBodaService } from './usuarios_boda.service';
 import { CreateUsuariosBodaDto } from './dto/create-usuarios_boda.dto';
 import { UpdateUsuariosBodaDto } from './dto/update-usuarios_boda.dto';
 
+
+
+//import * as moment from 'moment';
+//import 'moment/locale/pt-br';
+
+const moment = require('moment');
+
+import { v4 as uuidv4 } from 'uuid';
+
+import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
+
+import * as express from 'express';
+import { UtilidadesService } from 'src/utilidades/utilidades.service';
+import { JwtGuardGuard } from 'src/guards/jwt-guard/jwt-guard.guard';
+
+
+// Para activar el auth JwTokenAuth
+@UseGuards( JwtGuardGuard )
+
+@ApiTags('Usuarios-Boda')
+@ApiBearerAuth()
+@UsePipes( new ValidationPipe )
+
+
+
+
+// CreateUsuariosBodaDto | UpdateUsuariosBodaDto
 @Controller('usuarios-boda')
 export class UsuariosBodaController {
-  constructor(private readonly usuariosBodaService: UsuariosBodaService) {}
+  // constructor(private readonly usuariosBodaService: UsuariosBodaService) {}
+  // ................................................................
+  // ................................................................
+  constructor(
+    private readonly usuariosBodaService: UsuariosBodaService , 
+    private readonly util : UtilidadesService , 
+  ) {}
+  // ................................................................
+  // ................................................................
+  // ................................................................
+  // ................................................................
+  // private readonly util : UtilidadesService , 
+  // ................................................................
+  // ................................................................
+  // ................................................................
+  // ................................................................
+  // ................................................................
+  // ................................................................
+  // ................................................................
+  // ................................................................
+  // ................................................................
+  // ................................................................
+  // ................................................................
+  // ................................................................
+  // ................................................................
+  // ................................................................
+  // ................................................................
+  // ................................................................
+  // ................................................................
+  @Post('guardar')
+  @HttpCode(200)
+  async guardar(@Body() dto : CreateUsuariosBodaDto , @Req() req : express.Request ) {
+    
+    const createdAt   = moment().format('YYYY-MM-DD HH:mm:ss');
+    let Usuario       = '' , IdUsuario = '0';
 
-  @Post()
-  create(@Body() createUsuariosBodaDto: CreateUsuariosBodaDto) {
-    return this.usuariosBodaService.create(createUsuariosBodaDto);
-  }
+    let a             = req.user;
+    console.log('_____+++', a);
+    if( a ){
+      IdUsuario       = a['DNI'];
+      Usuario         = a['Nombre'];
+    }
+    console.log( 'Usuario'   , Usuario );
+    console.log( 'IdUsuario' , IdUsuario );
 
-  @Get()
-  findAll() {
-    return this.usuariosBodaService.findAll();
-  }
+    const bodyProocolo = {
+      ...dto , 
+      created_at : createdAt , 
+      updated_at : createdAt , 
+      Estado: 'Activo',
+      DniUsuarioMod: IdUsuario,
+      UsuarioMod: Usuario,
+    };
 
-  @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.usuariosBodaService.findOne(+id);
+    return this.usuariosBodaService.guardar( bodyProocolo );
   }
+  // ................................................................
+  // ................................................................
+  @Get('get-todos')
+  @HttpCode(200)
+  async getTodos() {
+    return this.usuariosBodaService.getTodos();
+  }
+  // ................................................................
+  // ................................................................
+  @Get('get-by-id/:id')
+  @HttpCode(200)
+  async getbyId( @Param('id') id : number ) {
+    return this.usuariosBodaService.getbyId( id );
+  }
+  // ................................................................
+  // ................................................................
+  @Patch('actualizar/:uuid')
+  @HttpCode(200)
+  async Actualizar( @Param('uuid') uuid : string, @Body() dto : UpdateUsuariosBodaDto , @Req() req : express.Request ) {
+    
+    const createdAt   = moment().format('YYYY-MM-DD HH:mm:ss');
+    let Usuario       = '' , IdUsuario = '0';
 
-  @Patch(':id')
-  update(@Param('id') id: string, @Body() updateUsuariosBodaDto: UpdateUsuariosBodaDto) {
-    return this.usuariosBodaService.update(+id, updateUsuariosBodaDto);
-  }
+    let a             = req.user;
+    console.log('_____+++', a);
+    if( a ){
+      IdUsuario       = a['DNI'];
+      Usuario         = a['Nombre'];
+    }
+    console.log( 'Usuario'   , Usuario );
+    console.log( 'IdUsuario' , IdUsuario );
 
-  @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.usuariosBodaService.remove(+id);
+    const bodyProocolo = {
+      ...dto , 
+      updated_at : createdAt , 
+      DniUsuarioMod: IdUsuario,
+      UsuarioMod: Usuario,
+    };
+    return this.usuariosBodaService.Actualizar( uuid , bodyProocolo);
   }
+  // ................................................................
+  // ................................................................
+  @Delete('anular-by-id/:id')
+  @HttpCode(200)
+  async Anular( @Param('id') id  : number ) {
+    return this.usuariosBodaService.AnularbyId( id );
+  }
+  // ................................................................
+  // ................................................................
+  // ................................................................
+  // ................................................................
+  // ................................................................
+  // ................................................................
+  // ................................................................
+  // ................................................................
+  // ................................................................
+  // ................................................................
+  // ................................................................
+  // ................................................................
+  // ................................................................
+  // ................................................................
+  // ................................................................
+  // ................................................................
+  // ................................................................
 }
