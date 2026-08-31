@@ -71,6 +71,11 @@
                                         </a>
                                     </li>
                                     <li class="app-sidebar-menu-item">
+                                        <a href="/boda" class="menu-link d-flex align-items-center">
+                                            <span class="menu-title flex-grow-1" >Boda</span>
+                                        </a>
+                                    </li>
+                                    <li class="app-sidebar-menu-item">
                                         <a href="/novios" class="menu-link d-flex align-items-center">
                                             <span class="menu-title flex-grow-1" >Novios</span>
                                         </a>

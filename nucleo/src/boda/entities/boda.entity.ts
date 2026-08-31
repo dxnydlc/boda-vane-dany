@@ -22,7 +22,7 @@ export class BodaModel {
     Estado : string = 'activo'
 
     @Column()
-    IdUsuario! : number
+    IdUsuario : number = 0
 
     @Column()
     DniUsuarioMod! : string

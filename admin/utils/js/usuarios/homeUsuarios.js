@@ -20,6 +20,7 @@ let xIdArea = 0 , xIdPuesto = 0 ;
 let dataEnviarPost = ``;
 /* ------------------------------------------------------------- */
 /* ------------------------------------------------------------- */
+let xIdFormx = ``;
 /* ------------------------------------------------------------- */
 /* ------------------------------------------------------------- */
 /* ------------------------------------------------------------- */
@@ -33,13 +34,13 @@ let dataEnviarPost = ``;
 let dataJson = [];
 /* ------------------------------------------------------------- */
 // columnas que se mostrarán en la tabla
-const columnasVisibles = ["Nombre", "DNI", "Email", "Rol", "Estado"];
+const columnasVisibles  = [ "id" , "Nombre", "DNI", "Email", "Rol", "Estado"];
 
 // campos que tendrá el formulario
-const formFields = ["Nombre", "DNI", "Email", "Rol", "Estado"];
+const formFields        = ["Nombre", "DNI", "Email", "Rol", "Estado"];
 
 // campos hidden
-const hiddenFields = ["id", "uu_id"];
+const hiddenFields      = ["id", "uu_id"];
 
 // valores por defecto
 const defaultValues = {
@@ -1041,9 +1042,12 @@ function cargarDatos() {
 /* ------------------------------------------------------------- */
 function openEditorTab(rowData, isNew = false) {
 
-    const tabId = `tab-${rowData.id}`;
-    const tabContentId = `content-${rowData.id}`;
-    const formId = `${rowData.id}-formulario`;
+    const tabId             = `tab-${rowData.id}`;
+    const tabContentId      = `content-${rowData.id}`;
+    const formId            = `${rowData.id}-formulario`;
+    xIdFormx                = formId;
+
+    idCab                   = isNew ? 0 : rowData.id
 
     const existingTab = document.getElementById(tabId);
 
