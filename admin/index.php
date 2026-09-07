@@ -8,6 +8,7 @@ $semilla                = time();
 
 // <script src="/utils/js/general.js?v=$semilla"></script>
 $archivoJS              = "<script src='/utils/js/u.js?v=$semilla'></script>";
+$archivoJS2             = "<script src='/utils/js/helpers.js?v=$semilla'></script>";
 $archivoCSS             = '<link rel="stylesheet" href="/utils/css/u.css" >';
 
 // 1. Función para cargar el archivo .env
@@ -74,9 +75,9 @@ switch ( $request ) {
         $archivoJS              = "<script src='/utils/js/novios/homeNovios.js?v=$semilla'></script>";
     break;
     case '/boda':
-        $title                  = 'Novios';
-        $content                = 'pages/novios/homeNovios.php';
-        $archivoJS              = "<script src='/utils/js/novios/homeNovios.js?v=$semilla'></script>";
+        $title                  = 'Boda';
+        $content                = 'pages/boda/homeBoda.php';
+        $archivoJS              = "<script src='/utils/js/boda/homeBoda.js?v=$semilla'></script>";
     break;
     default:
         http_response_code( 404 );

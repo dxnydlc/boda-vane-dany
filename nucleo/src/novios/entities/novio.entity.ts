@@ -1,5 +1,5 @@
 
-import { Column, Entity, Generated, JoinColumn, OneToOne, PrimaryGeneratedColumn } from "typeorm"
+import { BeforeInsert, BeforeUpdate, Column, Entity, Generated, JoinColumn, OneToOne, PrimaryGeneratedColumn } from "typeorm"
 
 @Entity({ name: 'tbl_novios' })
 export class NovioModel {
@@ -15,6 +15,9 @@ export class NovioModel {
     Nombre! : string
 
     @Column()
+    Apellidos : string = ''
+
+    @Column()
     Email! : string
 
     @Column()
@@ -24,7 +27,7 @@ export class NovioModel {
     IdBoda : number = 0
 
     @Column()
-    Tipo : string  = ''
+    Tipo : string  = '' // Novio/Novia
 
     @Column()
     deleted_at! : string
@@ -34,5 +37,18 @@ export class NovioModel {
 
     @Column()
     updated_at! : string
+
+    @Column()
+    DniUsuarioMod! : string
+    
+    @Column()
+    UsuarioMod! : string
+
+    @BeforeInsert()
+    @BeforeUpdate()
+    normalize() {
+        this.Nombre         = this.Nombre?.toUpperCase();
+        this.Apellidos      = this.Apellidos?.toUpperCase();
+    }
 
 }

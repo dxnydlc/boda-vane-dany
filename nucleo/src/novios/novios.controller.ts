@@ -63,16 +63,17 @@ export class NoviosController {
   // ................................................................
   @Post('guardar')
   @HttpCode(200)
-  async guardar(@Body() dto : CreateNovioDto , @Req() req : express.Request ) {
+  async guardar( @Body() dto : CreateNovioDto , @Req() req : express.Request ) {
     
     const createdAt   = moment().format('YYYY-MM-DD HH:mm:ss');
-    let Usuario       = '' , IdUsuario = '0';
+    let Usuario       = '' , IdUsuario = '0' , IdU = '0';
 
     let a             = req.user;
     console.log('_____+++', a);
     if( a ){
       IdUsuario       = a['DNI'];
       Usuario         = a['Nombre'];
+      IdU             = a["id"]
     }
     console.log( 'Usuario'   , Usuario );
     console.log( 'IdUsuario' , IdUsuario );
@@ -81,10 +82,13 @@ export class NoviosController {
       ...dto , 
       created_at : createdAt , 
       updated_at : createdAt , 
-      Estado: 'Activo',
+      Estado: 'activo',
       DniUsuarioMod: IdUsuario,
       UsuarioMod: Usuario,
+      IdUsuario : IdU , 
     };
+
+    console.log( bodyProocolo )
 
     return this.noviosService.guardar( bodyProocolo );
   }
@@ -94,6 +98,13 @@ export class NoviosController {
   @HttpCode(200)
   async getTodos() {
     return this.noviosService.getTodos();
+  }
+  // ................................................................
+  // ................................................................
+  @Get('get-activos')
+  @HttpCode(200)
+  async getActivos() {
+    return this.noviosService.getActivos();
   }
   // ................................................................
   // ................................................................

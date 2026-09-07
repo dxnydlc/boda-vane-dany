@@ -20,9 +20,13 @@
     <!-- page level styles -->
     <link href="assets/vendor/libs/toastr/toastr.css" rel="stylesheet">
 
+    
+
     <!-- select2 -->
     <link href="/assets/vendor/libs/select2/select2.css" rel="stylesheet">
     <link href="/assets/css/elegant-icon.css" rel="stylesheet">
+
+    <link href="/assets/vendor/libs/sweetalert2/sweetalert2.css" rel="stylesheet">
 
     <link rel="stylesheet" href="https://cdn.datatables.net/3.0.0/css/dataTables.dataTables.min.css" />
     

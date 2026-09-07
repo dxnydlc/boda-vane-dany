@@ -20,7 +20,7 @@ import { UtilidadesService } from 'src/utilidades/utilidades.service';
 import { JwtGuardGuard } from 'src/guards/jwt-guard/jwt-guard.guard';
 
 
-// Para activar el auth JwTokenAuth
+// Para activar el auth JwTokenAuth..
 @UseGuards( JwtGuardGuard )
 
 @ApiTags('Boda')
@@ -62,9 +62,9 @@ export class BodaController {
   @Get('get-activos')
   @HttpCode(200)
   async getActivos() {
-    return this.bodaService.getTodos();
+    return this.bodaService.getActivos();
   }
-  // ................................................................
+  // ................................................................-
   // ................................................................
   // ................................................................
   // ................................................................
@@ -73,13 +73,14 @@ export class BodaController {
   async guardar(@Body() dto : CreateBodaDto , @Req() req : express.Request ) {
     
     const createdAt   = moment().format('YYYY-MM-DD HH:mm:ss');
-    let Usuario       = '' , IdUsuario = '0';
+    let Usuario       = '' , IdUsuario = '0' , IdU = '0';
 
     let a             = req.user;
     console.log('_____+++', a);
     if( a ){
       IdUsuario       = a['DNI'];
       Usuario         = a['Nombre'];
+      IdU             = a["id"]
     }
     console.log( 'Usuario'   , Usuario );
     console.log( 'IdUsuario' , IdUsuario );
@@ -91,7 +92,10 @@ export class BodaController {
       Estado: 'activo',
       DniUsuarioMod: IdUsuario,
       UsuarioMod: Usuario,
+      IdUsuario : IdU , 
     };
+
+    console.log( bodyProocolo );
 
     return this.bodaService.guardar( bodyProocolo );
   }

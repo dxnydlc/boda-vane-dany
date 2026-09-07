@@ -69,7 +69,7 @@ export class BodaService {
 
       // SI ES UN ERROR INESPERADO (ej. caída de BD, error de sintaxis), ENVIAMOS UN 500
       throw new InternalServerErrorException({
-        message: 'Error en el servicio de autenticación',
+        message: 'Error en el servicio de Boda',
         cause: error // Mantiene el rastro del error original en logs internos
       });
 
@@ -82,16 +82,23 @@ export class BodaService {
 
     try {
 
+      varDump( dto );
+
       const newArea = await this.datosModel.create( dto );
+
+      varDump( newArea );
       let dataSave  = await this.datosModel.save( newArea );
       //let Codigo = await this.util.addZeros( dataSave.id , 4 );
       //await this.datosModel.update({ id : dataSave.id },{ Codigo : `RM${Codigo}` });
 
-      let data = await this.datosModel.findOne({
-        where : {
-          id : dataSave.id
-        }
-      });
+      let data = await this.datosModel.createQueryBuilder('c')
+      .select([ 
+        "id" , "uu_id" , "Nombre" , "DATE_FORMAT( c.Fecha , '%Y-%m-%d') as Fecha" , "Estado" , "DniUsuarioMod" , "UsuarioMod" , 
+        "DATE_FORMAT( c.created_at , '%Y-%m-%d %H:%i:%s') as Creado" , "DATE_FORMAT( c.created_at , '%Y-%m-%d %H:%i:%s') as Anulado" , 
+        "Hora" , "MapaLink" , "Direccion"
+      ])
+      .where(" c.id = :id" , { id : dataSave.id } )
+      .getRawOne();
 
       return {
         data , 
@@ -111,7 +118,7 @@ export class BodaService {
 
       // SI ES UN ERROR INESPERADO (ej. caída de BD, error de sintaxis), ENVIAMOS UN 500
       throw new InternalServerErrorException({
-        message: 'Error en el servicio de autenticación',
+        message: 'Error en el servicio de Boda',
         cause: error // Mantiene el rastro del error original en logs internos
       });
 
@@ -123,13 +130,14 @@ export class BodaService {
   async getTodos() {
 
     try {
-      
-      let data = await this.datosModel.find({
-        take : 200 ,
-        order : {
-          id : 'DESC'
-        }
-      });
+      // '%Y-%m-%d'
+      let data = await this.datosModel.createQueryBuilder('c')
+      .select([ 
+        "id" , "uu_id" , "Nombre" , "DATE_FORMAT( c.Fecha , '%d/%m/%Y' ) as Fecha" , "Estado" , "DniUsuarioMod" , "UsuarioMod" , 
+        "DATE_FORMAT( c.created_at , '%Y-%m-%d %H:%i:%s') as created_at" , 
+        "Hora" , "MapaLink" , "Direccion"
+      ])
+      .getRawMany();
   
       return {
         data , 
@@ -149,7 +157,47 @@ export class BodaService {
 
       // SI ES UN ERROR INESPERADO (ej. caída de BD, error de sintaxis), ENVIAMOS UN 500
       throw new InternalServerErrorException({
-        message: 'Error en el servicio de autenticación',
+        message: 'Error en el servicio de Boda',
+        cause: error // Mantiene el rastro del error original en logs internos
+      });
+
+    }
+
+  }
+  // ...................................................................
+  // ...................................................................
+  async getActivos() {
+
+    try {
+      // '%Y-%m-%d'
+      let data = await this.datosModel.createQueryBuilder('c')
+      .select([ 
+        "id" , "uu_id" , "Nombre" , "DATE_FORMAT( c.Fecha , '%d/%m/%Y' ) as Fecha" , "Estado" , "DniUsuarioMod" , "UsuarioMod" , 
+        "DATE_FORMAT( c.created_at , '%Y-%m-%d %H:%i:%s') as created_at" , 
+        "Hora" , "MapaLink" , "Direccion"
+      ])
+      .where(" Estado = 'activo' ")
+      .getRawMany();
+  
+      return {
+        data , 
+        version : '1' , 
+        msg : { titulo : 'Correcto' , texto : 'Registros cargados' , clase : 'success' , call : 'tostada2' }
+      }
+
+    } catch (error) {
+
+      // Para depuración local
+      varDump(error); 
+
+      // SI EL ERROR YA ES DE NESTJS (ej. BadRequestException), LO RELANZAMOS DIRECTO
+      if (error instanceof HttpException) {
+        throw error;
+      }
+
+      // SI ES UN ERROR INESPERADO (ej. caída de BD, error de sintaxis), ENVIAMOS UN 500
+      throw new InternalServerErrorException({
+        message: 'Error en el servicio de Boda',
         cause: error // Mantiene el rastro del error original en logs internos
       });
 
@@ -162,11 +210,14 @@ export class BodaService {
 
     try {
 
-      let data = await this.datosModel.findOne({
-        where : {
-          id
-        }
-      });
+      let data = await this.datosModel.createQueryBuilder('c')
+      .select([ 
+        "id" , "uu_id" , "Nombre" , "DATE_FORMAT( c.Fecha , '%Y-%m-%d') as Fecha" , "Estado" , "DniUsuarioMod" , "UsuarioMod" , 
+        "DATE_FORMAT( c.created_at , '%Y-%m-%d %H:%i:%s') as Creado" , 
+        "Hora" , "MapaLink" , "Direccion"
+      ])
+      .where(" c.id = :id" , { id } )
+      .getRawOne();
 
       return {
         data , 
@@ -186,7 +237,7 @@ export class BodaService {
 
       // SI ES UN ERROR INESPERADO (ej. caída de BD, error de sintaxis), ENVIAMOS UN 500
       throw new InternalServerErrorException({
-        message: 'Error en el servicio de autenticación',
+        message: 'Error en el servicio de Boda',
         cause: error // Mantiene el rastro del error original en logs internos
       });
 
@@ -208,14 +259,18 @@ export class BodaService {
       if( data1!.Estado != 'activo' )throw new HttpException( 'Documento no disponible', HttpStatus.CONFLICT);
 
       await this.datosModel.update({ uu_id : uuID } , dto );
-      let dataP = await this.datosModel.findOne({
-        where : {
-          uu_id : uuID
-        }
-      });
+      
+      let data = await this.datosModel.createQueryBuilder('c')
+      .select([ 
+        "id" , "uu_id" , "Nombre" , "DATE_FORMAT( c.Fecha , '%Y-%m-%d') as Fecha" , "Estado" , "DniUsuarioMod" , "UsuarioMod" , 
+        "DATE_FORMAT( c.created_at , '%Y-%m-%d %H:%i:%s') as Creado" ,
+        "Hora" , "MapaLink" , "Direccion"
+      ])
+      .where(" c.id = :id" , { id : data1!.id } )
+      .getRawOne();
 
       return {
-        data : dataP , 
+        data  , 
         version : '1' , 
         msg : { titulo : 'Correcto' , texto : 'Registro actualizado' , clase : 'success' , call : 'tostada2' }
       }
@@ -232,7 +287,7 @@ export class BodaService {
 
       // SI ES UN ERROR INESPERADO (ej. caída de BD, error de sintaxis), ENVIAMOS UN 500
       throw new InternalServerErrorException({
-        message: 'Error en el servicio de autenticación',
+        message: 'Error en el servicio de Boda',
         cause: error // Mantiene el rastro del error original en logs internos
       });
       
@@ -272,7 +327,7 @@ export class BodaService {
 
       // SI ES UN ERROR INESPERADO (ej. caída de BD, error de sintaxis), ENVIAMOS UN 500
       throw new InternalServerErrorException({
-        message: 'Error en el servicio de autenticación',
+        message: 'Error en el servicio de Boda',
         cause: error // Mantiene el rastro del error original en logs internos
       });
 

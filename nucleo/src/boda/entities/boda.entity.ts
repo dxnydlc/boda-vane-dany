@@ -1,7 +1,6 @@
 import { Column, Entity, Generated, JoinColumn, OneToOne, PrimaryGeneratedColumn } from "typeorm"
 
-
-@Entity({ name: 'orq_datos' })
+@Entity({ name: 'tbl_boda' })
 
 export class BodaModel {
 
@@ -19,6 +18,15 @@ export class BodaModel {
     Fecha! : string
 
     @Column()
+    Hora : string = '00:00'
+
+    @Column({type:'text'})
+    MapaLink : string = ''
+
+    @Column({type:'text'})
+    Direccion : string = ''
+
+    @Column()
     Estado : string = 'activo'
 
     @Column()
@@ -29,9 +37,6 @@ export class BodaModel {
     
     @Column()
     UsuarioMod! : string
-
-    @Column()
-    Fecha_Creacion! : string
 
     @Column()
     deleted_at! : string

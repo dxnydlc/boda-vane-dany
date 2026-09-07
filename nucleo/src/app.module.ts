@@ -41,6 +41,8 @@ import { UsuariosBodaModule } from './usuarios_boda/usuarios_boda.module';
     InvitadosModule, RsvpModule, CompanionsModule, AccessLogModule, UsersModule, EventosModule, AdminLogModule, AuthModule, UtilidadesModule, NoviosModule, BodaModule, UsuariosBodaModule
   ],
   controllers: [AppController],
-  providers: [AppService],
+  providers: [
+    AppService
+  ],
 })
 export class AppModule {}

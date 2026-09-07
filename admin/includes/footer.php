@@ -36,6 +36,9 @@
 
     <script src="/assets/js/pages/datatable.js"></script>
 
+    <script src="/assets//vendor/libs/sweetalert2/sweetalert2.js"></script>
+    <script src="/assets/js/pages/extended-ui-sweetalert2.js"></script>
+
     <!-- select2 -->
     <script src="/assets/vendor/libs/select2/select2.js"></script>
     <script src="/assets/js/pages/extended-ui-select2.js"></script>
@@ -44,6 +47,7 @@
 
     <!-- page specific script -->
     <?php echo $archivoJS ?>
+    <?php echo $archivoJS2 ?>
 
 </body>
 
