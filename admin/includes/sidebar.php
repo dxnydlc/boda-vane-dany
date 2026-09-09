@@ -81,13 +81,18 @@
                                         </a>
                                     </li>
                                     <li class="app-sidebar-menu-item">
-                                        <a href="./user-profile-projects.html" class="menu-link d-flex align-items-center">
-                                            <span class="menu-title flex-grow-1" >Musica</span>
+                                        <a href="/invitados" class="menu-link d-flex align-items-center">
+                                            <span class="menu-title flex-grow-1" >Invitados</span>
                                         </a>
                                     </li>
                                     <li class="app-sidebar-menu-item">
-                                        <a href="./user-profile-team.html" class="menu-link d-flex align-items-center">
-                                            <span class="menu-title flex-grow-1" >Barman</span>
+                                        <a href="/asignar-mesas" class="menu-link d-flex align-items-center">
+                                            <span class="menu-title flex-grow-1" >Asignar mesas</span>
+                                        </a>
+                                    </li>
+                                    <li class="app-sidebar-menu-item">
+                                        <a href="/mesas" class="menu-link d-flex align-items-center">
+                                            <span class="menu-title flex-grow-1" >Mesas</span>
                                         </a>
                                     </li>
                                 </ul>

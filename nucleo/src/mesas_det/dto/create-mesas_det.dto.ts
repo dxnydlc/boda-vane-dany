@@ -1,25 +1,26 @@
 import { ApiProperty } from "@nestjs/swagger"
 import { IsNotEmpty } from "class-validator"
 
-export class CreateInvitadoDto {
+
+export class CreateMesasDetDto {
 
     // ************************************************
 
     @ApiProperty({
-        description : 'Nombre',
-        default     : 'Nombre invitado',
+        description : 'IdMesa',
+        default     : '2',
     })
-    @IsNotEmpty({message : 'Ingrese invitado'})
-    Nombre : string = ''
+    @IsNotEmpty({message : 'Ingrese IdMesa'})
+    IdMesa : number = 0
 
     // ************************************************
 
     @ApiProperty({
-        description : 'Boda',
-        default     : '0',
+        description : 'IdInvitado',
+        default     : '1',
     })
-    @IsNotEmpty({message : 'Seleccione Boda'})
-    IdBoda : number = 0
+    @IsNotEmpty({message : 'Ingrese IdInvitado'})
+    IdInvitado : number = 0
 
     // ************************************************
 

@@ -1,13 +1,9 @@
 import { Controller, Get, Post, Body, Patch, Param, Delete, UseGuards, ValidationPipe, UsePipes, HttpCode, Req } from '@nestjs/common';
-import { NoviosService } from './novios.service';
-import { CreateNovioDto } from './dto/create-novio.dto';
-import { UpdateNovioDto } from './dto/update-novio.dto';
+import { MesasDetService } from './mesas_det.service';
+import { CreateMesasDetDto } from './dto/create-mesas_det.dto';
+import { UpdateMesasDetDto } from './dto/update-mesas_det.dto';
 
 
-
-
-//import * as moment from 'moment';
-//import 'moment/locale/pt-br';
 
 const moment = require('moment');
 
@@ -23,20 +19,20 @@ import { JwtGuardGuard } from 'src/guards/jwt-guard/jwt-guard.guard';
 // Para activar el auth JwTokenAuth
 @UseGuards( JwtGuardGuard )
 
-@ApiTags('Novios')
+@ApiTags('Datos')
 @ApiBearerAuth()
 @UsePipes( new ValidationPipe )
 
 
 
-// CreateNovioDto | UpdateNovioDto
-@Controller('novios')
-export class NoviosController {
-  //constructor(private readonly noviosService: NoviosService) {}
+// CreateMesasDetDto | UpdateMesasDetDto
+@Controller('mesas-det')
+export class MesasDetController {
+  // constructor(private readonly mesasDetService: MesasDetService) {}
   // ................................................................
   // ................................................................
   constructor(
-    private readonly noviosService: NoviosService , 
+    private readonly mesasDetService : MesasDetService , 
     private readonly util : UtilidadesService , 
   ) {}
   // ................................................................
@@ -59,26 +55,25 @@ export class NoviosController {
   // ................................................................
   // ................................................................
   // ................................................................
-  @Get('by-idboda/:IdBoda')
+  @Delete('quitar-invitado')
   @HttpCode(200)
-  async getByIdBoda( @Param('IdBoda') IdBoda : number ) {
-    return this.noviosService.getActivosfromIdBoda( IdBoda );
+  async QuitarInvitado( @Body('IdMesa') IdMesa  : number , @Body('IdInvitado') IdInvitado  : number ) {
+    return this.mesasDetService.quitarInvitado( IdMesa , IdInvitado );
   }
   // ................................................................
   // ................................................................
   @Post('guardar')
   @HttpCode(200)
-  async guardar( @Body() dto : CreateNovioDto , @Req() req : express.Request ) {
+  async guardar(@Body() dto : CreateMesasDetDto , @Req() req : express.Request ) {
     
     const createdAt   = moment().format('YYYY-MM-DD HH:mm:ss');
-    let Usuario       = '' , IdUsuario = '0' , IdU = '0';
+    let Usuario       = '' , IdUsuario = '0';
 
     let a             = req.user;
     console.log('_____+++', a);
     if( a ){
       IdUsuario       = a['DNI'];
       Usuario         = a['Nombre'];
-      IdU             = a["id"]
     }
     console.log( 'Usuario'   , Usuario );
     console.log( 'IdUsuario' , IdUsuario );
@@ -87,42 +82,29 @@ export class NoviosController {
       ...dto , 
       created_at : createdAt , 
       updated_at : createdAt , 
-      Estado: 'activo',
-      DniUsuarioMod: IdUsuario,
-      UsuarioMod: Usuario,
-      IdUsuario : IdU , 
     };
 
-    console.log( bodyProocolo )
-
-    return this.noviosService.guardar( bodyProocolo );
+    return this.mesasDetService.guardar( bodyProocolo );
   }
   // ................................................................
   // ................................................................
   @Get('get-todos')
   @HttpCode(200)
   async getTodos() {
-    return this.noviosService.getTodos();
-  }
-  // ................................................................
-  // ................................................................
-  @Get('get-activos')
-  @HttpCode(200)
-  async getActivos() {
-    return this.noviosService.getActivos();
+    return this.mesasDetService.getTodos();
   }
   // ................................................................
   // ................................................................
   @Get('get-by-id/:id')
   @HttpCode(200)
   async getbyId( @Param('id') id : number ) {
-    return this.noviosService.getbyId( id );
+    return this.mesasDetService.getbyId( id );
   }
   // ................................................................
   // ................................................................
-  @Patch('actualizar/:uuid')
+  @Patch('actualizar/:id')
   @HttpCode(200)
-  async Actualizar( @Param('uuid') uuid : string, @Body() dto : UpdateNovioDto , @Req() req : express.Request ) {
+  async Actualizar( @Param('id') id : number, @Body() dto : UpdateMesasDetDto , @Req() req : express.Request ) {
     
     const createdAt   = moment().format('YYYY-MM-DD HH:mm:ss');
     let Usuario       = '' , IdUsuario = '0';
@@ -139,17 +121,15 @@ export class NoviosController {
     const bodyProocolo = {
       ...dto , 
       updated_at : createdAt , 
-      DniUsuarioMod: IdUsuario,
-      UsuarioMod: Usuario,
     };
-    return this.noviosService.Actualizar( uuid , bodyProocolo);
+    return this.mesasDetService.Actualizar( id , bodyProocolo );
   }
   // ................................................................
   // ................................................................
   @Delete('anular-by-id/:id')
   @HttpCode(200)
   async Anular( @Param('id') id  : number ) {
-    return this.noviosService.AnularbyId( id );
+    return this.mesasDetService.AnularbyId( id );
   }
   // ................................................................
   // ................................................................

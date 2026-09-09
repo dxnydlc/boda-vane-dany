@@ -79,6 +79,17 @@ switch ( $request ) {
         $content                = 'pages/boda/homeBoda.php';
         $archivoJS              = "<script src='/utils/js/boda/homeBoda.js?v=$semilla'></script>";
     break;
+    case '/invitados':
+        $title                  = 'Invitados';
+        $content                = 'pages/invitados/homeInvitados.php';
+        $archivoJS              = "<script src='/utils/js/invitados/homeInvitados.js?v=$semilla'></script>";
+    break;
+    case '/asignar-mesas':
+        $title                  = 'Asignar mesas';
+        $content                = 'pages/asignar_mesas/homeAsignarMesas.php';
+        $archivoJS              = "<script src='/utils/js/asignar_mesas/homeAsignarMesas.js?v=$semilla'></script>";
+        $archivoCSS             = '<link rel="stylesheet" href="/utils/css/mesas.css" >';
+    break;
     default:
         http_response_code( 404 );
         $title                  = 'Página No Encontrada';

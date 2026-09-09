@@ -1,50 +1,25 @@
 
-import { BodaModel } from "src/boda/entities/boda.entity";
 import { Column, Entity, Generated, Index, JoinColumn, ManyToOne, OneToOne, PrimaryGeneratedColumn } from "typeorm"
 
-
-@Entity({ name: 'tbl_invitados' })
-export class InvitadoModel {
+@Entity({ name: 'tbl_mesas_cab' })
+export class MesasCabModel {
 
     @PrimaryGeneratedColumn({ type: 'bigint', unsigned: true })
     id: number = 0;
 
     @Column({ type: 'varchar', length: 50, unique: true })
+    @Generated("uuid")
     uu_id: string = '';
-
-    // @Column({ type: 'varchar', length: 100, unique: true })
-    // token: string = '';
 
     @Index('idx_invitado_nombre')
     @Column({ type: 'varchar', length: 150 })
     Nombre: string = '';
 
-    // -----------------------------
-    // Relaciones
-    // -----------------------------
-
-    @Index('idx_invitado_boda')
-    @Column({ type: 'bigint', unsigned: true, nullable: true })
-    IdBoda: number = 0;
-
-    @Column({type : 'double'})
-    IdNovio : number = 0
-
-    // -----------------------------
-    // Datos del invitado
-    // -----------------------------
+    @Column({type : 'int'})
+    NroInvitados : number = 0
 
     @Column({ type: 'varchar', length: 150, nullable: true })
-    email : string = ''
-
-    @Column({ type: 'varchar', length: 50, nullable: true })
-    phone : string = ''
-
-    @Column({ type: 'varchar', length: 100, nullable: true })
-    group_name : string = ''
-
-    @Column({ type: 'varchar', length: 150 })
-    Foto : string = ''
+    Color : string = ''
 
     @Column({
         type: 'enum',
@@ -53,11 +28,11 @@ export class InvitadoModel {
     })
     Estado: string = '';
 
-    @Column({ type: 'int', unsigned: true, default: 0 })
-    max_companions : number = 0
+    // Relaciones
+    // -----------------------------
 
-    @Column({ type: 'datetime', nullable: true })
-    invitation_sent_at : string = ''
+    @Column({ type: 'bigint', unsigned: true, nullable: true })
+    IdBoda: number = 0;
 
     // -----------------------------
     // Auditoría

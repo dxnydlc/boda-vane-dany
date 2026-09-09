@@ -1,7 +1,6 @@
-import { BadRequestException, HttpException, Injectable, InternalServerErrorException } from '@nestjs/common';
-import { CreateNovioDto } from './dto/create-novio.dto';
-import { UpdateNovioDto } from './dto/update-novio.dto';
-
+import { BadRequestException, HttpException, HttpStatus, Injectable, InternalServerErrorException } from '@nestjs/common';
+import { CreateMesasCabDto } from './dto/create-mesas_cab.dto';
+import { UpdateMesasCabDto } from './dto/update-mesas_cab.dto';
 
 
 import { readFileSync, writeFileSync } from 'fs';
@@ -12,24 +11,43 @@ const execShPromise = require("exec-sh").promise;
 
 const moment = require('moment');
 
+
+
 import { v4 as uuidv4 } from 'uuid';
 import { UtilidadesService } from 'src/utilidades/utilidades.service';
 import { InjectRepository } from '@nestjs/typeorm';
-import { NovioModel } from './entities/novio.entity';
+import { MesasCabModel } from './entities/mesas_cab.entity';
 import { Repository } from 'typeorm';
+import { MesasDetService } from 'src/mesas_det/mesas_det.service';
 
 require('colors');
 
 
+export interface Invitado {
+  id: number;
+  Nombre: string;
+  Tipo: string;
+  Foto: string;
+  Estado: string;
+}
 
-// CreateNovioDto | UpdateNovioDto
+export interface Mesa {
+  id: number;
+  Nombre: string;
+  color: string;
+  invitados: Invitado[];
+}
+
+
+// CreateMesasCabDto | UpdateMesasCabDto
 @Injectable()
-export class NoviosService {
+export class MesasCabService {
   // ...................................................................
   // ...................................................................
   constructor(
-    @InjectRepository( NovioModel )private readonly datosModel : Repository<NovioModel> ,
+    @InjectRepository( MesasCabModel )private readonly datosModel : Repository<MesasCabModel> ,
     private util : UtilidadesService , 
+    private readonly srvDetalle : MesasDetService , 
   ){}
   // ...................................................................
   // ...................................................................
@@ -71,7 +89,7 @@ export class NoviosService {
 
       // SI ES UN ERROR INESPERADO (ej. caída de BD, error de sintaxis), ENVIAMOS UN 500
       throw new InternalServerErrorException({
-        message: 'Error en el servicio de Novios',
+        message: 'Error en el servicio de Mesas Cab',
         cause: error // Mantiene el rastro del error original en logs internos
       });
 
@@ -80,36 +98,59 @@ export class NoviosService {
   }
   // ...................................................................
   // ...................................................................
-  async guardar( dto : CreateNovioDto ) {
+  async guardar( dto : CreateMesasCabDto ) {
 
     try {
 
       //Comprobar si el codigo ya existe
       const mipPlagaInit = await this.datosModel.findOne({
         where: {
-          IdBoda: dto.IdBoda , DNI : dto.DNI
+          Nombre: dto.Nombre , IdBoda : dto.IdBoda
         }
       });
 
-      let NombreTipo = dto.Tipo == 'Novio' ? `El` : `La`;
-
-      if (mipPlagaInit) throw new BadRequestException( `${NombreTipo} ya existe en el sistema.` );
+      if (mipPlagaInit) throw new BadRequestException('La mesa ya existe' );
       
-      varDump( dto );
       const newArea = await this.datosModel.create( dto );
       let dataSave  = await this.datosModel.save( newArea );
+      //let Codigo = await this.util.addZeros( dataSave.id , 4 );
+      //await this.datosModel.update({ id : dataSave.id },{ Codigo : `RM${Codigo}` });
 
-
-      let data = await this.datosModel.findOne({
-        where : {
-          id : dataSave.id
-        }
+      let data = await this.datosModel.find({
+        where : { IdBoda : dto.IdBoda }
       });
 
+      let mesas : Mesa[] = [];
+
+      for (let index = 0; index < data.length; index++) {
+        const rs                  = data[index];
+        // Invitados asignados
+        let dataInvitadosMeasa    = await this.srvDetalle.invitadoMesa( rs.id );
+        let invitados: Invitado[] = [];
+        for (let indexD = 0; indexD < dataInvitadosMeasa.data.length; indexD++) {
+          const rsD = dataInvitadosMeasa.data[indexD];
+          let i = {
+            id      : parseInt( rsD.id ) , 
+            Nombre  :  rsD.Nombre , 
+            Tipo    : rsD.Tipo , 
+            Foto    : rsD.Foto , 
+            Estado  : rsD.Estado
+          };
+          invitados.push( i );
+        }
+        let m = {
+          id : rs.id , 
+          Nombre : rs.Nombre , 
+          color : rs.Color , 
+          invitados : invitados 
+        };
+        mesas.push( m );
+      }
+
       return {
-        data , 
+        data : mesas , 
         version : '1' , 
-        msg : { titulo : 'Correcto' , texto : 'Registro guardado' , clase : 'success' , call : 'tostada2' }
+        msg : { titulo : 'Correcto' , texto : 'Mesa agregada' , clase : 'success' , call : 'tostada2' }
       }
 
     } catch (error) {
@@ -124,7 +165,7 @@ export class NoviosService {
 
       // SI ES UN ERROR INESPERADO (ej. caída de BD, error de sintaxis), ENVIAMOS UN 500
       throw new InternalServerErrorException({
-        message: 'Error en el servicio de Novios',
+        message: 'Error en el servicio de Mesas Cab',
         cause: error // Mantiene el rastro del error original en logs internos
       });
 
@@ -134,12 +175,14 @@ export class NoviosService {
   // ...................................................................
   // ...................................................................
   async getTodos() {
-
     try {
       
-      let data = await this.datosModel.createQueryBuilder('c')
-      .select([ "id" , "uu_id" , "Tipo" , "Nombre" , "Apellidos" , "Email" , "DNI" , "Estado" ])
-      .getRawMany();
+      let data = await this.datosModel.find({
+        take : 200 ,
+        order : {
+          id : 'DESC'
+        }
+      });
   
       return {
         data , 
@@ -159,101 +202,7 @@ export class NoviosService {
 
       // SI ES UN ERROR INESPERADO (ej. caída de BD, error de sintaxis), ENVIAMOS UN 500
       throw new InternalServerErrorException({
-        message: 'Error en el servicio de Novios',
-        cause: error // Mantiene el rastro del error original en logs internos
-      });
-
-    }
-
-  }
-  // ...................................................................
-  // ...................................................................
-  async getActivos() {
-
-    try {
-      
-      let data = await this.datosModel.createQueryBuilder('c')
-      .select([ 
-        "c.id as id" , 
-        "c.uu_id as uu_id" , 
-        "b.Nombre as Boda" , 
-        "c.Tipo as Tipo" , 
-        "c.Nombre as Nombre" , 
-        "c.Apellidos as Apellidos" , 
-        "c.DNI as DNI" , 
-        "c.Email as Email" , 
-        "c.Estado as Estado" 
-      ])
-      .innerJoin( "tbl_boda" , "b" , " c.IdBoda = b.id " )
-      .where(" c.Estado = 'activo' ")
-      .getRawMany();
-  
-      return {
-        data , 
-        version : '1' , 
-        msg : { titulo : 'Correcto' , texto : 'Registros cargados' , clase : 'success' , call : 'tostada2' }
-      }
-
-    } catch (error) {
-
-      // Para depuración local
-      varDump(error); 
-
-      // SI EL ERROR YA ES DE NESTJS (ej. BadRequestException), LO RELANZAMOS DIRECTO
-      if (error instanceof HttpException) {
-        throw error;
-      }
-
-      // SI ES UN ERROR INESPERADO (ej. caída de BD, error de sintaxis), ENVIAMOS UN 500
-      throw new InternalServerErrorException({
-        message: 'Error en el servicio de Novios',
-        cause: error // Mantiene el rastro del error original en logs internos
-      });
-
-    }
-
-  }
-  // ...................................................................
-  // ...................................................................
-  async getActivosfromIdBoda( IdBoda : number = 0 ) {
-
-    try {
-      
-      let data = await this.datosModel.createQueryBuilder('c')
-      .select([ 
-        "c.id as id" , 
-        "c.uu_id as uu_id" , 
-        "b.Nombre as Boda" , 
-        "c.Tipo as Tipo" , 
-        "c.Nombre as Nombre" , 
-        "c.Apellidos as Apellidos" , 
-        "c.DNI as DNI" , 
-        "c.Email as Email" , 
-        "c.Estado as Estado" 
-      ])
-      .innerJoin( "tbl_boda" , "b" , " c.IdBoda = b.id " )
-      .where(" c.Estado = 'activo' AND c.IdBoda = :IdBoda " , { IdBoda }  )
-      .getRawMany();
-  
-      return {
-        data , 
-        version : '1' , 
-        msg : { titulo : 'Correcto' , texto : `Hay ${data.length} registros.` , clase : 'success' , call : 'tostada2' }
-      }
-
-    } catch (error) {
-
-      // Para depuración local
-      varDump(error); 
-
-      // SI EL ERROR YA ES DE NESTJS (ej. BadRequestException), LO RELANZAMOS DIRECTO
-      if (error instanceof HttpException) {
-        throw error;
-      }
-
-      // SI ES UN ERROR INESPERADO (ej. caída de BD, error de sintaxis), ENVIAMOS UN 500
-      throw new InternalServerErrorException({
-        message: 'Error en el servicio de Novios',
+        message: 'Error en el servicio de Mesas Cab',
         cause: error // Mantiene el rastro del error original en logs internos
       });
 
@@ -290,7 +239,7 @@ export class NoviosService {
 
       // SI ES UN ERROR INESPERADO (ej. caída de BD, error de sintaxis), ENVIAMOS UN 500
       throw new InternalServerErrorException({
-        message: 'Error en el servicio de Novios',
+        message: 'Error en el servicio de Mesas Cab',
         cause: error // Mantiene el rastro del error original en logs internos
       });
 
@@ -298,8 +247,7 @@ export class NoviosService {
   }
   // ...................................................................
   // ...................................................................
-  async Actualizar( uuID : string , dto : UpdateNovioDto ) {
-
+  async Actualizar( uuID : string , dto : UpdateMesasCabDto ) {
     try {
 
       // Primero ver si esta activo o no {-.-}
@@ -308,6 +256,8 @@ export class NoviosService {
           uu_id: uuID,
         },
       });
+
+      if( data1!.Estado != 'Activo' )throw new HttpException( 'Documento no disponible', HttpStatus.CONFLICT);
 
       await this.datosModel.update({ uu_id : uuID } , dto );
       let dataP = await this.datosModel.findOne({
@@ -334,7 +284,7 @@ export class NoviosService {
 
       // SI ES UN ERROR INESPERADO (ej. caída de BD, error de sintaxis), ENVIAMOS UN 500
       throw new InternalServerErrorException({
-        message: 'Error en el servicio de Novios',
+        message: 'Error en el servicio de Mesas Cab',
         cause: error // Mantiene el rastro del error original en logs internos
       });
       
@@ -349,14 +299,12 @@ export class NoviosService {
 
       const updatedAt = moment().format('YYYY-MM-DD HH:mm:ss');
 
-      
+      await this.datosModel.update({ id } , { Estado : 'Anulado' , deleted_at : updatedAt , updated_at : updatedAt } );
       let data = await this.datosModel.findOne({
         where : {
           id 
         }
       });
-
-      await this.datosModel.delete({ id });
 
       return {
         data , 
@@ -376,7 +324,7 @@ export class NoviosService {
 
       // SI ES UN ERROR INESPERADO (ej. caída de BD, error de sintaxis), ENVIAMOS UN 500
       throw new InternalServerErrorException({
-        message: 'Error en el servicio de Novios',
+        message: 'Error en el servicio de Mesas Cab',
         cause: error // Mantiene el rastro del error original en logs internos
       });
 
@@ -384,76 +332,146 @@ export class NoviosService {
   }
   // ...................................................................
   // ...................................................................
-  // ...................................................................
-  // ...................................................................
-  // ...................................................................
-  // ...................................................................
-  // ...................................................................
-  // ...................................................................
-  // ...................................................................
-  // ...................................................................
-  // ...................................................................
-  // ...................................................................
-  // ...................................................................
-  // ...................................................................
-  // ...................................................................
-  // ...................................................................
-  // ...................................................................
-  // ...................................................................
-  // IMPRESION CLIENTE
-  async generarHTML01(IdsOT: string) {
-
-    let css = '';
-    let Salto = `<div style="page-break-after:always;" ></div>`;
-
-    let html = ``;
-
-    // TERMINAMOS DE ESCRIBIR EL ARCHIVO
-    let _uuid = uuidv4();
-    let _URL_PROYECTO = process.env.URL_PROYECTO;
-    let NombreArchivo = `OT01_${_uuid}`;
-    let pathPhp = `${_URL_PROYECTO}public/html/${NombreArchivo}.html`;
-    varDump(pathPhp);
-    writeFileSync(pathPhp, html);
-    //
-    await sleep(2000); // Wait for one second
-    await this.transformarHtml(NombreArchivo);
-    //
-    return {
-      file: `${NombreArchivo}`,
-      version: 1,
-    };
-
-  }
-  // ...................................................................
-  // ...................................................................
-  async transformarHtml(file: string) {
-    //
-
-    let out;
+  async getMesas( IdBoda : number ) {
 
     try {
-      let _URL_PROYECTO = process.env.URL_PROYECTO;
-      // Tal vez en tu equipo se necesite usar otro comando, lo defines en el .env, key "COMANDO_PDF"
-      let COMANDO_PDF = process.env.COMANDO_PDF;
-      if(!COMANDO_PDF){
-      COMANDO_PDF = `xvfb-run wkhtmltopdf --enable-local-file-access`;
-      }
-      let comando = `${COMANDO_PDF} ${_URL_PROYECTO}public/html/${file}.html ${_URL_PROYECTO}public/html/${file}.pdf`;
-      out = await execShPromise(comando, true);
-    } catch (e) {
-      console.log('Error: ', e);
+      
+      let data = await this.datosModel.find({
+        where : { IdBoda }
+      });
 
-      return e;
+      let mesas : Mesa[] = [];
+
+      for (let index = 0; index < data.length; index++) {
+        const rs                  = data[index];
+        // Invitados asignados
+        let dataInvitadosMeasa    = await this.srvDetalle.invitadoMesa( rs.id );
+        let invitados: Invitado[] = [];
+        for (let indexD = 0; indexD < dataInvitadosMeasa.data.length; indexD++) {
+          const rsD = dataInvitadosMeasa.data[indexD];
+          let i = {
+            id      : parseInt( rsD.id ) , 
+            Nombre  :  rsD.Nombre , 
+            Tipo    : rsD.Tipo , 
+            Foto    : rsD.Foto , 
+            Estado  : rsD.Estado
+          };
+          invitados.push( i );
+        }
+        let m = {
+          id : rs.id , 
+          Nombre : rs.Nombre , 
+          color : rs.Color , 
+          invitados : invitados 
+        };
+        mesas.push( m );
+      }
+
+      return {
+        data : mesas , 
+        version : '1' , 
+        msg : { titulo : 'Correcto' , texto : 'Registros cargados' , clase : 'success' , call : 'tostada2' }
+      }
+
+    } catch (error) {
+
+      // Para depuración local
+      varDump(error); 
+
+      // SI EL ERROR YA ES DE NESTJS (ej. BadRequestException), LO RELANZAMOS DIRECTO
+      if (error instanceof HttpException) {
+        throw error;
+      }
+
+      // SI ES UN ERROR INESPERADO (ej. caída de BD, error de sintaxis), ENVIAMOS UN 500
+      throw new InternalServerErrorException({
+        message: 'Error en el servicio de Mesas Cab',
+        cause: error // Mantiene el rastro del error original en logs internos
+      });
+
     }
 
-    console.log('out: ', out.stdout, out.stderr);
+  }
+  // ...................................................................
+  // ...................................................................
+  async setColor( id : number = 0 , Color : string ) {
+    try {
+      
+      let data = await this.datosModel.update({ id },{ Color });
+  
+      // throw new BadRequestException('Usuario no existe');
 
-    return {
-      data: 'ok'
-    };
+      return {
+        data , 
+        version : '1' , 
+        msg : { titulo : 'Correcto' , texto : 'Registros cargados' , clase : 'success' , call : 'tostada2' }
+      }
+
+    } catch (error) {
+
+      // Para depuración local
+      varDump(error); 
+
+      // SI EL ERROR YA ES DE NESTJS (ej. BadRequestException), LO RELANZAMOS DIRECTO
+      if (error instanceof HttpException) {
+        throw error;
+      }
+
+      // SI ES UN ERROR INESPERADO (ej. caída de BD, error de sintaxis), ENVIAMOS UN 500
+      throw new InternalServerErrorException({
+        message: 'Error en el servicio de Mesas Cab',
+        cause: error // Mantiene el rastro del error original en logs internos
+      });
+
+    }
 
   }
+  // ...................................................................
+  // ...................................................................
+  async setNroInvitados( id : number = 0 , NroInvitados : number ) {
+    try {
+      
+      let data = await this.datosModel.update({ id },{ NroInvitados });
+  
+      // throw new BadRequestException('Usuario no existe');
+
+      return {
+        data , 
+        version : '1' , 
+        msg : { titulo : 'Correcto' , texto : 'Registros cargados' , clase : 'success' , call : 'tostada2' }
+      }
+
+    } catch (error) {
+
+      // Para depuración local
+      varDump(error); 
+
+      // SI EL ERROR YA ES DE NESTJS (ej. BadRequestException), LO RELANZAMOS DIRECTO
+      if (error instanceof HttpException) {
+        throw error;
+      }
+
+      // SI ES UN ERROR INESPERADO (ej. caída de BD, error de sintaxis), ENVIAMOS UN 500
+      throw new InternalServerErrorException({
+        message: 'Error en el servicio de Mesas Cab',
+        cause: error // Mantiene el rastro del error original en logs internos
+      });
+
+    }
+
+  }
+  // ...................................................................
+  // ...................................................................
+  // ...................................................................
+  // ...................................................................
+  // ...................................................................
+  // ...................................................................
+  // ...................................................................
+  // ...................................................................
+  // ...................................................................
+  // ...................................................................
+  // ...................................................................
+  // ...................................................................
   // ...................................................................
   // ...................................................................
   // ...................................................................

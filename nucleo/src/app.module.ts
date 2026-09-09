@@ -18,6 +18,8 @@ import { UtilidadesModule } from './utilidades/utilidades.module';
 import { NoviosModule } from './novios/novios.module';
 import { BodaModule } from './boda/boda.module';
 import { UsuariosBodaModule } from './usuarios_boda/usuarios_boda.module';
+import { MesasCabModule } from './mesas_cab/mesas_cab.module';
+import { MesasDetModule } from './mesas_det/mesas_det.module';
 
 
 @Module({
@@ -38,7 +40,7 @@ import { UsuariosBodaModule } from './usuarios_boda/usuarios_boda.module';
       entities: [__dirname + '/**/*entity{.ts,.js}'],
       //logging  : true
     }),
-    InvitadosModule, RsvpModule, CompanionsModule, AccessLogModule, UsersModule, EventosModule, AdminLogModule, AuthModule, UtilidadesModule, NoviosModule, BodaModule, UsuariosBodaModule
+    InvitadosModule, RsvpModule, CompanionsModule, AccessLogModule, UsersModule, EventosModule, AdminLogModule, AuthModule, UtilidadesModule, NoviosModule, BodaModule, UsuariosBodaModule, MesasCabModule, MesasDetModule
   ],
   controllers: [AppController],
   providers: [

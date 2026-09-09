@@ -1,34 +1,193 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, UseGuards, ValidationPipe, UsePipes, HttpCode, Req, UseInterceptors, UploadedFile } from '@nestjs/common';
 import { InvitadosService } from './invitados.service';
 import { CreateInvitadoDto } from './dto/create-invitado.dto';
 import { UpdateInvitadoDto } from './dto/update-invitado.dto';
 
+
+//import * as moment from 'moment';
+//import 'moment/locale/pt-br';
+
+const moment = require('moment');
+
+import { v4 as uuidv4 } from 'uuid';
+
+import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
+
+import * as express from 'express';
+import { UtilidadesService } from 'src/utilidades/utilidades.service';
+import { JwtGuardGuard } from 'src/guards/jwt-guard/jwt-guard.guard';
+import { FileInterceptor } from '@nestjs/platform-express';
+
+import { Multer } from 'multer'; // Importa el tipo si es necesario
+import { storage } from 'src/utils/media.hadle';
+import * as path from 'path';
+import sharp from 'sharp';
+
+// Para activar el auth JwTokenAuth
+@UseGuards( JwtGuardGuard )
+
+@ApiTags('Datos')
+@ApiBearerAuth()
+@UsePipes( new ValidationPipe )
+
+
+
+// CreateInvitadoDto | UpdateInvitadoDto
 @Controller('invitados')
 export class InvitadosController {
-  constructor(private readonly invitadosService: InvitadosService) {}
-
-  @Post()
-  create(@Body() createInvitadoDto: CreateInvitadoDto) {
-    return this.invitadosService.create(createInvitadoDto);
+  //constructor(private readonly invitadosService: InvitadosService) {}
+  // ................................................................
+  // ................................................................
+  constructor(
+    private readonly invitadosService: InvitadosService , 
+    private readonly util : UtilidadesService , 
+  ) {}
+  // ................................................................
+  // ................................................................
+  // ................................................................
+  // ................................................................
+  // private readonly util : UtilidadesService , 
+  // ................................................................
+  // ................................................................
+  // ................................................................
+  // ................................................................
+  // ................................................................
+  // ................................................................
+  // ................................................................
+  // ................................................................
+  // ................................................................
+  // ................................................................
+  // ................................................................
+  // ................................................................
+  // ................................................................
+  @Get('get-lista/:IdBoda')
+  @HttpCode(200)
+  async getListabyId( @Param('IdBoda') IdBoda : number ) {
+    return this.invitadosService.getListabyIdBoda( IdBoda );
   }
+  // ................................................................
+  // ................................................................
+  @Post('upload')
+  @UseInterceptors(FileInterceptor('formData', { storage }))
+  async uploadFile(@UploadedFile() file: Express.Multer.File) {
 
-  @Get()
-  findAll() {
-    return this.invitadosService.findAll();
-  }
+    const originalPath    = file.path; // ruta del archivo subido
+    const ext             = path.extname(file.filename); // extensión
+    const nameOnly        = file.filename.replace(ext, ''); // nombre sin extensión
 
-  @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.invitadosService.findOne(+id);
-  }
+    const resizedName     = `${nameOnly}-200x200${ext}`;
+    const resizedPath     = path.join(path.dirname(originalPath), resizedName);
 
-  @Patch(':id')
-  update(@Param('id') id: string, @Body() updateInvitadoDto: UpdateInvitadoDto) {
-    return this.invitadosService.update(+id, updateInvitadoDto);
-  }
+    // Crear la versión redimensionada
+    await sharp(originalPath)
+      .resize(200, 200)
+      .toFile(resizedPath);
 
-  @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.invitadosService.remove(+id);
+    return {
+      message   : 'Archivo subido y redimensionado',
+      original  : `uploads/${file.filename}`,
+      resized   : `uploads/${resizedName}`,
+      resizedPath
+    };
   }
+  // ................................................................
+  // ................................................................
+  @Get('get-activos')
+  @HttpCode(200)
+  async getActivos() {
+    return this.invitadosService.getActivos();
+  }
+  // ................................................................
+  // ................................................................
+  @Post('guardar')
+  @HttpCode(200)
+  async guardar(@Body() dto : CreateInvitadoDto , @Req() req : express.Request ) {
+    
+    const createdAt   = moment().format('YYYY-MM-DD HH:mm:ss');
+    let Usuario       = '' , IdUsuario = '0';
+
+    let a             = req.user;
+    console.log('_____+++', a);
+    if( a ){
+      IdUsuario       = a['DNI'];
+      Usuario         = a['Nombre'];
+    }
+    console.log( 'Usuario'   , Usuario );
+    console.log( 'IdUsuario' , IdUsuario );
+
+    const bodyProocolo = {
+      ...dto , 
+      created_at : createdAt , 
+      updated_at : createdAt , 
+      Estado: 'Activo',
+      DniUsuarioMod: IdUsuario,
+      UsuarioMod: Usuario,
+    };
+
+    return this.invitadosService.guardar( bodyProocolo );
+  }
+  // ................................................................
+  // ................................................................
+  @Get('get-todos')
+  @HttpCode(200)
+  async getTodos() {
+    return this.invitadosService.getTodos();
+  }
+  // ................................................................
+  // ................................................................
+  @Get('get-by-id/:id')
+  @HttpCode(200)
+  async getbyId( @Param('id') id : number ) {
+    return this.invitadosService.getbyId( id );
+  }
+  // ................................................................
+  // ................................................................
+  @Patch('actualizar/:uuid')
+  @HttpCode(200)
+  async Actualizar( @Param('uuid') uuid : string, @Body() dto : UpdateInvitadoDto , @Req() req : express.Request ) {
+    
+    const createdAt   = moment().format('YYYY-MM-DD HH:mm:ss');
+    let Usuario       = '' , IdUsuario = '0';
+
+    let a             = req.user;
+    console.log('_____+++', a);
+    if( a ){
+      IdUsuario       = a['DNI'];
+      Usuario         = a['Nombre'];
+    }
+    console.log( 'Usuario'   , Usuario );
+    console.log( 'IdUsuario' , IdUsuario );
+
+    const bodyProocolo = {
+      ...dto , 
+      updated_at : createdAt , 
+      DniUsuarioMod: IdUsuario,
+      UsuarioMod: Usuario,
+    };
+    return this.invitadosService.Actualizar( uuid , bodyProocolo);
+  }
+  // ................................................................
+  // ................................................................
+  @Delete('anular-by-id/:id')
+  @HttpCode(200)
+  async Anular( @Param('id') id  : number ) {
+    return this.invitadosService.AnularbyId( id );
+  }
+  // ................................................................
+  // ................................................................
+  // ................................................................
+  // ................................................................
+  // ................................................................
+  // ................................................................
+  // ................................................................
+  // ................................................................
+  // ................................................................
+  // ................................................................
+  // ................................................................
+  // ................................................................
+  // ................................................................
+  // ................................................................
+  // ................................................................
+  // ................................................................
+  // ................................................................
 }
