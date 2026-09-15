@@ -5,7 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <title><?php echo $title; ?> | Conca</title>
+    <title><?php echo $title; ?> | Boda</title>
 
     <!-- favicon -->
     <link rel="shortcut icon" href="/assets/img/logo/favicon.png" type="image/x-icon">
@@ -18,7 +18,7 @@
 
     
     <!-- page level styles -->
-    <link href="assets/vendor/libs/toastr/toastr.css" rel="stylesheet">
+    <link href="/assets/vendor/libs/toastr/toastr.css" rel="stylesheet">
 
     
 
@@ -29,6 +29,10 @@
     <link href="/assets/vendor/libs/sweetalert2/sweetalert2.css" rel="stylesheet">
 
     <link rel="stylesheet" href="https://cdn.datatables.net/3.0.0/css/dataTables.dataTables.min.css" />
+
+    
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.30.1/moment.js" integrity="sha512-3CuraBvy05nIgcoXjVN33mACRyI89ydVHg7y/HMN9wcTVbHeur0SeBzweSd/rxySapO7Tmfu68+JlKkLTnDFNg==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.30.1/moment-with-locales.js" integrity="sha512-1cMYNLuYP3nNQUA42Gj7XvcJN5lAukNNw3fE1HtK3Fs1DA5JPrNQHv5g/FM+1yL5cT6x3sf2o1mKmTpVO0iGcA==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
     
     <script type="text/javascript">
     let URL_API         = '<?php echo $API; ?>';

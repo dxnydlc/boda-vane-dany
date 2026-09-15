@@ -76,6 +76,16 @@
                                         </a>
                                     </li>
                                     <li class="app-sidebar-menu-item">
+                                        <a href="/historia" class="menu-link d-flex align-items-center">
+                                            <span class="menu-title flex-grow-1" >Historia</span>
+                                        </a>
+                                    </li>
+                                    <li class="app-sidebar-menu-item">
+                                        <a href="/programa" class="menu-link d-flex align-items-center">
+                                            <span class="menu-title flex-grow-1" >Programa</span>
+                                        </a>
+                                    </li>
+                                    <li class="app-sidebar-menu-item">
                                         <a href="/novios" class="menu-link d-flex align-items-center">
                                             <span class="menu-title flex-grow-1" >Novios</span>
                                         </a>

@@ -10,6 +10,10 @@ $semilla                = time();
 $archivoJS              = "<script src='/utils/js/u.js?v=$semilla'></script>";
 $archivoJS2             = "<script src='/utils/js/helpers.js?v=$semilla'></script>";
 $archivoCSS             = '<link rel="stylesheet" href="/utils/css/u.css" >';
+$uuID                   = '';
+
+$incHeader              = 'includes/header.php';
+$incFooter              = 'includes/footer.php';
 
 // 1. Función para cargar el archivo .env
 function cargarEnv($rutaArchivo) {
@@ -45,17 +49,23 @@ cargarEnv(__DIR__ . '/.env');
 
 $API = $_ENV['API'];
 
-$request = parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH);
+$request            = parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH);
+$request            = parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH);
+$partes             = explode('/', trim($request, '/'));
+
+//var_dump( $partes[0] );
+
+$ruta_base          = $partes[0] ?? '';
 
 // 1. Rutas estáticas simples
 
-switch ( $request ) {
+switch ( $ruta_base ) {
     case '':
     case '/':
         $title                  = 'Inicio';
         $content                = 'pages/home.php';
     break;
-    case '/login':
+    case 'login':
         $title                  = 'Login';
         include 'pages/login.php';
         return true;
@@ -64,31 +74,86 @@ switch ( $request ) {
         $title                  = 'Datos';
         $content                = 'pages/datos.php';
     break;
-    case '/usuario':
+    case 'usuario':
         $title                  = 'Usuarios';
         $content                = 'pages/usuarios/homeUsuario.php';
         $archivoJS              = "<script src='/utils/js/usuarios/homeUsuarios.js?v=$semilla'></script>";
     break;
-    case '/novios':
+    case 'novios':
         $title                  = 'Novios';
         $content                = 'pages/novios/homeNovios.php';
         $archivoJS              = "<script src='/utils/js/novios/homeNovios.js?v=$semilla'></script>";
     break;
-    case '/boda':
+    case 'boda':
         $title                  = 'Boda';
         $content                = 'pages/boda/homeBoda.php';
         $archivoJS              = "<script src='/utils/js/boda/homeBoda.js?v=$semilla'></script>";
     break;
-    case '/invitados':
+    case 'invitados':
         $title                  = 'Invitados';
         $content                = 'pages/invitados/homeInvitados.php';
         $archivoJS              = "<script src='/utils/js/invitados/homeInvitados.js?v=$semilla'></script>";
     break;
-    case '/asignar-mesas':
+    case 'asignar-mesas':
         $title                  = 'Asignar mesas';
         $content                = 'pages/asignar_mesas/homeAsignarMesas.php';
         $archivoJS              = "<script src='/utils/js/asignar_mesas/homeAsignarMesas.js?v=$semilla'></script>";
         $archivoCSS             = '<link rel="stylesheet" href="/utils/css/mesas.css" >';
+    break;
+    case 'mesas':
+        $title                  = 'Mesas';
+        $content                = 'pages/mesas/homeMesas.php';
+        $archivoJS              = "<script src='/utils/js/mesas/homeMesas.js?v=$semilla'></script>";
+    break;
+    case 'invitacion':
+        // Obtenemos la segunda y tercera parte de la URL
+        $sub_ruta               = $partes[1] ?? '';
+        $parametro              = $partes[2] ?? '';
+        $regex_uuid             = '#^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$#';
+
+        // Verificamos que la sub-ruta sea "sukun" y que el parámetro sea un UUID válido
+        if ($sub_ruta           === 'sukun' && preg_match($regex_uuid, $parametro)) {
+            $uuID               = $parametro;
+            $title              = 'Invitación Especial';
+            $content            = 'pages/invitacion/sukun/homeInvitacionSukun.php';
+            $archivoJS          = "<script src='/utils/js/invitacion/sukun/homeInvitacion.js?v=$semilla'></script>";
+
+            $incHeader          = 'includes/invitacion/sukun/header.php';
+            $incFooter          = 'includes/invitacion/sukun/footer.php';
+        } else {
+            // Si dice algo distinto a "sukun" o el UUID está mal escrito
+            http_response_code(404);
+            $title              = 'Invitación no válida';
+            $content            = 'pages/404.php';
+        }
+    break;
+    case 'documento':
+        // Verificamos si existe la parte 1 (el parámetro) y si tiene el formato UUID correcto
+        $parametro              = $partes[1] ?? '';
+        $regex_uuid             = '#^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$#';
+
+        var_dump( $parametro );
+
+        if (preg_match($regex_uuid, $parametro)) {
+            $uuid_documento = $parametro;
+            $content            = 'pages/mesas/homeMesas.php';
+            $archivoJS          = "<script src='/utils/js/mesas/homeMesas.js?v=$semilla'></script>";
+        } else {
+            // Si no hay UUID o el formato es incorrecto
+            http_response_code(404);
+            $title              = 'Documento no válido';
+            $content            = 'pages/404.php';
+        }
+    break;
+    case 'historia':
+        $title                  = 'Historia';
+        $content                = 'pages/historia/homeHistoria.php';
+        $archivoJS              = "<script src='/utils/js/historia/homeHistoria.js?v=$semilla'></script>";
+    break;
+    case 'programa':
+        $title                  = 'Programa';
+        $content                = 'pages/programa/homePrograma.php';
+        $archivoJS              = "<script src='/utils/js/programa/homePrograma.js?v=$semilla'></script>";
     break;
     default:
         http_response_code( 404 );
@@ -96,64 +161,9 @@ switch ( $request ) {
         $content                = 'pages/404.php';
     break;
 }
-/**/
-// if ($request === '/' || $request === '') {
-//     $title = 'Inicio';
-//     $content = 'pages/home.php';
-// } 
-// elseif ($request === '/datos') {
-//     $title = 'Datos';
-//     $content = 'pages/datos.php';
-// }
-// elseif ($request === '/usuario') {
-//     $title                  = 'Usuarios';
-//     $content                = 'pages/usuarios/homeUsuario.php';
-//     $archivoJS              = "<script src='/utils/js/usuarios/homeUsuarios.js?v=$semilla'></script>";
-// }
-// elseif ($request === '/novios') {
-//     $title                  = 'Novios';
-//     $content                = 'pages/novios/homeNovios.php';
-//     $archivoJS              = "<script src='/utils/js/novios/homeNovios.js?v=$semilla'></script>";
-// }
-// /**/
 
-
-
-// elseif ($request === '/login') {
-//     $title = 'Login';
-//     include 'pages/login.php';
-//     return true;
-// }
-
-// // 2. Ruta dinámica para ID numérico (ej. /producto/45)
-// // El patrón ([0-9]+) captura uno o más números
-// elseif (preg_match('#^/producto/([0-9]+)$#', $request, $matches)) {
-//     // $matches[1] contendrá el número capturado en la URL
-//     $id_producto = $matches[1]; 
-    
-//     $title = 'Viendo producto ' . $id_producto;
-//     $content = 'pages/producto.php';
-// }
-
-// // 3. Ruta dinámica para texto (ej. /usuario/juan)
-// // El patrón ([a-zA-Z0-9_-]+) captura letras, números, guiones bajos o medios
-// elseif (preg_match('#^/usuariXXo/([a-zA-Z0-9_-]+)$#', $request, $matches)) {
-//     // $matches[1] contendrá el nombre capturado
-//     $nombre_usuario = $matches[1]; 
-    
-//     $title = 'Perfil de ' . $nombre_usuario;
-//     $content = 'pages/usuario.php';
-// }
-
-// // 4. Página no encontrada (404)
-// else {
-//     http_response_code(404);
-//     $title = 'Página No Encontrada';
-//     $content = 'pages/404.php';
-// }
-/**/
 
 // Cargar la plantilla y la vista
-include 'includes/header.php';
+include $incHeader;
 include $content;
-include 'includes/footer.php';
+include $incFooter;

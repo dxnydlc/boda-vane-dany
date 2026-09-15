@@ -177,12 +177,18 @@ export class MesasCabService {
   async getTodos() {
     try {
       
-      let data = await this.datosModel.find({
-        take : 200 ,
-        order : {
-          id : 'DESC'
-        }
-      });
+      let data = await this.datosModel.createQueryBuilder('c')
+      .innerJoin( "tbl_boda" , "b" , " b.id = c.IdBoda" )
+      .select([ 
+        "c.id as id" , "c.Nombre as Nombre" , 
+        "c.NroInvitados as NroInvitados" , 
+        "c.IdBoda as IdBoda" ,
+        "b.Nombre as Boda" , 
+        "c.Color as Color" , 
+        "c.Estado as Estado" , 
+        "DATE_FORMAT( c.created_at , '%Y-%m-%d %H:%i:%s') as created_at" , 
+      ])
+      .getRawMany();
   
       return {
         data , 
@@ -257,7 +263,7 @@ export class MesasCabService {
         },
       });
 
-      if( data1!.Estado != 'Activo' )throw new HttpException( 'Documento no disponible', HttpStatus.CONFLICT);
+      if( data1!.Estado != 'activo' )throw new HttpException( 'Documento no disponible', HttpStatus.CONFLICT);
 
       await this.datosModel.update({ uu_id : uuID } , dto );
       let dataP = await this.datosModel.findOne({

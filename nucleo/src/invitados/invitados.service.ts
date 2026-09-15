@@ -16,6 +16,8 @@ import { InvitadoModel } from './entities/invitado.entity';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { UtilidadesService } from 'src/utilidades/utilidades.service';
+import { NoviosService } from 'src/novios/novios.service';
+import { BodaService } from 'src/boda/boda.service';
 
 require('colors');
 
@@ -28,6 +30,8 @@ export class InvitadosService {
   constructor(
     @InjectRepository( InvitadoModel )private readonly datosModel : Repository<InvitadoModel> ,
     private util : UtilidadesService , 
+    private readonly srvNovios : NoviosService , 
+    private readonly srvBoda   : BodaService , 
   ){}
   // ...................................................................
   // ...................................................................
@@ -399,73 +403,66 @@ export class InvitadosService {
   // ...................................................................
   // ...................................................................
   // ...................................................................
-  // ...................................................................
-  // ...................................................................
-  // ...................................................................
-  // ...................................................................
-  // ...................................................................
-  // ...................................................................
-  // ...................................................................
-  // ...................................................................
-  // ...................................................................
-  // ...................................................................
-  // ...................................................................
-  // ...................................................................
-  // ...................................................................
-  // IMPRESION CLIENTE
-  async generarHTML01(IdsOT: string) {
-
-    let css = '';
-    let Salto = `<div style="page-break-after:always;" ></div>`;
-
-    let html = ``;
-
-    // TERMINAMOS DE ESCRIBIR EL ARCHIVO
-    let _uuid = uuidv4();
-    let _URL_PROYECTO = process.env.URL_PROYECTO;
-    let NombreArchivo = `OT01_${_uuid}`;
-    let pathPhp = `${_URL_PROYECTO}public/html/${NombreArchivo}.html`;
-    await varDump(pathPhp);
-    writeFileSync(pathPhp, html);
-    //
-    await sleep(2000); // Wait for one second
-    await this.transformarHtml(NombreArchivo);
-    //
-    return {
-      file: `${NombreArchivo}`,
-      version: 1,
-    };
-
-  }
-  // ...................................................................
-  // ...................................................................
-  async transformarHtml(file: string) {
-    //
-
-    let out;
-
+  async getInvitado( uu_id : string = '' ) {
     try {
-      let _URL_PROYECTO = process.env.URL_PROYECTO;
-      // Tal vez en tu equipo se necesite usar otro comando, lo defines en el .env, key "COMANDO_PDF"
-      let COMANDO_PDF = process.env.COMANDO_PDF;
-      if(!COMANDO_PDF){
-      COMANDO_PDF = `xvfb-run wkhtmltopdf --enable-local-file-access`;
-      }
-      let comando = `${COMANDO_PDF} ${_URL_PROYECTO}public/html/${file}.html ${_URL_PROYECTO}public/html/${file}.pdf`;
-      out = await execShPromise(comando, true);
-    } catch (e) {
-      console.log('Error: ', e);
 
-      return e;
+      let data = await this.datosModel.createQueryBuilder('i')
+      .where(" i.uu_id = :uu_id " , { uu_id } )
+      .innerJoin( "tbl_boda" , "b" , " b.id = i.IdBoda " )
+      .select([
+        "i.id as id" , "i.uu_id as uu_id" , "i.Nombre as Nombre" , "i.max_companions as NComp" , 
+        "i.group_name as Grupo" , "i.Estado as Estado" , "b.Nombre" , "b.id as IdBoda"
+      ])
+      .getRawOne();
+
+      if(!data)
+        throw new BadRequestException('No existe invitado');
+  
+      // Data Invitado
+      let IdBoda = data.IdBoda;
+      // Data Novios
+      let dataNovios = await this.srvNovios.getActivosfromIdBoda( IdBoda );
+      // Data Boda
+      let dataBoda    = await this.srvBoda.getbyId( IdBoda );
+
+      return {
+        data , novios : dataNovios.data , boda : dataBoda.data , 
+        version : '1' , 
+        msg : { titulo : 'Correcto' , texto : 'Registros cargados' , clase : 'success' , call : 'tostada2' }
+      }
+
+    } catch (error) {
+
+      // Para depuración local
+      varDump(error); 
+
+      // SI EL ERROR YA ES DE NESTJS (ej. BadRequestException), LO RELANZAMOS DIRECTO
+      if (error instanceof HttpException) {
+        throw error;
+      }
+
+      // SI ES UN ERROR INESPERADO (ej. caída de BD, error de sintaxis), ENVIAMOS UN 500
+      throw new InternalServerErrorException({
+        message: 'Error en el servicio de Invitados',
+        cause: error // Mantiene el rastro del error original en logs internos
+      });
+
     }
 
-    console.log('out: ', out.stdout, out.stderr);
-
-    return {
-      data: 'ok'
-    };
-
   }
+  // ...................................................................
+  // ...................................................................
+  // ...................................................................
+  // ...................................................................
+  // ...................................................................
+  // ...................................................................
+  // ...................................................................
+  // ...................................................................
+  // ...................................................................
+  // ...................................................................
+  // ...................................................................
+  // ...................................................................
+  // ...................................................................
   // ...................................................................
   // ...................................................................
   // ...................................................................
