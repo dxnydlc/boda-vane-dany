@@ -21,10 +21,16 @@ export class NovioModel {
     Email! : string
 
     @Column()
+    Estado! : string
+
+    @Column()
     DNI! : string
 
     @Column()
     IdBoda : number = 0
+
+    @Column({type:'text'})
+    Descripcion : string = ''
 
     @Column()
     Tipo : string  = '' // Novio/Novia

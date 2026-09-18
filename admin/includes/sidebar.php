@@ -91,6 +91,11 @@
                                         </a>
                                     </li>
                                     <li class="app-sidebar-menu-item">
+                                        <a href="/fotos" class="menu-link d-flex align-items-center">
+                                            <span class="menu-title flex-grow-1" >Fotos</span>
+                                        </a>
+                                    </li>
+                                    <li class="app-sidebar-menu-item">
                                         <a href="/invitados" class="menu-link d-flex align-items-center">
                                             <span class="menu-title flex-grow-1" >Invitados</span>
                                         </a>

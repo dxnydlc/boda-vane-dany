@@ -22,15 +22,15 @@ export class ProgramaModel {
     @Column({ type: 'bigint', unsigned: true, nullable: true })
     IdBoda: number = 0;
 
-    @Column({type : 'double'})
-    IdNovio : number = 0
-
     // -----------------------------
     // Datos del invitado
     // -----------------------------
 
     @Column({ type: 'varchar', length: 100, unique: true })
     Hora : string = '';
+
+    @Column({ type: 'varchar', length: 150, unique: true })
+    Icono : string = '';
 
     @Column({
         type: 'enum',

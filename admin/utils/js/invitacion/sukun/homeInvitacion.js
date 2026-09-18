@@ -59,7 +59,17 @@ const defaultValues = {
 
 
 
-
+let dataInvitadoForm = {
+    id          : 0 , 
+    uu_id       : crypto.randomUUID() , 
+    Nombre      : '' , 
+    IdBoda      : 0 , 
+    IdNovio     : 0 , 
+    phone       : '' , 
+    group_name  : 'Invitado' , 
+    Estado      : '' , 
+    IdInvitado  : 0 
+};
 
 
 
@@ -216,6 +226,17 @@ let optsLangDatatable = {
         /* ------------------------------------------------------------- */
         /* ------------------------------------------------------------- */
         /* ------------------------------------------------------------- */
+        $("#btnConfirmaInvitado").on( "click", function(e) {
+            e.preventDefault();
+            dataInvitadoForm.Nombre = $('#contact-form-main #Nombre').val();
+            dataInvitadoForm.phone  = $('#contact-form-main #phone').val();
+
+            const valorSeleccionado = $('input[name="Estado"]:checked').val();
+
+            dataInvitadoForm.Estado  = valorSeleccionado;
+
+            console.log( dataInvitadoForm );
+        });
         /* ------------------------------------------------------------- */
         /* ------------------------------------------------------------- */
         /* ------------------------------------------------------------- */
@@ -516,10 +537,17 @@ function handleSuccess( json , textStatus , xhr , tipoReq ) {
         switch ( tipoReq ) {
             // -------------------------------------------------------------
             case 'get-invitado':
+                let txtNovia1   = ``;
+                let txtNovio1   = ``;
                 document.title  = data.Nombre;
                 arrNoviosx      = json.novios;
                 dataInvitado    = data;
+                // Data Invitado
                 dataBoda        = json.boda;
+
+                // Fotos Boda
+                let dataFotos   = json.fotos;
+                
 
                 for (let index = 0; index < arrNoviosx.length; index++) {
                     const rs = arrNoviosx[index];
@@ -527,9 +555,11 @@ function handleSuccess( json , textStatus , xhr , tipoReq ) {
 
                     if( rs.Tipo == 'Novio' ){
                         Novio = g.charAt(0).toUpperCase() + g.slice(1);
+                        txtNovio1   = rs.Descripcion;
                     }
                     if( rs.Tipo == 'Novia' ){
-                        Novia = g.charAt(0).toUpperCase() + g.slice(1);
+                        Novia       = g.charAt(0).toUpperCase() + g.slice(1);
+                        txtNovia1   = rs.Descripcion;
                     }
                 }
 
@@ -546,7 +576,205 @@ function handleSuccess( json , textStatus , xhr , tipoReq ) {
                         + '<div class="box"><div><div class="time">%S</div> <span>Secs</span> </div></div>'));
                 });
 
+                // Novios
                 $('#lblNovios01').html(`${Novia} & ${Novio}`);
+                
+                $('#lblNovia1').html( Novia );
+                $('#txtNovia1').html( txtNovia1 );
+
+                $('#lblNovio1').html( Novio );
+                $('#txtNovio1').html( txtNovio1 );
+
+
+                // FOTOS
+                if( dataFotos.Principal.length > 0 )
+                {
+                    const imgPrincipal          = `${URL_API}${dataFotos.Principal[0].Url}`;
+                    $('#imgPrincipal').attr( "src" , imgPrincipal );
+                }
+                if( dataFotos.Novia.length > 0 )
+                {
+                    const imgNovia1             = `${URL_API}${dataFotos.Novia[0].Url}`;
+                    $('#imgNovia1').attr( "src" , imgNovia1 );
+                }
+                if( dataFotos.Novio.length > 0 )
+                {
+                    const imgNovia1             = `${URL_API}${dataFotos.Novio[0].Url}`;
+                    $('#imgNovio1').attr( "src" , imgNovia1 );
+                }
+
+                // contenedorHistoria
+                let dataHistoria            = json.historia;
+                let htmlHistoria            = ``;
+                
+                for (let index = 0; index < dataHistoria.length; index++) {
+                    const rs = dataHistoria[index];
+                    htmlHistoria += `
+                    <div class="wpo-story-item">
+                        <div class="row">
+                            <div class=" col col-lg-6 col-12 " >
+                                <div class=" wpo-story-img " >
+                                    <img src="${URL_API}${rs.Portada}" alt="" >
+                                </div>
+                            </div>
+                            <div class=" col col-lg-6 col-12 " >
+                                <div class=" wpo-story-content " >
+                                    <div class="pin">
+                                        <img src="<?php echo $URL_ASSETS ?>assets/images/story/pin.svg" alt="">
+                                    </div>
+                                    <i><img src="<?php echo $URL_ASSETS ?>assets/images/story/f-shape-1.png" alt=""></i>
+                                    <h2>${rs.Titulo}</h2>
+                                    <span>${moment(rs.Fecha).format('DD/MM/YYYY')}</span>
+                                    <p>${rs.Historia}.</p>
+                                    <i><img src="<?php echo $URL_ASSETS ?>assets/images/story/f-shape-2.png" alt=""></i>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    `;
+                }
+                $('#contenedorHistoria').html( htmlHistoria );
+                
+                // FOTOS GALERIA
+                let rsF                         = {};
+                let fotosGalerias               = ``;
+
+                // Foto izquierda (1)
+                if( dataFotos.Momentos.length   >= 0 )
+                {
+                    rsF                         = dataFotos.Momentos[ 0 ];
+                    fotosGalerias               = `
+                    <div class="col-lg-2 col-md-6 order-lg-1 order-2">
+                        <div class="gallery-side-img wow fadeInLeftSlow" data-wow-duration="1400ms">
+                            <div class="img-holder">
+                                <a href="${URL_API}${rsF.Url}" class="fancybox" data-fancybox-group="gall-1">
+                                    <img src="${URL_API}${rsF.Url}" alt class="img img-responsive">
+                                    <div class="hover-content">
+                                        <i class="ti-plus"></i>
+                                    </div>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                    `;
+                }
+                // Fotos medio (6)
+                if( dataFotos.Momentos.length   >= 7 )
+                {
+                    rsF                         = dataFotos.Momentos;
+                    fotosGalerias               += `
+                    <div class="col-lg-8 order-lg-2 order-3">
+                        <div class="sortable-gallery">
+                            <div class="row portfolio-grids style-1 clearfix">
+                                <div class="col-lg-4 col-md-6 col-12 grid">
+                                    <div class="img-holder wow fadeInUp" data-wow-duration="1000ms">
+                                        <a href="${URL_API}${rsF[1].Url}" class="fancybox" data-fancybox-group="gall-1">
+                                            <img src="${URL_API}${rsF[1].Url}" alt class="img img-responsive">
+                                            <div class="hover-content">
+                                                <i class="ti-plus"></i>
+                                            </div>
+                                        </a>
+                                    </div>
+                                </div>
+                                <div class="col-lg-4 col-md-6 col-12 grid">
+                                    <div class="img-holder wow fadeInUp" data-wow-duration="1200ms">
+                                        <a href="${URL_API}${rsF[2].Url}" class="fancybox"
+                                            data-fancybox-group="gall-1">
+                                            <img src="${URL_API}${rsF[2].Url}" alt class="img img-responsive">
+                                            <div class="hover-content">
+                                                <i class="ti-plus"></i>
+                                            </div>
+                                        </a>
+                                    </div>
+                                </div>
+                                <div class="col-lg-4 col-md-6 col-12 grid">
+                                    <div class="img-holder wow fadeInUp" data-wow-duration="1400ms">
+                                        <a href="${URL_API}${rsF[3].Url}" class="fancybox"
+                                            data-fancybox-group="gall-1">
+                                            <img src="${URL_API}${rsF[3].Url}" alt class="img img-responsive">
+                                            <div class="hover-content">
+                                                <i class="ti-plus"></i>
+                                            </div>
+                                        </a>
+                                    </div>
+                                </div>
+                                <div class="col-lg-4 col-md-6 col-12 grid">
+                                    <div class="img-holder wow fadeInUp" data-wow-duration="1000ms">
+                                        <a href="${URL_API}${rsF[4].Url}" class="fancybox"
+                                            data-fancybox-group="gall-1">
+                                            <img src="${URL_API}${rsF[4].Url}" alt class="img img-responsive">
+                                            <div class="hover-content">
+                                                <i class="ti-plus"></i>
+                                            </div>
+                                        </a>
+                                    </div>
+                                </div>
+                                <div class="col-lg-4 col-md-6 col-12 grid">
+                                    <div class="img-holder wow fadeInUp" data-wow-duration="1200ms">
+                                        <a href="${URL_API}${rsF[5].Url}" class="fancybox"
+                                            data-fancybox-group="gall-1">
+                                            <img src="${URL_API}${rsF[5].Url}" alt class="img img-responsive">
+                                            <div class="hover-content">
+                                                <i class="ti-plus"></i>
+                                            </div>
+                                        </a>
+                                    </div>
+                                </div>
+                                <div class="col-lg-4 col-md-6 col-12 grid">
+                                    <div class="img-holder wow fadeInUp" data-wow-duration="1400ms">
+                                        <a href="${URL_API}${rsF[6].Url}" class="fancybox"
+                                            data-fancybox-group="gall-1">
+                                            <img src="${URL_API}${rsF[6].Url}" alt class="img img-responsive">
+                                            <div class="hover-content">
+                                                <i class="ti-plus"></i>
+                                            </div>
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    `;
+                }
+                // Foto derecha (1)
+                if( dataFotos.Momentos.length   >= 8 )
+                {
+                    rsF                         = dataFotos.Momentos;
+                    fotosGalerias               += `
+                    <div class="col-lg-2 col-md-6 order-lg-3 order-2">
+                        <div class="gallery-side-img wow fadeInRightSlow" data-wow-duration="1400ms">
+                            <div class="img-holder">
+                                <a href="${URL_API}${rsF[7].Url}" class="fancybox" data-fancybox-group="gall-1" >
+                                    <img src="${URL_API}${rsF[7].Url}" alt class="img img-responsive">
+                                    <div class="hover-content">
+                                        <i class="ti-plus"></i>
+                                    </div>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                    `;
+                }
+                $('#wrapperMomentos').html( fotosGalerias );
+                $('.fancybox').fancybox();
+
+                // REGISTRO
+                if( dataFotos.Registro.length > 0 )
+                {
+                    $('#imgRegistro').attr( 'src' , `${URL_API}${dataFotos.Registro[0].Url}` );
+                }
+                
+                // Invitados
+
+                dataInvitadoForm.IdBoda     = dataInvitado.IdBoda;
+                dataInvitadoForm.IdNovio    = dataInvitado.IdNovio;
+                dataInvitadoForm.IdInvitado = dataInvitado.id;
+
+                if( parseInt( dataInvitado.NComp ) > 0 )
+                {
+                    $('#rsvp').show();
+                }
+
             break;
             // -------------------------------------------------------------
             // -------------------------------------------------------------

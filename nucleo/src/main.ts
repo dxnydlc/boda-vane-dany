@@ -29,8 +29,10 @@ async function bootstrap() {
     .addTag('Boda')
     .addTag('Usuarios-Boda')
     .addTag('Auth')
+    .addTag('Invitados')
     .addTag('Historia')
     .addTag('Programa')
+    .addTag('Fotos')
     .build();
   const documentFactory = () => SwaggerModule.createDocument(app, config);
   SwaggerModule.setup('documentation', app, documentFactory);

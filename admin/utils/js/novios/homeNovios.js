@@ -39,7 +39,7 @@ let dataJson = [];
 const columnasVisibles  = [ "id" , "Tipo" , "Boda" , "Nombre" , "Apellidos" , "DNI" , "Email" , "Estado" ];
 
 // campos que tendrá el formulario
-const formFields        = [ "Tipo" , "Nombre" , "Apellidos" , "Email" , "DNI" , "IdBoda" , "Estado" ];
+const formFields        = [ "Tipo" , "Nombre" , "Apellidos" , "Descripcion" , "Email" , "DNI" , "IdBoda" , "Estado" ];
 
 // campos hidden
 const hiddenFields      = ["id", "uu_id"];
@@ -47,7 +47,7 @@ const hiddenFields      = ["id", "uu_id"];
 // valores por defecto
 const defaultValues = {
     id      : 0 , 
-    uu_id   : crypto.randomUUID()
+    uu_id   : crypto.randomUUID() , Descripcion : ''
 };
 
 
@@ -649,7 +649,7 @@ function prepararRequest( tipoReq ) {
             xMetodo         = `POST`;
 
             if( idCab > 0 ){
-                xUrl            = `${urlServicio}actualizar/${uu_id}`;
+                xUrl            = `${urlServicio}actualizar/${dataEnviarPost.uu_id}`;
                 xMetodo         = `PATCH`;
             }
         break;
@@ -769,10 +769,10 @@ function handleSuccess( json , textStatus , xhr , tipoReq ) {
                 });
                 toastr["success"]( json.msg.texto , 'Correcto' );
 
-                //$('#frmDocumento #IdClienteProv').html(`<option value="${data.IdClienteProv}" >${data.Cliente}</option>`);
-                //$('#frmDocumento #IdClienteProv').trigger('change');
+                llenarCombo( arrBodas , `#${xIdForm} #IdBoda` , true );
 
-                //getLocales( data.IdClienteProv , data.IdSucursal );
+                setTimeout(function(){ $(`#${xIdForm} #IdBoda`).val( data.IdBoda ); }, 1000);
+
 
             break;
             // -------------------------------------------------------------
@@ -1193,6 +1193,14 @@ function renderFormInTab( rowData , formId ) {
                 `;
             break;
             // -----------------------------------------
+            case 'Descripcion':
+                htmlForm += `
+                <div class=" col-md-6 ">
+                    <label class="form-label" >Descripcion:</label>
+                    <textarea name="${field}" id="${field}"  rows ="5" class=" form-control " >${rowData[field] || defaultValues[field] || ""}</textarea>
+                </div>
+                `;
+            break;
             // -----------------------------------------
             // -----------------------------------------
             // -----------------------------------------

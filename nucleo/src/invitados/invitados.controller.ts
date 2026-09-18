@@ -26,7 +26,7 @@ import sharp from 'sharp';
 // Para activar el auth JwTokenAuth
 @UseGuards( JwtGuardGuard )
 
-@ApiTags('Datos')
+@ApiTags('Invitados')
 @ApiBearerAuth()
 @UsePipes( new ValidationPipe )
 

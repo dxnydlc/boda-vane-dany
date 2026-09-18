@@ -20,7 +20,8 @@ export class HistoriaModel {
     @Column({ type: 'text' })
     Historia: string = '';
 
-    
+    @Column({ type: 'varchar', length: 150 })
+    Portada : string = ''
 
     
 

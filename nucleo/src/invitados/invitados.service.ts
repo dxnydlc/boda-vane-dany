@@ -18,6 +18,9 @@ import { Repository } from 'typeorm';
 import { UtilidadesService } from 'src/utilidades/utilidades.service';
 import { NoviosService } from 'src/novios/novios.service';
 import { BodaService } from 'src/boda/boda.service';
+import { FotosService } from 'src/fotos/fotos.service';
+import { ProgramaService } from 'src/programa/programa.service';
+import { HistoriaService } from 'src/historia/historia.service';
 
 require('colors');
 
@@ -32,6 +35,9 @@ export class InvitadosService {
     private util : UtilidadesService , 
     private readonly srvNovios : NoviosService , 
     private readonly srvBoda   : BodaService , 
+    private readonly srvFotos  : FotosService , 
+    private readonly srvPrograma : ProgramaService , 
+    private readonly srvHistoria : HistoriaService , 
   ){}
   // ...................................................................
   // ...................................................................
@@ -186,7 +192,7 @@ export class InvitadosService {
       ])
       .innerJoin( "tbl_boda" , "b" , " c.IdBoda = b.id " )
       .innerJoin( "tbl_novios" , "n" , " c.IdNovio = n.id " )
-      .where(" c.Estado = 'activo' ")
+      .where(" c.Estado <> 'anulado' ")
       .getRawMany();
   
       return {
@@ -410,8 +416,15 @@ export class InvitadosService {
       .where(" i.uu_id = :uu_id " , { uu_id } )
       .innerJoin( "tbl_boda" , "b" , " b.id = i.IdBoda " )
       .select([
-        "i.id as id" , "i.uu_id as uu_id" , "i.Nombre as Nombre" , "i.max_companions as NComp" , 
-        "i.group_name as Grupo" , "i.Estado as Estado" , "b.Nombre" , "b.id as IdBoda"
+        "i.id as id" , 
+        "i.uu_id as uu_id" , 
+        "i.Nombre as Nombre" , 
+        "i.max_companions as NComp" , 
+        "i.group_name as Grupo" , 
+        "i.Estado as Estado" , 
+        "b.Nombre" , 
+        "b.id as IdBoda" , 
+        "i.IdNovio as IdNovio" 
       ])
       .getRawOne();
 
@@ -421,12 +434,19 @@ export class InvitadosService {
       // Data Invitado
       let IdBoda = data.IdBoda;
       // Data Novios
-      let dataNovios = await this.srvNovios.getActivosfromIdBoda( IdBoda );
+      let dataNovios   = await this.srvNovios.getActivosfromIdBoda( IdBoda );
       // Data Boda
-      let dataBoda    = await this.srvBoda.getbyId( IdBoda );
+      let dataBoda     = await this.srvBoda.getbyId( IdBoda );
+      // Fotos Boda
+      let dataFoto     = await this.srvFotos.getFotosBoda( IdBoda );
+      // Programa Boda
+      let dataPrograma = await this.srvPrograma.getbyBoda( IdBoda );
+      // Historia Boda
+      let dataHistoria = await this.srvHistoria.getbyBoda( IdBoda );
 
       return {
-        data , novios : dataNovios.data , boda : dataBoda.data , 
+        data , novios : dataNovios.data , boda : dataBoda.data , fotos : dataFoto.data , programa : dataPrograma.data , 
+        historia : dataHistoria.data , 
         version : '1' , 
         msg : { titulo : 'Correcto' , texto : 'Registros cargados' , clase : 'success' , call : 'tostada2' }
       }

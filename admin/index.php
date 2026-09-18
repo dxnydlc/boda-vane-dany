@@ -48,6 +48,8 @@ function cargarEnv($rutaArchivo) {
 cargarEnv(__DIR__ . '/.env');
 
 $API = $_ENV['API'];
+$URL = $_ENV['URL'];
+$URL_ASSETS = $URL;
 
 $request            = parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH);
 $request            = parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH);
@@ -111,6 +113,8 @@ switch ( $ruta_base ) {
         $parametro              = $partes[2] ?? '';
         $regex_uuid             = '#^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$#';
 
+        $URL_ASSETS             = $URL."public/sukun/";
+
         // Verificamos que la sub-ruta sea "sukun" y que el parámetro sea un UUID válido
         if ($sub_ruta           === 'sukun' && preg_match($regex_uuid, $parametro)) {
             $uuID               = $parametro;
@@ -154,6 +158,11 @@ switch ( $ruta_base ) {
         $title                  = 'Programa';
         $content                = 'pages/programa/homePrograma.php';
         $archivoJS              = "<script src='/utils/js/programa/homePrograma.js?v=$semilla'></script>";
+    break;
+    case 'fotos':
+        $title                  = 'Fotos';
+        $content                = 'pages/fotos/homeFotos.php';
+        $archivoJS              = "<script src='/utils/js/fotos/homeFotos.js?v=$semilla'></script>";
     break;
     default:
         http_response_code( 404 );

@@ -14,7 +14,7 @@ const moment = require('moment');
 
 import { v4 as uuidv4 } from 'uuid';
 import { ProgramaModel } from './entities/programa.entity';
-import { Repository } from 'typeorm';
+import { Not, Repository } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
 import { UtilidadesService } from 'src/utilidades/utilidades.service';
 
@@ -204,7 +204,7 @@ export class ProgramaService {
         },
       });
 
-      if( data1!.Estado != 'Activo' )throw new HttpException( 'Documento no disponible', HttpStatus.CONFLICT);
+      if( data1!.Estado != 'activo' )throw new HttpException( 'Documento no disponible', HttpStatus.CONFLICT);
 
       await this.datosModel.update({ uu_id : uuID } , dto );
       let dataP = await this.datosModel.findOne({
@@ -281,11 +281,96 @@ export class ProgramaService {
   // ...................................................................
   // ...................................................................
   // ...................................................................
+  async getActivos() {
+
+    try {
+
+      let data = await this.datosModel.createQueryBuilder('c')
+      .select([ 
+        "c.id as id" , 
+        "c.uu_id as uu_id" , 
+        "b.Nombre as Boda" , 
+        "c.Descripcion as Descripcion" , 
+        "c.Icono as Icono" , 
+        "DATE_FORMAT( c.Hora , '%H:%i')  as Hora" , 
+        "c.Estado as Estado" , 
+        "c.UsuarioMod as UsuarioMod" , 
+        "DATE_FORMAT( c.created_at , '%Y-%m-%d %H:%i:%s') as created_at" 
+      ])
+      .innerJoin( "tbl_boda" , "b" , " c.IdBoda = b.id " )
+      .where(" c.Estado = 'activo' ")
+      .getRawMany();
+  
+      return {
+        data , 
+        version : '1' , 
+        msg : { titulo : 'Correcto' , texto : 'Registros cargados' , clase : 'success' , call : 'tostada2' }
+      }
+
+    } catch (error) {
+
+      // Para depuración local
+      varDump(error); 
+
+      // SI EL ERROR YA ES DE NESTJS (ej. BadRequestException), LO RELANZAMOS DIRECTO
+      if (error instanceof HttpException) {
+        throw error;
+      }
+
+      // SI ES UN ERROR INESPERADO (ej. caída de BD, error de sintaxis), ENVIAMOS UN 500
+      throw new InternalServerErrorException({
+        message: 'Error en el servicio de programa',
+        cause: error // Mantiene el rastro del error original en logs internos
+      });
+
+    }
+
+  }
   // ...................................................................
   // ...................................................................
   // ...................................................................
   // ...................................................................
   // ...................................................................
+  async getbyBoda( IdBoda : number = 0 ) {
+    try {
+      
+      let datosJson = await this.datosModel.find({
+        where : {
+          IdBoda , 
+          Estado: Not('anulado') // Agrega esta línea
+        } ,
+        order : {
+          id : 'DESC'
+        }
+      });
+  
+      // throw new BadRequestException('Usuario no existe');
+
+      return {
+        data : datosJson , 
+        version : '1' , 
+        msg : { titulo : 'Correcto' , texto : 'Registros cargados' , clase : 'success' , call : 'tostada2' }
+      }
+
+    } catch (error) {
+
+      // Para depuración local
+      varDump(error); 
+
+      // SI EL ERROR YA ES DE NESTJS (ej. BadRequestException), LO RELANZAMOS DIRECTO
+      if (error instanceof HttpException) {
+        throw error;
+      }
+
+      // SI ES UN ERROR INESPERADO (ej. caída de BD, error de sintaxis), ENVIAMOS UN 500
+      throw new InternalServerErrorException({
+        message: 'Error en el servicio de programa',
+        cause: error // Mantiene el rastro del error original en logs internos
+      });
+
+    }
+
+  }
   // ...................................................................
   // ...................................................................
   // ...................................................................

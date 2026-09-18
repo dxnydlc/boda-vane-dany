@@ -23,6 +23,7 @@ import { MesasDetModule } from './mesas_det/mesas_det.module';
 import { PublicModule } from './public/public.module';
 import { ProgramaModule } from './programa/programa.module';
 import { HistoriaModule } from './historia/historia.module';
+import { FotosModule } from './fotos/fotos.module';
 
 
 @Module({
@@ -43,7 +44,7 @@ import { HistoriaModule } from './historia/historia.module';
       entities: [__dirname + '/**/*entity{.ts,.js}'],
       //logging  : true
     }),
-    InvitadosModule, RsvpModule, CompanionsModule, AccessLogModule, UsersModule, EventosModule, AdminLogModule, AuthModule, UtilidadesModule, NoviosModule, BodaModule, UsuariosBodaModule, MesasCabModule, MesasDetModule, PublicModule, ProgramaModule, HistoriaModule
+    InvitadosModule, RsvpModule, CompanionsModule, AccessLogModule, UsersModule, EventosModule, AdminLogModule, AuthModule, UtilidadesModule, NoviosModule, BodaModule, UsuariosBodaModule, MesasCabModule, MesasDetModule, PublicModule, ProgramaModule, HistoriaModule, FotosModule
   ],
   controllers: [AppController],
   providers: [

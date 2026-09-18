@@ -30,6 +30,9 @@ export class InvitadoModel {
     @Column({type : 'double'})
     IdNovio : number = 0
 
+    @Column({type : 'double'})
+    IdInvitado : number = 0
+
     // -----------------------------
     // Datos del invitado
     // -----------------------------

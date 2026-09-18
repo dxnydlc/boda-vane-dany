@@ -25,7 +25,7 @@
                         <div class="col col-xl-6 col-lg-4 col-md-6 col-sm-12 col-12">
                             <div class="widget about-widget">
                                 <div class="logo widget-title">
-                                    <a class="logo" href="index.html"><img src="/includes/invitacion/sukun/assets/images/logo-2.svg" alt=""></a>
+                                    <a class="logo" href="index.html"><img src="<?php echo $URL_ASSETS ?>assets/images/logo-2.svg" alt=""></a>
                                 </div>
                                 <p>We can’t wait to see all of our beloved friends
                                     and relative s at our wedding.</p>
@@ -82,24 +82,24 @@
 
     <!-- All JavaScript files
     ================================================== -->
-    <script src="/includes/invitacion/sukun/assets/js/jquery.min.js"></script>
-    <script src="/includes/invitacion/sukun/assets/js/bootstrap.bundle.min.js"></script>
+    <script src="<?php echo $URL_ASSETS ?>assets/js/jquery.min.js"></script>
+    <script src="<?php echo $URL_ASSETS ?>assets/js/bootstrap.bundle.min.js"></script>
     <!-- Plugins for this template -->
-    <script src="/includes/invitacion/sukun/assets/js/modernizr.custom.js"></script>
-    <script src="/includes/invitacion/sukun/assets/js/jquery-plugin-collection.js"></script>
-    <script src="/includes/invitacion/sukun/assets/js/gsap-active.js"></script>
+    <script src="<?php echo $URL_ASSETS ?>assets/js/modernizr.custom.js"></script>
+    <script src="<?php echo $URL_ASSETS ?>assets/js/jquery-plugin-collection.js"></script>
+    <script src="<?php echo $URL_ASSETS ?>assets/js/gsap-active.js"></script>
     <!-- Custom script for this template -->
-    <script src="/includes/invitacion/sukun/assets/js/script.js?v=<?php echo $semilla ?>"></script>
+    <!-- Custom script for this template -->
+    <script src="<?php echo $URL_ASSETS ?>assets/js/script.js?v=<?php echo $semilla ?>"></script>
 
     <!-- page level script -->
-    <script src="/assets//vendor/libs/toastr/toastr.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js" integrity="sha512-VEd+nq25CkR676O+pLBnDW09R7VQX9Mdiij052gVCp5yVH3jGtH70Ho/UUv4mJDsEdTvqRCFZg0NKGiojGnUCw==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 
     
 
     <!-- page specific script -->
     <?php echo $archivoJS ?>
     <?php echo $archivoJS2 ?>
-
 </body>
 
 </html>

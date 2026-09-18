@@ -179,6 +179,7 @@ export class NoviosService {
         "b.Nombre as Boda" , 
         "c.Tipo as Tipo" , 
         "c.Nombre as Nombre" , 
+        "c.Descripcion as Descripcion",
         "c.Apellidos as Apellidos" , 
         "c.DNI as DNI" , 
         "c.Email as Email" , 
@@ -228,6 +229,7 @@ export class NoviosService {
         "c.Nombre as Nombre" , 
         "c.Apellidos as Apellidos" , 
         "c.DNI as DNI" , 
+        "c.Descripcion as Descripcion" , 
         "c.Email as Email" , 
         "c.Estado as Estado" 
       ])
