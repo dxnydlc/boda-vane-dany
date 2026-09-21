@@ -217,7 +217,7 @@ let optsLangDatatable = {
                 console.log( response );
                 varDump(`#${xIdForm} #Musica`);
 
-                $(`#${xIdForm} #Musica`).val( response.resized );ßß
+                $(`#${xIdForm} #Musica`).val( response.original );ßß
                 //mdlArchivos
             },
 
