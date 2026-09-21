@@ -400,9 +400,77 @@ let optsLangDatatable = {
             }
         });
         /* ------------------------------------------------------------- */
+        /* ------------------------------------------------------------- *
+        // Delegación de eventos en jQuery
+        $("#tblUsuarios").on("click", ".btn-copiar" , async () => {
+            // Obtenemos el uuid del botón que fue clickeado
+            const uuid              = $(this).data("uuid");
+            const id                = $(this).data("id");
+            // URL_API
+            // http://localhost:8002/invitacion/sukun/4414c64b-d218-4389-b376-0dd5a104af86
+            
+            // Aquí puedes armar tu link y llamar a navigator.clipboard.writeText(link)
+            console.log("El UUID a copiar es:", uuid);
+
+            let linkInvitacion          = `${URL_API}invitacion/sukun/${uuid}`;
+            const btnCopiar             = document.getElementById('btnCopiar'+id);
+
+
+            try {
+                // Escribe el texto en el portapapeles
+                await navigator.clipboard.writeText( linkInvitacion );
+                
+                // Feedback visual para el usuario
+                const textoOriginal     = btnCopiar.innerText;
+                btnCopiar.innerText     = '¡Copiado!';
+                
+                // Restaura el texto original después de 2 segundos
+                setTimeout(() => {
+                    btnCopiar.innerText = textoOriginal;
+                }, 2000);
+                
+            } catch (err) {
+                console.error('Falló al copiar el texto: ', err);
+                alert('Error al copiar el enlace');
+            }
+        });
         /* ------------------------------------------------------------- */
         /* ------------------------------------------------------------- */
-        /* ------------------------------------------------------------- */
+        // Escuchamos los clics dentro de la tabla, específicamente en los botones con clase 'btn-copiar'
+        $("#tblUsuarios").on("click", ".btn-copiar", async function(e) {
+            e.preventDefault();
+
+            // 1. Capturamos el botón que fue clickeado (usando jQuery)
+            const btn                       = $(this);
+            
+            // 2. Obtenemos el uuid desde el atributo data-uuid que configuraste en el render
+            const uuid                      = btn.data("uuid");
+            
+            // 3. Armamos el link completo que quieres copiar
+            const linkParaCopiar            = `${URL_WEB}invitacion/sukun/${uuid}`;// Cambia esto por tu URL real
+
+            // Guardamos el contenido y clase original para restaurarlo después
+            const contenidoOriginal         = btn.html(); 
+
+            try {
+                // 4. Usamos la API del portapapeles para copiar el texto
+                await navigator.clipboard.writeText(linkParaCopiar);
+                
+                // 5. Feedback visual: cambiamos el texto/ícono y el color del botón
+                btn.html("¡Copiado!");
+                btn.removeClass("btn-outline-info").addClass("btn-success");
+                
+                // 6. Restauramos el botón a su estado original después de 2 segundos
+                setTimeout(() => {
+                    btn.html(contenidoOriginal);
+                    btn.removeClass("btn-success").addClass("btn-outline-info");
+                }, 2000);
+                
+            } catch (err) {
+                console.error("Falló al copiar el texto: ", err);
+                alert("Error al copiar el enlace");
+            }
+        });
         /* ------------------------------------------------------------- */
         /* ------------------------------------------------------------- */
         /* ------------------------------------------------------------- */
@@ -978,12 +1046,19 @@ function renderTable(data) {
         {
             title: "Editar",
             data: null,
-            render: () => `<button data-id="" class=" btn btn-outline-primary btn-edit">✏️</button>`
+            // Pasamos 'row' para acceder a los datos de la fila actual
+            render: (data, type, row) => `<button data-id="${row.id || ''}" class="btn btn-outline-primary btn-edit">✏️</button>`
         },
         {
             title: "Anular",
             data: null,
-            render: () => `<button class=" btn btn-outline-danger btn-anular">X</button>`
+            render: () => `<button class="btn btn-outline-danger btn-anular">X</button>`
+        },
+        {
+            title: "Copiar",
+            data: null,
+            // Usamos row.uu_id para inyectarlo en el data-uuid
+            render: (data, type, row) => `<button id="btnCopiar${row.id || '0'}" data-uuid="${row.uu_id}" data-id="${row.id}" class="btn btn-outline-info btn-copiar ">C</button>`
         }
     ];
 

@@ -18,99 +18,59 @@
                     <!-- app sidebar menu -->
                     <div id="app-sidebar-menu" class="app-sidebar-menu">
                         <ul>
+                            
+
                             <li class="app-sidebar-menu-item">
                                 <a href="/" class="menu-link d-flex align-items-center">
                                     <span class="menu-title flex-grow-1" >Inicio</span>
                                 </a>
                             </li>
-                            <li class="app-sidebar-menu-heading">
-                                <span>
-                                    <span class="app-sidebar-menu-heading-line"></span>
-                                    Invitados
-                                </span>
+
+                            <li class="app-sidebar-menu-item">
+                                <a href="/usuario" class="menu-link d-flex align-items-center">
+                                    <span class="menu-title flex-grow-1" >Usuario</span>
+                                </a>
+                            </li>
+
+                            <li class="app-sidebar-menu-item">
+                                <a href="/boda" class="menu-link d-flex align-items-center">
+                                    <span class="menu-title flex-grow-1" >Boda</span>
+                                </a>
                             </li>
                             <li class="app-sidebar-menu-item">
-                                <a href="./app-chat.html" class="menu-link d-flex align-items-center">
-                                    <span class="menu-title flex-grow-1" >Lista</span>
+                                <a href="/historia" class="menu-link d-flex align-items-center">
+                                    <span class="menu-title flex-grow-1" >Historia</span>
                                 </a>
                             </li>
                             <li class="app-sidebar-menu-item">
-                                <a href="./app-pos.html" class="menu-link d-flex align-items-center">
-                                    <span class="menu-title flex-grow-1">Resumen</span>
+                                <a href="/programa" class="menu-link d-flex align-items-center">
+                                    <span class="menu-title flex-grow-1" >Programa</span>
                                 </a>
                             </li>
-
-                            <li class="app-sidebar-menu-heading">
-                                <span>
-                                    <span class="app-sidebar-menu-heading-line"></span>
-                                    Proveedores
-                                </span>
-                            </li>
-
-                            <li class="app-sidebar-menu-item has-dropdown">
-                                <a href="javascript:void(0);" class="menu-link d-flex align-items-center">
-                                    <span class="menu-icon flex-shrink-0">
-                                        <svg width="17" height="17" viewBox="0 0 17 17" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                            <path d="M8.24985 9.40384C9.84298 9.40384 11.1345 8.11236 11.1345 6.51923C11.1345 4.9261 9.84298 3.63461 8.24985 3.63461C6.65672 3.63461 5.36523 4.9261 5.36523 6.51923C5.36523 8.11236 6.65672 9.40384 8.24985 9.40384Z" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
-                                            <path d="M3.32324 13.9038C3.83814 13.0587 4.56179 12.3602 5.42464 11.8755C6.28748 11.3908 7.2605 11.1362 8.25017 11.1362C9.23983 11.1362 10.2129 11.3908 11.0757 11.8755C11.9385 12.3602 12.6622 13.0587 13.1771 13.9038" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
-                                            <path d="M8.25 15.75C12.3921 15.75 15.75 12.3921 15.75 8.25C15.75 4.10786 12.3921 0.75 8.25 0.75C4.10786 0.75 0.75 4.10786 0.75 8.25C0.75 12.3921 4.10786 15.75 8.25 15.75Z" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
-                                        </svg>
-                                    </span>
-                                    <span class="menu-title flex-grow-1" >Operaciones</span>
-                                    <span class="menu-arrow flex-shrink-0 d-flex align-items-center justify-content-center">
-                                        <svg width="6" height="10" viewBox="0 0 6 10" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                            <path d="M1 9L5 5L1 1" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
-                                        </svg>
-                                    </span>
+                            <li class="app-sidebar-menu-item">
+                                <a href="/novios" class="menu-link d-flex align-items-center">
+                                    <span class="menu-title flex-grow-1" >Novios</span>
                                 </a>
-
-                                <ul class="app-sidebar-submenu">
-                                    <li class="app-sidebar-menu-item">
-                                        <a href="/usuario" class="menu-link d-flex align-items-center">
-                                            <span class="menu-title flex-grow-1" >Usuario</span>
-                                        </a>
-                                    </li>
-                                    <li class="app-sidebar-menu-item">
-                                        <a href="/boda" class="menu-link d-flex align-items-center">
-                                            <span class="menu-title flex-grow-1" >Boda</span>
-                                        </a>
-                                    </li>
-                                    <li class="app-sidebar-menu-item">
-                                        <a href="/historia" class="menu-link d-flex align-items-center">
-                                            <span class="menu-title flex-grow-1" >Historia</span>
-                                        </a>
-                                    </li>
-                                    <li class="app-sidebar-menu-item">
-                                        <a href="/programa" class="menu-link d-flex align-items-center">
-                                            <span class="menu-title flex-grow-1" >Programa</span>
-                                        </a>
-                                    </li>
-                                    <li class="app-sidebar-menu-item">
-                                        <a href="/novios" class="menu-link d-flex align-items-center">
-                                            <span class="menu-title flex-grow-1" >Novios</span>
-                                        </a>
-                                    </li>
-                                    <li class="app-sidebar-menu-item">
-                                        <a href="/fotos" class="menu-link d-flex align-items-center">
-                                            <span class="menu-title flex-grow-1" >Fotos</span>
-                                        </a>
-                                    </li>
-                                    <li class="app-sidebar-menu-item">
-                                        <a href="/invitados" class="menu-link d-flex align-items-center">
-                                            <span class="menu-title flex-grow-1" >Invitados</span>
-                                        </a>
-                                    </li>
-                                    <li class="app-sidebar-menu-item">
-                                        <a href="/asignar-mesas" class="menu-link d-flex align-items-center">
-                                            <span class="menu-title flex-grow-1" >Asignar mesas</span>
-                                        </a>
-                                    </li>
-                                    <li class="app-sidebar-menu-item">
-                                        <a href="/mesas" class="menu-link d-flex align-items-center">
-                                            <span class="menu-title flex-grow-1" >Mesas</span>
-                                        </a>
-                                    </li>
-                                </ul>
+                            </li>
+                            <li class="app-sidebar-menu-item">
+                                <a href="/fotos" class="menu-link d-flex align-items-center">
+                                    <span class="menu-title flex-grow-1" >Fotos</span>
+                                </a>
+                            </li>
+                            <li class="app-sidebar-menu-item">
+                                <a href="/invitados" class="menu-link d-flex align-items-center">
+                                    <span class="menu-title flex-grow-1" >Invitados</span>
+                                </a>
+                            </li>
+                            <li class="app-sidebar-menu-item">
+                                <a href="/asignar-mesas" class="menu-link d-flex align-items-center">
+                                    <span class="menu-title flex-grow-1" >Asignar mesas</span>
+                                </a>
+                            </li>
+                            <li class="app-sidebar-menu-item">
+                                <a href="/mesas" class="menu-link d-flex align-items-center">
+                                    <span class="menu-title flex-grow-1" >Mesas</span>
+                                </a>
                             </li>
                         </ul>
                     </div>
