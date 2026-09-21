@@ -6,6 +6,9 @@ import { UtilidadesModule } from 'src/utilidades/utilidades.module';
 import { InvitadoModel } from './entities/invitado.entity';
 import { NoviosModule } from 'src/novios/novios.module';
 import { BodaModule } from 'src/boda/boda.module';
+import { FotosModule } from 'src/fotos/fotos.module';
+import { HistoriaModule } from 'src/historia/historia.module';
+import { ProgramaModule } from 'src/programa/programa.module';
 
 @Module({
   controllers: [InvitadosController],
@@ -17,6 +20,9 @@ import { BodaModule } from 'src/boda/boda.module';
     UtilidadesModule , 
     NoviosModule , 
     BodaModule , 
+    FotosModule , 
+    HistoriaModule , 
+    ProgramaModule , 
   ],
   exports     : [InvitadosService],
 })

@@ -21,6 +21,7 @@ import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 import * as express from 'express';
 import { UtilidadesService } from 'src/utilidades/utilidades.service';
 import { JwtGuardGuard } from 'src/guards/jwt-guard/jwt-guard.guard';
+import { generateHash } from 'src/utils/handleBcrypt';
 
 
 // Para activar el auth JwTokenAuth
@@ -65,6 +66,14 @@ export class UsersController {
   // ................................................................
   // ................................................................
   // ................................................................
+  @Post('cambio_clave')
+  @HttpCode(200)
+  async handleCambiarClave(@Body('Token') Token: string, @Body('Clave') Clave: string) {
+    //
+    let Password = await generateHash(Clave);
+    console.log( Token );
+    return await this.elservicio.cambiarClaveUsuario(Token, Password);
+  }
   // ................................................................
   // ................................................................
   @Post('guardar')
@@ -133,8 +142,8 @@ export class UsersController {
     const bodyProocolo = {
       ...dto , 
       updated_at : createdAt , 
-      DniUsuarioMod: IdUsuario,
-      UsuarioMod: Usuario,
+      /*DniUsuarioMod: IdUsuario,
+      UsuarioMod: Usuario,*/
     };
     return this.elservicio.Actualizar( uuid , bodyProocolo);
   }

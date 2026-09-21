@@ -8,6 +8,13 @@ let urlServicio = `${URL_API}v1/public/`;
 /* ------------------------------------------------------------- */
 /* ------------------------------------------------------------- */
 /* ------------------------------------------------------------- */
+const audio                 = document.getElementById('musica-fondo');
+/* ------------------------------------------------------------- */
+/* ------------------------------------------------------------- */
+const btnPlay               = document.getElementById('btn-play');
+/* ------------------------------------------------------------- */
+/* ------------------------------------------------------------- */
+let estaReproduciendo       = false;
 /* ------------------------------------------------------------- */
 /* ------------------------------------------------------------- */
 let idCab = 0, uuidCab = ``, xIdClienteProv = 0, xIdSucursal = 0;
@@ -37,8 +44,14 @@ let Novia = ``;
 let fechaBoda = `2026-09-25`;
 /* ------------------------------------------------------------- */
 /* ------------------------------------------------------------- */
+let mapa;
 /* ------------------------------------------------------------- */
 /* ------------------------------------------------------------- */
+let marcador;
+/* ------------------------------------------------------------- */
+/* ------------------------------------------------------------- */
+// Escuchamos el evento de Bootstrap cuando el modal ya es completamente visible
+const mapaModal = document.getElementById('mapaModal');
 /* ------------------------------------------------------------- */
 /* ------------------------------------------------------------- */
 /* ------------------------------------------------------------- */
@@ -59,7 +72,18 @@ const defaultValues = {
 
 
 
-
+let dataInvitadoForm = {
+    id          : 0 , 
+    uu_id       : crypto.randomUUID() , 
+    Nombre      : '' , 
+    IdBoda      : 0 , 
+    IdNovio     : 0 , 
+    phone       : '' , 
+    group_name  : 'Invitado' , 
+    Estado      : '' , 
+    IdInvitado  : 0 , 
+    Foto        : 'img/512x512.png'
+};
 
 
 
@@ -69,6 +93,36 @@ const defaultValues = {
 
 
 /* ------------------------------------------------------------- */
+mapaModal.addEventListener('shown.bs.modal', function (event) {
+    // Referencia al <a> que disparó el modal
+    const boton             = event.relatedTarget;
+    
+    // Extraemos las coordenadas de los atributos data-*
+    const lat               = parseFloat(boton.getAttribute('data-lat'));
+    const lng               = parseFloat(boton.getAttribute('data-lng'));
+    const posicion          = { lat: lat, lng: lng };
+
+    // Si el mapa aún no existe, lo creamos
+    if (!mapa) {
+      mapa = new google.maps.Map(document.getElementById('contenedor-mapa'), {
+        center: posicion,
+        zoom: 16, // Nivel de acercamiento
+        mapTypeId: 'roadmap'
+      });
+
+      marcador = new google.maps.Marker({
+        position: posicion,
+        map: mapa,
+        animation: google.maps.Animation.DROP,
+        title: "Dirección"
+      });
+    } else {
+      // Si el mapa ya fue creado previamente, solo actualizamos el centro y el marcador
+      // (Útil si reutilizas el modal para varios botones con distintas direcciones)
+      mapa.setCenter(posicion);
+      marcador.setPosition(posicion);
+    }
+  });
 // ======================================================
 // ======================================================
 // CONFIGURACIÓN DINÁMICA
@@ -88,7 +142,7 @@ let columnasDefault     = {
   "id"           : 0
 };
 
-let eventFormulario, formDataGeneral, xIdForm = ``;
+let eventFormulario, formDataGeneral, xIdForm = `contact-form-main`;
 
 // ======================================================
 // MAPA DE COLORES PARA ESTADOS
@@ -216,12 +270,50 @@ let optsLangDatatable = {
         /* ------------------------------------------------------------- */
         /* ------------------------------------------------------------- */
         /* ------------------------------------------------------------- */
+        $("#btnConfirmaInvitado").on( "click", function(e) {
+            e.preventDefault();
+            dataInvitadoForm.Nombre = $('#contact-form-main #Nombre').val();
+            dataInvitadoForm.phone  = $('#contact-form-main #phone').val();
+
+            const valorSeleccionado = $('input[name="Estado"]:checked').val();
+
+            dataInvitadoForm.Estado  = $('input[name="Estado"]:checked').val();
+
+            console.log( dataInvitadoForm );
+
+            ejecutarDoc( 'guardar-cab' );
+        });
         /* ------------------------------------------------------------- */
         /* ------------------------------------------------------------- */
+        $("#btnConfirmarAsistencia").on( "click", function(e) {
+            e.preventDefault();
+            ejecutarDoc( 'confirmar-asistencia' );
+        });
         /* ------------------------------------------------------------- */
         /* ------------------------------------------------------------- */
+        $("#btnCancelarAsistencia").on( "click", function(e) {
+            e.preventDefault();
+            ejecutarDoc( 'cancelar-asistencia' );
+        });
         /* ------------------------------------------------------------- */
         /* ------------------------------------------------------------- */
+        // 4. Lógica del botón con validación
+        btnPlay.addEventListener('click', () => {
+            // Evitar errores si el usuario hace clic antes de que el servicio responda
+            if (!audio.getAttribute('src')) {
+                console.warn("La ruta del audio aún no se ha cargado.");
+                return;
+            }
+
+            if (estaReproduciendo) {
+                audio.pause();
+                btnPlay.innerHTML = '▶️';
+            } else {
+                audio.play();
+                btnPlay.innerHTML = '⏸️';
+            }
+            estaReproduciendo = !estaReproduciendo;
+        });
         /* ------------------------------------------------------------- */
         /* ------------------------------------------------------------- */
         /* ------------------------------------------------------------- */
@@ -425,7 +517,10 @@ function ejecutarDoc( tipoReq ) {
         varDump( tipoReq );
 
         switch (tipoReq) {
-            //case 'get-invitado'  : objCargando = `#TablaHomePs`; break;
+            case 'guardar-cab'  : objCargando = `#contact-form-main`; break;
+
+            case 'confirmar-asistencia'  : objCargando = `#wrapperConfirmar`; break;
+            case 'cancelar-asistencia'  : objCargando = `#wrapperConfirmar`; break;
         }
 
         mostrarLoader( objCargando );
@@ -474,9 +569,37 @@ function prepararRequest( tipoReq ) {
         break;
         // -------------------------------------------------------------
         // -------------------------------------------------------------
+        case 'guardar-cab':
+            idCab               = parseInt( $('#contact-form-main #id').val() );
+            data                = dataInvitadoForm;
+            dataInvitadoForm.id = $('#contact-form-main #id').val();
+
+            xUrl            = `${urlServicio}guardar-invitado`;
+            xMetodo         = `POST`;
+
+            if( idCab > 0 ){
+                xUrl            = `${urlServicio}actualizar-invitado/${dataInvitadoForm.uu_id}`;
+                xMetodo         = `PATCH`;
+            }
+        break;
         // -------------------------------------------------------------
         // -------------------------------------------------------------
+        case 'confirmar-asistencia':
+            xUrl            = `${urlServicio}confirmar-asistencia/`;
+            xMetodo         = 'POST';
+            data            = {
+                uuID : uuID
+            };
+        break;
         // -------------------------------------------------------------
+        // -------------------------------------------------------------
+        case 'cancelar-asistencia':
+            xUrl            = `${urlServicio}cancelar-asistencia/`;
+            xMetodo         = 'POST';
+            data            = {
+                uuID : uuID
+            };
+        break;
         // -------------------------------------------------------------
         // -------------------------------------------------------------
         // -------------------------------------------------------------
@@ -516,10 +639,17 @@ function handleSuccess( json , textStatus , xhr , tipoReq ) {
         switch ( tipoReq ) {
             // -------------------------------------------------------------
             case 'get-invitado':
+                let txtNovia1   = ``;
+                let txtNovio1   = ``;
                 document.title  = data.Nombre;
                 arrNoviosx      = json.novios;
                 dataInvitado    = data;
+                // Data Invitado
                 dataBoda        = json.boda;
+
+                // Fotos Boda
+                let dataFotos   = json.fotos;
+                
 
                 for (let index = 0; index < arrNoviosx.length; index++) {
                     const rs = arrNoviosx[index];
@@ -527,9 +657,11 @@ function handleSuccess( json , textStatus , xhr , tipoReq ) {
 
                     if( rs.Tipo == 'Novio' ){
                         Novio = g.charAt(0).toUpperCase() + g.slice(1);
+                        txtNovio1   = rs.Descripcion;
                     }
                     if( rs.Tipo == 'Novia' ){
-                        Novia = g.charAt(0).toUpperCase() + g.slice(1);
+                        Novia       = g.charAt(0).toUpperCase() + g.slice(1);
+                        txtNovia1   = rs.Descripcion;
                     }
                 }
 
@@ -546,14 +678,347 @@ function handleSuccess( json , textStatus , xhr , tipoReq ) {
                         + '<div class="box"><div><div class="time">%S</div> <span>Secs</span> </div></div>'));
                 });
 
+                // Novios
                 $('#lblNovios01').html(`${Novia} & ${Novio}`);
+                
+                $('#lblNovia1').html( Novia );
+                $('#txtNovia1').html( txtNovia1 );
+
+                $('#lblNovio1').html( Novio );
+                $('#txtNovio1').html( txtNovio1 );
+
+
+                // FOTOS
+                if( dataFotos.Principal.length > 0 )
+                {
+                    const imgPrincipal          = `${URL_API}${dataFotos.Principal[0].Url}`;
+                    $('#imgPrincipal').attr( "src" , imgPrincipal );
+                }
+                if( dataFotos.Novia.length > 0 )
+                {
+                    const imgNovia1             = `${URL_API}${dataFotos.Novia[0].Url}`;
+                    $('#imgNovia1').attr( "src" , imgNovia1 );
+                }
+                if( dataFotos.Novio.length > 0 )
+                {
+                    const imgNovia1             = `${URL_API}${dataFotos.Novio[0].Url}`;
+                    $('#imgNovio1').attr( "src" , imgNovia1 );
+                }
+
+                // contenedorHistoria
+                let dataHistoria            = json.historia;
+                let htmlHistoria            = ``;
+                
+                for (let index = 0; index < dataHistoria.length; index++) {
+                    const rs = dataHistoria[index];
+                    htmlHistoria += `
+                    <div class="wpo-story-item">
+                        <div class="row">
+                            <div class=" col col-lg-6 col-12 " >
+                                <div class=" wpo-story-img " >
+                                    <img src="${URL_API}${rs.Portada}" alt="" >
+                                </div>
+                            </div>
+                            <div class=" col col-lg-6 col-12 " >
+                                <div class=" wpo-story-content " >
+                                    <div class="pin">
+                                        <img src="<?php echo $URL_ASSETS ?>assets/images/story/pin.svg" alt="">
+                                    </div>
+                                    <i><img src="<?php echo $URL_ASSETS ?>assets/images/story/f-shape-1.png" alt=""></i>
+                                    <h2>${rs.Titulo}</h2>
+                                    <span>${moment(rs.Fecha).format('DD/MM/YYYY')}</span>
+                                    <p>${rs.Historia}.</p>
+                                    <i><img src="<?php echo $URL_ASSETS ?>assets/images/story/f-shape-2.png" alt=""></i>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    `;
+                }
+                $('#contenedorHistoria').html( htmlHistoria );
+                
+                // FOTOS GALERIA
+                let rsF                         = {};
+                let fotosGalerias               = ``;
+
+                // Foto izquierda (1)
+                if( dataFotos.Momentos.length   >= 0 )
+                {
+                    rsF                         = dataFotos.Momentos[ 0 ];
+                    fotosGalerias               = `
+                    <div class="col-lg-2 col-md-6 order-lg-1 order-2">
+                        <div class="gallery-side-img wow fadeInLeftSlow" data-wow-duration="1400ms">
+                            <div class="img-holder">
+                                <a href="${URL_API}${rsF.Url}" class="fancybox" data-fancybox-group="gall-1">
+                                    <img src="${URL_API}${rsF.Url}" alt class="img img-responsive">
+                                    <div class="hover-content">
+                                        <i class="ti-plus"></i>
+                                    </div>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                    `;
+                }
+                // Fotos medio (6)
+                if( dataFotos.Momentos.length   >= 7 )
+                {
+                    rsF                         = dataFotos.Momentos;
+                    fotosGalerias               += `
+                    <div class="col-lg-8 order-lg-2 order-3">
+                        <div class="sortable-gallery">
+                            <div class="row portfolio-grids style-1 clearfix">
+                                <div class="col-lg-4 col-md-6 col-12 grid">
+                                    <div class="img-holder wow fadeInUp" data-wow-duration="1000ms">
+                                        <a href="${URL_API}${rsF[1].Url}" class="fancybox" data-fancybox-group="gall-1">
+                                            <img src="${URL_API}${rsF[1].Url}" alt class="img img-responsive">
+                                            <div class="hover-content">
+                                                <i class="ti-plus"></i>
+                                            </div>
+                                        </a>
+                                    </div>
+                                </div>
+                                <div class="col-lg-4 col-md-6 col-12 grid">
+                                    <div class="img-holder wow fadeInUp" data-wow-duration="1200ms">
+                                        <a href="${URL_API}${rsF[2].Url}" class="fancybox"
+                                            data-fancybox-group="gall-1">
+                                            <img src="${URL_API}${rsF[2].Url}" alt class="img img-responsive">
+                                            <div class="hover-content">
+                                                <i class="ti-plus"></i>
+                                            </div>
+                                        </a>
+                                    </div>
+                                </div>
+                                <div class="col-lg-4 col-md-6 col-12 grid">
+                                    <div class="img-holder wow fadeInUp" data-wow-duration="1400ms">
+                                        <a href="${URL_API}${rsF[3].Url}" class="fancybox"
+                                            data-fancybox-group="gall-1">
+                                            <img src="${URL_API}${rsF[3].Url}" alt class="img img-responsive">
+                                            <div class="hover-content">
+                                                <i class="ti-plus"></i>
+                                            </div>
+                                        </a>
+                                    </div>
+                                </div>
+                                <div class="col-lg-4 col-md-6 col-12 grid">
+                                    <div class="img-holder wow fadeInUp" data-wow-duration="1000ms">
+                                        <a href="${URL_API}${rsF[4].Url}" class="fancybox"
+                                            data-fancybox-group="gall-1">
+                                            <img src="${URL_API}${rsF[4].Url}" alt class="img img-responsive">
+                                            <div class="hover-content">
+                                                <i class="ti-plus"></i>
+                                            </div>
+                                        </a>
+                                    </div>
+                                </div>
+                                <div class="col-lg-4 col-md-6 col-12 grid">
+                                    <div class="img-holder wow fadeInUp" data-wow-duration="1200ms">
+                                        <a href="${URL_API}${rsF[5].Url}" class="fancybox"
+                                            data-fancybox-group="gall-1">
+                                            <img src="${URL_API}${rsF[5].Url}" alt class="img img-responsive">
+                                            <div class="hover-content">
+                                                <i class="ti-plus"></i>
+                                            </div>
+                                        </a>
+                                    </div>
+                                </div>
+                                <div class="col-lg-4 col-md-6 col-12 grid">
+                                    <div class="img-holder wow fadeInUp" data-wow-duration="1400ms">
+                                        <a href="${URL_API}${rsF[6].Url}" class="fancybox"
+                                            data-fancybox-group="gall-1">
+                                            <img src="${URL_API}${rsF[6].Url}" alt class="img img-responsive">
+                                            <div class="hover-content">
+                                                <i class="ti-plus"></i>
+                                            </div>
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    `;
+                }
+                // Foto derecha (1)
+                if( dataFotos.Momentos.length   >= 8 )
+                {
+                    rsF                         = dataFotos.Momentos;
+                    fotosGalerias               += `
+                    <div class="col-lg-2 col-md-6 order-lg-3 order-2">
+                        <div class="gallery-side-img wow fadeInRightSlow" data-wow-duration="1400ms">
+                            <div class="img-holder">
+                                <a href="${URL_API}${rsF[7].Url}" class="fancybox" data-fancybox-group="gall-1" >
+                                    <img src="${URL_API}${rsF[7].Url}" alt class="img img-responsive">
+                                    <div class="hover-content">
+                                        <i class="ti-plus"></i>
+                                    </div>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                    `;
+                }
+                $('#wrapperMomentos').html( fotosGalerias );
+                $('.fancybox').fancybox();
+
+                // REGISTRO
+                if( dataFotos.Registro.length > 0 )
+                {
+                    $('#imgRegistro').attr( 'src' , `${URL_API}${dataFotos.Registro[0].Url}` );
+                }
+                
+                // Invitados
+
+                dataInvitadoForm.IdBoda     = dataInvitado.IdBoda;
+                dataInvitadoForm.IdNovio    = dataInvitado.IdNovio;
+                dataInvitadoForm.IdInvitado = dataInvitado.id;
+
+                // boton para confirmar
+                // btnConfirmarAsistencia | btnCancelarAsistencia
+                varDump( dataInvitado.Estado );
+                switch (dataInvitado.Estado) {
+                    case 'activo':
+                        $('#btnConfirmarAsistencia').show();
+                        $('#btnCancelarAsistencia').show();
+                    break;
+                    case 'no-podra':
+                        $('#btnConfirmarAsistencia').show();
+                        $('#btnCancelarAsistencia').hide();
+                    break;
+                    case 'confirmado':
+                        $('#btnConfirmarAsistencia').hide();
+                        $('#btnCancelarAsistencia').show();
+                    break;
+                    break;
+                    default:
+                }
+
+                if( parseInt( dataInvitado.NComp ) > 0 )
+                {
+                    $('#rsvp').show();
+                }
+
+                // Invitado adicional
+                let dataInvitadoBD = json.invitado_adicional;
+                varDump( dataInvitadoBD );
+                if ( dataInvitadoBD )
+                {
+                    $('#contact-form-main #id').val( dataInvitadoBD.id );
+                    $('#contact-form-main #uu_id').val( dataInvitadoBD.uu_id );
+                    $('#contact-form-main #Nombre').val( dataInvitadoBD.Nombre );
+                    $('#contact-form-main #phone').val( dataInvitadoBD.phone );
+                    if( dataInvitadoBD.Estado == 'confirmado' )
+                    {
+                        $('#contact-form-main #attend').prop( 'checked' , true );
+                        //
+                    }else{
+                        // activo
+                        $('#contact-form-main #not').prop( 'checked' , true );
+                    }
+                    dataInvitadoForm.id         = dataInvitadoBD.id;
+                    dataInvitadoForm.uu_id      = dataInvitadoBD.uu_id;
+                    dataInvitadoForm.Estado     = dataInvitadoBD.Estado;
+                    dataInvitadoForm.Nombre     = dataInvitadoBD.Nombre;
+                    dataInvitadoForm.phone      = dataInvitadoBD.phone;
+                    dataInvitadoForm.Foto       = dataInvitadoBD.Foto;
+                }
+
+                // Programa boda
+                moment.locale('es');
+                // Definir la fecha exacta (Formato ISO: YYYY-MM-DD)
+                const fecha                     = moment( fechaBoda );
+                // D    -> Día del mes sin ceros iniciales (10)
+                // MMMM -> Nombre completo del mes (octubre)
+                // YYYY -> Año de cuatro dígitos (2026)
+                // []   -> El texto entre corchetes se imprime literalmente sin alteraciones
+                const textoFormateado           = fecha.format('D [de] MMMM [del] YYYY');
+                let textoMapa                   = dataBoda.MapaLink;
+                let arMapa                      = textoMapa.split(',');
+                $('#lblFechaP1').html( textoFormateado );
+                $('#lblDireP1').html( dataBoda.Direccion+` <a id="lblVerMapa" href="#" 
+                    class="btn btn-outline-primary" 
+                    data-bs-toggle="modal" 
+                    data-bs-target="#mapaModal" 
+                    data-lat="${arMapa[0]}" 
+                    data-lng="${arMapa[1]}">
+                    📍 Ver Ubicación
+                    </a>` );
+
+                let htmlPrograma                = ``;
+                let dataPrograma                = json.programa;
+                for (let index = 0; index < dataPrograma.length; index++) {
+                    const rs                    = dataPrograma[index];
+                    const horaFormateada        = moment( rs.Hora , 'HH:mm:ss').format('h:mm a');
+                    htmlPrograma                += `
+                    <div class="wpo-event-item">
+                        <div class="wpo-event-text">
+                            <i><img src="${URL_API}${rs.Icono}" alt="" style="width:80px;" /></i>
+                            <span>${rs.Descripcion}</span>
+                        </div>
+                        <div class="wpo-event-time">
+                            <h4>${horaFormateada}</h4>
+                            <i class="fa fa-heart"></i>
+                        </div>
+                    </div>
+                    `;
+                }
+                $('#wrapperPrograma').html( htmlPrograma );
+
+                // Simulación de la URL obtenida del servicio:
+                const urlDinamica               = `${URL_API}${dataBoda.Musica}}`; 
+                
+                // 2. Asignar la ruta al audio
+                audio.src = urlDinamica;
+                audio.load(); // Fundamental: le dice al navegador que prepare el nuevo archivo
+
             break;
             // -------------------------------------------------------------
             // -------------------------------------------------------------
             // -------------------------------------------------------------
             // -------------------------------------------------------------
+            case 'guardar-cab':
+                const $form     = $('#'+xIdForm);
+                
+                Object.keys( data ).forEach(key => {
+
+                    const valor = data[key];
+
+                    // Buscar control por name
+                    const $ctrl = $('#'+xIdForm).find(`[name="${key}"]`);
+
+                    if ($ctrl.length === 0) {
+                        console.warn("Campo no encontrado en el formulario:", key);
+                        return;
+                    }
+
+                    // Input normal
+                    $ctrl.val(valor);
+                });
+
+                toastr["success"]( json.msg.texto , 'Correcto' );
+
+            break;
             // -------------------------------------------------------------
             // -------------------------------------------------------------
+            case 'confirmar-asistencia':
+                Swal.fire({
+                    title   : 'Correcto',
+                    text    : json.msg.texto,
+                    icon    : 'success',
+                    confirmButtonText: 'Cool'
+                });
+                $('#btnConfirmarAsistencia').hide();
+            break;
+            // -------------------------------------------------------------
+            // -------------------------------------------------------------
+            case 'cancelar-asistencia':
+                Swal.fire({
+                    title   : 'Correcto',
+                    text    : json.msg.texto,
+                    icon    : 'warning',
+                    confirmButtonText: 'Cool'
+                });
+                $('#btnCancelarAsistencia').show();
+            break;
             // -------------------------------------------------------------
             // -------------------------------------------------------------
             // -------------------------------------------------------------

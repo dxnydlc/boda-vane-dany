@@ -14,7 +14,7 @@ const moment = require('moment');
 
 import { v4 as uuidv4 } from 'uuid';
 import { HistoriaModel } from './entities/historia.entity';
-import { Repository } from 'typeorm';
+import { Not, Repository } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
 import { UtilidadesService } from 'src/utilidades/utilidades.service';
 
@@ -324,6 +324,46 @@ export class HistoriaService {
   // ...................................................................
   // ...................................................................
   // ...................................................................
+  async getbyBoda( IdBoda : number = 0 ) {
+      try {
+        
+        let datosJson = await this.datosModel.find({
+          where : {
+            IdBoda , 
+            Estado: Not('anulado') // Agrega esta línea
+          } ,
+          order : {
+            id : 'DESC'
+          }
+        });
+    
+        // throw new BadRequestException('Usuario no existe');
+  
+        return {
+          data : datosJson , 
+          version : '1' , 
+          msg : { titulo : 'Correcto' , texto : 'Registros cargados' , clase : 'success' , call : 'tostada2' }
+        }
+  
+      } catch (error) {
+  
+        // Para depuración local
+        varDump(error); 
+  
+        // SI EL ERROR YA ES DE NESTJS (ej. BadRequestException), LO RELANZAMOS DIRECTO
+        if (error instanceof HttpException) {
+          throw error;
+        }
+  
+        // SI ES UN ERROR INESPERADO (ej. caída de BD, error de sintaxis), ENVIAMOS UN 500
+        throw new InternalServerErrorException({
+          message: 'Error en el servicio de historia',
+          cause: error // Mantiene el rastro del error original en logs internos
+        });
+  
+      }
+  
+    }
   // ...................................................................
   // ...................................................................
   // ...................................................................

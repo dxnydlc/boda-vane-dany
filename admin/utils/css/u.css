@@ -1,0 +1,7 @@
+#fxModal {
+    display: none;
+}
+
+#fxModal.show {
+    display: flex;
+}

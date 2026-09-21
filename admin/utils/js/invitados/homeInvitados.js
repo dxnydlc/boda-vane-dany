@@ -772,6 +772,8 @@ function handleSuccess( json , textStatus , xhr , tipoReq ) {
                 // Combo Boda
                 llenarCombo( arrBodas , `#${xIdForm} #IdBoda` , true );
                 $(`#${xIdForm} #IdBoda`).val( data.IdBoda );
+
+                $(`#${xIdForm} #laFoto`).attr( 'src' , `${URL_API}${data.Foto}` );
                 
                 // Combo Novios
                 ejecutarDoc( 'get-novios' );

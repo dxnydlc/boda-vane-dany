@@ -14,7 +14,7 @@ var _AuthFormulario = 'ADMIN-USUARIOS';
 let idCab = 0, uuidCab = ``, xIdClienteProv = 0, xIdSucursal = 0;
 /* ------------------------------------------------------------- */
 /* ------------------------------------------------------------- */
-let xIdArea = 0 , xIdPuesto = 0 ;
+let xIdArea = 0 , xIdPuesto = 0 , xClave = ``;
 /* ------------------------------------------------------------- */
 /* ------------------------------------------------------------- */
 let dataEnviarPost = ``;
@@ -167,32 +167,6 @@ let optsLangDatatable = {
         /* ------------------------------------------------------------- */
         /* ------------------------------------------------------------- */
         /* ------------------------------------------------------------- */
-        // SELECT 2 USUARIOS NEST
-        let Supervisor = $('#frmDocumento #Supervisor').select2({
-            ajax: {
-                url : `${URL_API}v1/publico/select2-reg-emple/` ,
-                dataType : 'json',
-                data : function (params) {
-                    var query = {
-                        query : params.term,
-                    }
-                    return query;
-                }
-            },
-            processResults: function (data) {
-                return {
-                results: data
-                };
-            },
-            minimumInputLength : 3,width : '100%'
-        });
-        /* ------------------------------------------------------------- */
-        /* ------------------------------------------------------------- */
-        Supervisor.on("select2:select", function (e) { 
-            let _Id = e.params.data.id, _Texto = e.params.data.text;
-            console.log("select2:select", _Id );
-            $('#frmDocumento #nombre_supervisor').val( _Texto );
-        });
         /* ------------------------------------------------------------- */
         /* ------------------------------------------------------------- */
         /* ------------------------------------------------------------- */
@@ -264,37 +238,23 @@ let optsLangDatatable = {
         /* ------------------------------------------------------------- */
         $(document).on("click", ".btn-guardar", function () {
 
-            $.blockUI({ message: "Guardando..." });
+            //$.blockUI({ message: "Guardando..." });
 
-            const formId = $(this).data("form");
-            const formData = {};
+            const formId            = $(this).data("form");
+            const formData          = {};
 
             $(`#${formId}`).serializeArray().forEach(item => {
                 formData[item.name] = item.value;
             });
 
             if (!formData.uu_id) {
-                formData.uu_id = crypto.randomUUID();
+                formData.uu_id      = crypto.randomUUID();
             }
 
-            fetch("api/v1/orders/guardar", {
-                method: "POST",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({ data: formData })
-            })
-            .then(r => r.json())
-            .then(resp => {
+            dataEnviarPost          = formData;
+            xIdForm                 = formId;
 
-                const newId = resp.data.id;
-                const oldId = formData.id;
-
-                // Actualizar el tab
-                updateTabId(oldId, newId);
-
-                // Actualizar el campo id del formulario
-                $(`#${newId}-formulario input[name="id"]`).val(newId);
-            })
-            .finally(() => $.unblockUI());
+            ejecutarDoc( 'guardar-cab' );
         });
         /* ------------------------------------------------------------- */
         /* ------------------------------------------------------------- */
@@ -347,6 +307,13 @@ let optsLangDatatable = {
         });
         /* ------------------------------------------------------------- */
         /* ------------------------------------------------------------- */
+        $(document).delegate('.cambiarClave', 'click', function(event) {
+            event.preventDefault();
+            let dni         = $(this).data('dni');
+            uuidCab         = $(this).data('uuid');
+            xClave          = prompt(`Ingrese nueva contraseña`);
+            ejecutarDoc( 'cambio_clave' );
+        });
         /* ------------------------------------------------------------- */
         /* ------------------------------------------------------------- */
         /* ------------------------------------------------------------- */
@@ -559,10 +526,11 @@ function ejecutarDoc( tipoReq ) {
         varDump( tipoReq );
 
         switch (tipoReq) {
-            case 'listar-cab'  : objCargando = `#TablaHomePs`; break;
-            case 'guardar-cab' : objCargando = `#${xIdForm}`; break;
-            case 'anular-cab'  : objCargando = `#wrapper_form`; break;
-            case 'cargar-cab'  : objCargando = `#frmDocumento`; break;
+            case 'listar-cab'   : objCargando = `#TablaHomePs`; break;
+            case 'guardar-cab'  : objCargando = `#${xIdForm}`; break;
+            case 'anular-cab'   : objCargando = `#wrapper_form`; break;
+            case 'cargar-cab'   : objCargando = `#frmDocumento`; break;
+            case 'cambio_clave' : objCargando = `#${xIdForm}`; break;
         }
 
         mostrarLoader( objCargando );
@@ -614,7 +582,7 @@ function prepararRequest( tipoReq ) {
             xMetodo         = `POST`;
 
             if( id > 0 ){
-                xUrl            = `${urlServicio}actualizar/${uu_id}`;
+                xUrl            = `${urlServicio}actualizar/${dataEnviarPost.uu_id}`;
                 xMetodo         = `PATCH`;
             }
         break;
@@ -639,6 +607,13 @@ function prepararRequest( tipoReq ) {
             xMetodo          = `GET`;
         break;
         // -------------------------------------------------------------
+        case 'cambio_clave':
+            xUrl             = `${urlServicio}cambio_clave`, 
+            xMetodo          = `POST`;
+            data = {
+                Token : uuidCab , Clave : xClave 
+            }
+        break;
         // -------------------------------------------------------------
         // -------------------------------------------------------------
         // -------------------------------------------------------------
@@ -801,6 +776,9 @@ function handleSuccess( json , textStatus , xhr , tipoReq ) {
             break;
             // -------------------------------------------------------------
             // -------------------------------------------------------------
+            case 'cambio_clave':
+                toastr["success"]( json.msg.texto , 'Correcto' );
+            break;
             // -------------------------------------------------------------
             // -------------------------------------------------------------
             // -------------------------------------------------------------
@@ -1044,8 +1022,8 @@ function openEditorTab(rowData, isNew = false) {
 
     const tabId             = `tab-${rowData.id}`;
     const tabContentId      = `content-${rowData.id}`;
-    const formId            = `${rowData.id}-formulario`;
-    xIdFormx                = formId;
+    const formId            = `formulario_${rowData.id}`;
+    xIdForm                = formId;
 
     idCab                   = isNew ? 0 : rowData.id
 
@@ -1089,7 +1067,7 @@ function renderFormInTab(rowData, formId) {
     let htmlForm = `
     <div class=" demo-card  rounded-xl mb-5 ">
         <div class=" demo-card-header d-flex align-items-center justify-content-between px-6 py-5  " >
-            <h3 class="demo-card-title m-0">Tab Pill</h3>
+            <h3 class="demo-card-title m-0">Usuario</h3>
         </div>
         <div class=" demo-card-body " >
             <div class=" demo-card-body-content row " >
@@ -1101,10 +1079,22 @@ function renderFormInTab(rowData, formId) {
                 htmlForm += `
                 <div class="col-md-6">
                     <label class="form-label" >Nombre:</label>
-                    <input type="text" class="form-control" name="${field}" value="${rowData[field] || defaultValues[field] || ""}" />
+                    <input type="text" class="form-control" name="${field}" id="${field}" value="${rowData[field] || defaultValues[field] || ""}" />
                 </div>
                 `;
-                break;
+            break;
+
+            case 'DNI':
+                htmlForm += `
+                <div class="col-md-2 ">
+                    <label class="form-label" >Nombre:</label>
+                    <input type="text" class="form-control" name="${field}" id="${field}" value="${rowData[field] || defaultValues[field] || ""}" />
+                </div>
+                <div class="col-md-2 ">
+                    <button data-dni="${rowData[field]}" data-uuid="${rowData['uu_id']}" type="button" class=" cambiarClave btn btn-primary " >Cambiar contraseña</button>
+                </div>
+                `;
+            break;
         
             default:
                 htmlForm += `

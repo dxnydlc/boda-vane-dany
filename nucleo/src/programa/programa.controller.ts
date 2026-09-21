@@ -1,4 +1,4 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete, HttpCode, UseGuards, UsePipes, ValidationPipe, Req } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, HttpCode, UseGuards, UsePipes, ValidationPipe, Req, UseInterceptors, UploadedFile } from '@nestjs/common';
 import { ProgramaService } from './programa.service';
 import { CreateProgramaDto } from './dto/create-programa.dto';
 import { UpdateProgramaDto } from './dto/update-programa.dto';
@@ -18,9 +18,15 @@ import * as express from 'express';
 import { UtilidadesService } from 'src/utilidades/utilidades.service';
 import { JwtGuardGuard } from 'src/guards/jwt-guard/jwt-guard.guard';
 
+import { Multer } from 'multer'; // Importa el tipo si es necesario
+import { storage } from 'src/utils/media.hadle';
+import * as path from 'path';
+import sharp from 'sharp';
+import { FileInterceptor } from '@nestjs/platform-express';
 
 // Para activar el auth JwTokenAuth
 @UseGuards( JwtGuardGuard )
+
 
 @ApiTags('Programa')
 @ApiBearerAuth()
@@ -55,8 +61,36 @@ export class ProgramaController {
   // ................................................................
   // ................................................................
   // ................................................................
+  @Post('upload')
+    @UseInterceptors( FileInterceptor('formData', { storage }))
+    async uploadFile(@UploadedFile() file: Express.Multer.File) {
+  
+      const originalPath    = file.path; // ruta del archivo subido
+      const ext             = path.extname(file.filename); // extensión
+      const nameOnly        = file.filename.replace(ext, ''); // nombre sin extensión
+  
+      const resizedName     = `${nameOnly}-200x200${ext}`;
+      const resizedPath     = path.join(path.dirname(originalPath), resizedName);
+  
+      // Crear la versión redimensionada
+      await sharp(originalPath)
+        .resize(200, 200)
+        .toFile(resizedPath);
+  
+      return {
+        message   : 'Archivo subido y redimensionado',
+        original  : `uploads/${file.filename}`,
+        resized   : `uploads/${resizedName}`,
+        resizedPath
+      };
+    }
   // ................................................................
   // ................................................................
+  @Get('get-activos')
+  @HttpCode(200)
+  async getActivos() {
+    return this.programaService.getActivos();
+  }
   // ................................................................
   // ................................................................
   @Post('guardar')

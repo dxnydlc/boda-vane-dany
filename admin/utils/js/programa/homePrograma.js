@@ -36,19 +36,20 @@ let arrBodas = [];
 let dataJson = [];
 /* ------------------------------------------------------------- */
 // columnas que se mostrarán en la tabla (1)
-const columnasVisibles  = [ "id" , "Descripcion" , "IdBoda" , "Hora" , "Estado" ];
+const columnasVisibles  = [ "id" , "Boda" , "Descripcion" , "Hora" , "Estado" ];
 
 // campos que tendrá el formulario
-const formFields        = [ "Descripcion" , "IdBoda" , "Hora" , "Estado" ];
+const formFields        = [ "Descripcion" , "IdBoda" , "Hora" , "Icono" , "Estado" ];
 
 // campos hidden
-const hiddenFields      = ["id", "uu_id"];
+const hiddenFields      = ["id", "uu_id" , "Icono" ];
 
 // valores por defecto
 const defaultValues = {
     id          : 0 , 
     Descripcion : '' , 
-    Hora        : moment().format('HH:mm') 
+    Hora        : moment().format('HH:mm') , 
+    Icono       : `img/7.svg`
 };
 
 
@@ -170,31 +171,37 @@ let optsLangDatatable = {
         /* ------------------------------------------------------------- */
         /* ------------------------------------------------------------- */
         /* ------------------------------------------------------------- */
-        // SELECT 2 USUARIOS NEST
-        let Supervisor = $('#frmDocumento #Supervisor').select2({
-            ajax: {
-                url : `${URL_API}v1/publico/select2-reg-emple/` ,
-                dataType : 'json',
-                data : function (params) {
-                    var query = {
-                        query : params.term,
-                    }
-                    return query;
-                }
-            },
-            processResults: function (data) {
+        $("#archivo").fileUploader({
+            endpoint        : `${urlServicio}upload`,
+            token           : tokenBackend , 
+
+            allowedMime: [
+                "image/jpeg",
+                "image/png",
+                "image/svg",
+                "image/svg+xml",
+                "application/pdf"
+            ],
+
+            extraData: function() {
                 return {
-                results: data
+                    Flag        : _AuthFormulario,
                 };
             },
-            minimumInputLength : 3,width : '100%'
-        });
-        /* ------------------------------------------------------------- */
-        /* ------------------------------------------------------------- */
-        Supervisor.on("select2:select", function (e) { 
-            let _Id = e.params.data.id, _Texto = e.params.data.text;
-            console.log("select2:select", _Id );
-            $('#frmDocumento #nombre_supervisor').val( _Texto );
+
+            afterUpload: function(file, response) {
+                console.log("Archivo subido:", file.name);
+                console.log( response );
+                varDump(`#${xIdForm} #Foto`);
+
+                $(`#${xIdForm} #Icono`).val( response.resized );
+                $(`#${xIdForm} #laFoto`).attr( 'src' , `${URL_API}${response.resized}` );
+                //mdlArchivos
+            },
+
+            afterAllUploads: function() {
+                console.log("Todos los archivos fueron subidos");
+            }
         });
         /* ------------------------------------------------------------- */
         /* ------------------------------------------------------------- */
@@ -457,6 +464,7 @@ let optsLangDatatable = {
 function initAdmin(){
     //
     ejecutarDoc( 'listar-cab' );
+    ejecutarDoc( 'get-bodas' );
     //
 }
 /* ------------------------------------------------------------- */
@@ -621,7 +629,7 @@ function prepararRequest( tipoReq ) {
             xMetodo         = `POST`;
 
             if( idCab > 0 ){
-                xUrl            = `${urlServicio}actualizar/${uu_id}`;
+                xUrl            = `${urlServicio}actualizar/${dataEnviarPost.uu_id}`;
                 xMetodo         = `PATCH`;
             }
         break;
@@ -641,8 +649,8 @@ function prepararRequest( tipoReq ) {
             xMetodo          = `DELETE`;
         break;
         // -------------------------------------------------------------
-        case 'get-locales':
-            xUrl             = `${URL_API}v1/sucursales/get-by-cliente/${xIdClienteProv}`;
+        case 'get-bodas':
+            xUrl             = `${urlBoda}get-activos`;
             xMetodo          = `GET`;
         break;
         // -------------------------------------------------------------
@@ -750,6 +758,8 @@ function handleSuccess( json , textStatus , xhr , tipoReq ) {
                 // Combo Boda
                 llenarCombo( arrBodas , `#${xIdForm} #IdBoda` , true );
                 $(`#${xIdForm} #IdBoda`).val( data.IdBoda );
+
+                $(`#${xIdForm} #laFoto`).attr( 'src' , `${URL_API}${data.Portada}` );
 
             break;
             // -------------------------------------------------------------
@@ -1076,7 +1086,7 @@ function renderFormInTab( rowData , formId ) {
     let htmlForm = `
     <div class=" demo-card  rounded-xl mb-5 ">
         <div class=" demo-card-header d-flex align-items-center justify-content-between px-6 py-5  " >
-            <h3 class="demo-card-title m-0">${ idCab == 0 ? 'Nuevo' : `Editar [${rowData.Nombre}] #${rowData.id}`}</h3>
+            <h3 class="demo-card-title m-0">${ idCab == 0 ? 'Nuevo' : `Editar [${rowData.Descripcion}] #${rowData.id}`}</h3>
         </div>
         <div class=" demo-card-body " >
             <div class=" demo-card-body-content row " >
@@ -1085,20 +1095,11 @@ function renderFormInTab( rowData , formId ) {
     formFields.forEach(field => {
         switch ( field ) {
             // -----------------------------------------
-            case 'Nombre':
+            case 'Descripcion':
                 htmlForm += `
                 <div class="col-md-6">
-                    <label class="form-label" >Nombre:</label>
-                    <input type="text" class="form-control" name="${field}" value="${rowData[field] ? rowData[field] : defaultValues[field]}" placeholder="-" />
-                </div>
-                `;
-            break;
-            // -----------------------------------------
-            case 'Fecha':
-                htmlForm += `
-                <div class=" col-md-2 ">
-                    <label class="form-label" >Fecha:</label>
-                    <input type="date" class="form-control" name="${field}" value="${rowData[field] ? rowData[field] : defaultValues[field]}" />
+                    <label class="form-label" >Descripcion:</label>
+                    <input type="text" class="form-control" name="${field}" value="${rowData[field] ? rowData[field] : defaultValues[field]}" />
                 </div>
                 `;
             break;
@@ -1107,7 +1108,7 @@ function renderFormInTab( rowData , formId ) {
                 htmlForm += `
                 <div class=" col-md-2 ">
                     <label class="form-label" >Hora:</label>
-                    <input type="time" class="form-control" name="${field}" value="${rowData[field] ? rowData[field] : defaultValues[field]}" />
+                    <input type="time" class="form-control" name="${field}" id="${field}" value="${rowData[field] ? rowData[field] : defaultValues[field]}" />
                 </div>
                 `;
             break;
@@ -1122,24 +1123,25 @@ function renderFormInTab( rowData , formId ) {
                 `;
             break;
             // -----------------------------------------
-            case 'MapaLink':
+            case 'IdBoda':
                 htmlForm += `
-                <div class=" col-md-6 ">
-                    <label class="form-label" >Link mapa:</label>
-                    <input type="text" class="form-control" name="${field}" value="${rowData[field] || defaultValues[field] || ""}" />
+                <div class="mb-5 col-md-3 ">
+                    <label for="IdBoda" class="form-label" >Boda:</label>
+                    <select id="${field}" name="${field}" id="${field}" class="form-select form-select-sm comboBoda "></select>
                 </div>
                 `;
             break;
             // -----------------------------------------
-            case 'Direccion':
+            case 'Icono':
                 htmlForm += `
-                <div class=" col-md-6 ">
-                    <label class="form-label" >Dirección:</label>
-                    <input type="text" class="form-control" name="${field}" value="${rowData[field] ? rowData[field] : defaultValues[field]}" />
+                <div class="mb-5 col-md-2 ">
+                    <img id="laFoto" src="${URL_API}img/7.svg" class="img-thumbnail" alt="..." />
+                    <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#mdlArchivos" >
+                    Subir Icono
+                    </button>
                 </div>
                 `;
             break;
-            // -----------------------------------------
             // -----------------------------------------
             // -----------------------------------------
             // -----------------------------------------
@@ -1258,6 +1260,273 @@ function esNumerico(texto) {
   return /^-?\d+(\.\d+)?$/.test(texto);
   // console.log(esNumerico("681904-formulario")); // false
 }
+/* ------------------------------------------------------------- */
+/* ------------------------------------------------------------- */
+$.fn.fileUploader = function (options) {
+
+    const settings = $.extend({
+        endpoint: "v1/tickets-archivos/upload",
+        token: "",
+        maxSizeMB: 10,
+        allowedMime: [],
+        extraData: {},
+        preview: true,
+        queue: true,
+        cancelable: true,
+        dragAndDrop: true,
+        clearPreviewAfterUpload: false,
+
+        // Hooks
+        beforeQueueStart: function (files) {},
+        beforeUpload: function (file) {},
+        afterUpload: function (file, response) {},
+        afterAllUploads: function () {},
+        onCancel: function (file) {},
+        onPreviewRender: function (file, previewElement) {},
+        onProgress: function (percent) {},
+        onError: function (err) {},
+        onSuccess: function (resp) {}
+    }, options);
+
+    return this.each(function () {
+
+        const $input = $(this);
+        $input.attr("type", "file").attr("multiple", true);
+
+        let uploadQueue = [];
+        let currentXHR = null;
+
+        // Preview container
+        const $preview = $('<div class="row" style="margin-top:10px;"></div>');
+        $input.after($preview);
+
+        // Progress bar
+        const $progress = $(`
+            <div class="progress" style="margin-top:10px; display:none;">
+                <div class="progress-bar progress-bar-striped active" 
+                        role="progressbar" style="width: 0%;">
+                    0%
+                </div>
+            </div>
+        `);
+        $preview.after($progress);
+
+        // Drag & Drop zone
+        let $dropZone = null;
+        if (settings.dragAndDrop) {
+            $dropZone = $(`
+                <div class="well text-center" 
+                        style="padding:30px; border:2px dashed #999; cursor:pointer; margin-top:10px;">
+                    Arrastra tus archivos aquí
+                </div>
+            `);
+            $input.after($dropZone);
+        }
+
+        function notify(type, message) {
+            const alert = $(`<div class="alert alert-${type}" style="margin-top:10px;">${message}</div>`);
+            $progress.after(alert);
+            alert.delay(3000).fadeOut(500, function () { $(this).remove(); });
+        }
+
+        function renderPreview(file) {
+            if (!settings.preview) return;
+
+            const col = $('<div class="col-xs-4" style="margin-bottom:10px;"></div>');
+            const box = $('<div class="thumbnail" style="position:relative;"></div>');
+
+            if (settings.cancelable) {
+                const cancelBtn = $(`
+                    <button class="btn btn-danger btn-xs" 
+                            style="position:absolute; top:5px; right:5px;">
+                        X
+                    </button>
+                `);
+
+                cancelBtn.on("click", function () {
+                    uploadQueue = uploadQueue.filter(f => f !== file);
+                    col.remove();
+                    settings.onCancel(file);
+                });
+
+                box.append(cancelBtn);
+            }
+
+            if (file.type.startsWith("image/")) {
+                const reader = new FileReader();
+                reader.onload = function (e) {
+                    box.append(`<img src="${e.target.result}" style="width:100%; height:120px; object-fit:cover;">`);
+                };
+                reader.readAsDataURL(file);
+            } else {
+                box.append(`<div style="padding:20px; text-align:center;">${file.name}</div>`);
+            }
+
+            col.append(box);
+            $preview.append(col);
+
+            settings.onPreviewRender(file, col);
+        }
+
+        function uploadNext() {
+            if (uploadQueue.length === 0) {
+                settings.afterAllUploads();
+                return;
+            }
+
+            const file = uploadQueue.shift();
+
+            settings.beforeUpload(file);
+
+            const formData = new FormData();
+            formData.append("formData", file);
+
+            // Extra params dinámicos
+            let extra = (typeof settings.extraData === "function")
+                ? settings.extraData()
+                : settings.extraData;
+
+            if (extra && typeof extra === "object") {
+                Object.entries(extra).forEach(([key, value]) => {
+                    if (Array.isArray(value)) {
+                        value.forEach(v => formData.append(`${key}[]`, v));
+                    } else if (typeof value === "object") {
+                        formData.append(key, JSON.stringify(value));
+                    } else {
+                        formData.append(key, value);
+                    }
+                });
+            }
+
+            $progress.show();
+            $progress.find(".progress-bar")
+                .removeClass("progress-bar-success progress-bar-danger")
+                .addClass("active")
+                .css("width", "0%")
+                .text("0%");
+
+            currentXHR = $.ajax({
+                url: settings.endpoint,
+                type: "POST",
+                data: formData,
+                processData: false,
+                contentType: false,
+                headers: {
+                    "Authorization": "Bearer " + settings.token
+                },
+                xhr: function () {
+                    const xhr = new window.XMLHttpRequest();
+                    xhr.upload.addEventListener("progress", function (evt) {
+                        if (evt.lengthComputable) {
+                            const percent = Math.round((evt.loaded / evt.total) * 100);
+                            $progress.find(".progress-bar")
+                                .css("width", percent + "%")
+                                .text(percent + "%");
+
+                            settings.onProgress(percent);
+                        }
+                    }, false);
+                    return xhr;
+                },
+                success: function (response) {
+
+                    // Clean input
+                    $input.val("");
+
+                    // Clean progress
+                    $progress.find(".progress-bar")
+                        .removeClass("active progress-bar-success progress-bar-danger")
+                        .css("width", "0%")
+                        .text("0%");
+
+                    setTimeout(() => $progress.hide(), 300);
+
+                    if (settings.clearPreviewAfterUpload) {
+                        $preview.empty();
+                    }
+
+                    settings.afterUpload(file, response);
+                    settings.onSuccess(response);
+
+                    uploadNext();
+                },
+                error: function (xhr) {
+
+                    $progress.find(".progress-bar")
+                        .removeClass("active")
+                        .addClass("progress-bar-danger")
+                        .css("width", "0%")
+                        .text("Error");
+
+                    setTimeout(() => {
+                        $progress.hide();
+                        $progress.find(".progress-bar")
+                            .removeClass("progress-bar-danger")
+                            .css("width", "0%")
+                            .text("0%");
+                    }, 800);
+
+                    settings.onError(xhr);
+
+                    uploadNext();
+                }
+            });
+        }
+
+        function processFiles(files) {
+            settings.beforeQueueStart(files);
+
+            files.forEach(file => {
+
+                if (settings.allowedMime.length > 0 &&
+                    !settings.allowedMime.includes(file.type)) {
+                    notify("danger", `El archivo ${file.name} no es un tipo permitido`);
+                    return;
+                }
+
+                if (file.size > settings.maxSizeMB * 1024 * 1024) {
+                    notify("danger", `El archivo ${file.name} supera el límite de ${settings.maxSizeMB}MB`);
+                    return;
+                }
+
+                uploadQueue.push(file);
+                //renderPreview(file);
+            });
+
+            uploadNext();
+        }
+
+        // Input change
+        $input.on("change", function () {
+            processFiles(Array.from(this.files));
+        });
+
+        // Drag & Drop
+        if (settings.dragAndDrop && $dropZone) {
+
+            $dropZone.on("dragover", function (e) {
+                e.preventDefault();
+                $dropZone.addClass("drop-highlight");
+            });
+
+            $dropZone.on("dragleave", function (e) {
+                e.preventDefault();
+                $dropZone.removeClass("drop-highlight");
+            });
+
+            $dropZone.on("drop", function (e) {
+                e.preventDefault();
+                $dropZone.removeClass("drop-highlight");
+
+                const files = Array.from(e.originalEvent.dataTransfer.files);
+                processFiles(files);
+            });
+        }
+
+    });
+};
+/* ------------------------------------------------------------- */
+/* ------------------------------------------------------------- */
 /* ------------------------------------------------------------- */
 /* ------------------------------------------------------------- */
 /* ------------------------------------------------------------- */

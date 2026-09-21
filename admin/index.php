@@ -47,7 +47,12 @@ function cargarEnv($rutaArchivo) {
 // 2. Ejecutar la función apuntando a tu archivo .env
 cargarEnv(__DIR__ . '/.env');
 
-$API = $_ENV['API'];
+$API                    = $_ENV['API'];
+$URL                    = $_ENV['URL'];
+$PATH_PROYECTO          = $_ENV['PATH_PROYECTO'];
+$PATH_REPO              = $_ENV['PATH_REPO'];
+$URL_ASSETS             = $URL;
+$MAPS_KEY               = $_ENV['MAPS_KEY'];
 
 $request            = parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH);
 $request            = parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH);
@@ -106,10 +111,30 @@ switch ( $ruta_base ) {
         $archivoJS              = "<script src='/utils/js/mesas/homeMesas.js?v=$semilla'></script>";
     break;
     case 'invitacion':
+        
         // Obtenemos la segunda y tercera parte de la URL
         $sub_ruta               = $partes[1] ?? '';
         $parametro              = $partes[2] ?? '';
         $regex_uuid             = '#^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$#';
+
+        $URL_ASSETS             = $URL."public/sukun/";
+
+        $rutaArchivo            = $PATH_REPO.'nucleo/public/uploads/ogg_'.$parametro.'.txt';
+        if (file_exists($rutaArchivo)) {
+            // FILE_IGNORE_NEW_LINES quita los saltos de línea al final de cada texto
+            // FILE_SKIP_EMPTY_LINES ignora las líneas en blanco
+            $lineas             = file($rutaArchivo, FILE_IGNORE_NEW_LINES | FILE_SKIP_EMPTY_LINES);
+            
+            // Asignas cada línea a una variable (usando ?? por si la línea no existe)
+            $titulo             = $lineas[0] ?? 'Título por defecto';
+            $descripcion        = $lineas[1] ?? 'Descripción por defecto';
+            $imagenUrl          = $lineas[2] ?? 'https://tuweb.com/default.jpg';
+            
+            // Ahora puedes usar estas variables para inyectarlas en tus etiquetas HTML
+            //echo "<meta property='og:title' content='" . htmlspecialchars($titulo) . "' />";
+        } else {
+            echo "El archivo no existe.";
+        }
 
         // Verificamos que la sub-ruta sea "sukun" y que el parámetro sea un UUID válido
         if ($sub_ruta           === 'sukun' && preg_match($regex_uuid, $parametro)) {
@@ -154,6 +179,11 @@ switch ( $ruta_base ) {
         $title                  = 'Programa';
         $content                = 'pages/programa/homePrograma.php';
         $archivoJS              = "<script src='/utils/js/programa/homePrograma.js?v=$semilla'></script>";
+    break;
+    case 'fotos':
+        $title                  = 'Fotos';
+        $content                = 'pages/fotos/homeFotos.php';
+        $archivoJS              = "<script src='/utils/js/fotos/homeFotos.js?v=$semilla'></script>";
     break;
     default:
         http_response_code( 404 );
