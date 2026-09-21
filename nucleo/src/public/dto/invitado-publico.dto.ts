@@ -2,11 +2,10 @@ import { Optional } from "@nestjs/common"
 import { ApiProperty } from "@nestjs/swagger"
 import { IsNotEmpty } from "class-validator"
 
-
-export class CreateBodaDto {
+export class CreateInvitadoPublicoDto {
 
     @Optional()
-    Musica : string = ''
+    IdInvitado : number = 0
 
     @Optional()
     id : number = 0
@@ -15,19 +14,19 @@ export class CreateBodaDto {
 
     @ApiProperty({
         description : 'Nombre',
-        default     : 'Nombre',
+        default     : 'Nombre invitado',
     })
-    @IsNotEmpty({message : 'Ingrese Nombre'})
-    Nombre! : string
+    @IsNotEmpty({message : 'Ingrese invitado'})
+    Nombre : string = ''
 
     // ************************************************
 
     @ApiProperty({
-        description : 'Fecha',
-        default     : 'Fecha',
+        description : 'Boda',
+        default     : '0',
     })
-    @IsNotEmpty({message : 'Ingrese Fecha'})
-    Fecha! : string
+    @IsNotEmpty({message : 'Seleccione Boda'})
+    IdBoda : number = 0
 
     // ************************************************
 

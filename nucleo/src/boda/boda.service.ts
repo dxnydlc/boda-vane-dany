@@ -172,9 +172,18 @@ export class BodaService {
       // '%Y-%m-%d'
       let data = await this.datosModel.createQueryBuilder('c')
       .select([ 
-        "id" , "uu_id" , "Nombre" , "DATE_FORMAT( c.Fecha , '%d/%m/%Y' ) as Fecha" , "Estado" , "DniUsuarioMod" , "UsuarioMod" , 
+        "id" , "uu_id" , 
+        "Nombre" , 
+        "DATE_FORMAT( c.Fecha , '%d/%m/%Y' ) as Fecha" , 
+        "Estado" , 
+        "DniUsuarioMod" , 
+        "UsuarioMod" , 
         "DATE_FORMAT( c.created_at , '%Y-%m-%d %H:%i:%s') as created_at" , 
-        "Hora" , "MapaLink" , "Direccion"
+        "Hora" , 
+        "MapaLink" , 
+        "Direccion" , 
+        "Portada" , 
+        "Musica as Musica"
       ])
       .where(" Estado = 'activo' ")
       .getRawMany();
@@ -214,7 +223,7 @@ export class BodaService {
       .select([ 
         "id" , "uu_id" , "Nombre" , "DATE_FORMAT( c.Fecha , '%Y-%m-%d') as Fecha" , "Estado" , "DniUsuarioMod" , "UsuarioMod" , 
         "DATE_FORMAT( c.created_at , '%Y-%m-%d %H:%i:%s') as Creado" , 
-        "Hora" , "MapaLink" , "Direccion"
+        "Hora" , "MapaLink" , "Direccion", "Portada", "Musica"
       ])
       .where(" c.id = :id" , { id } )
       .getRawOne();
@@ -258,6 +267,7 @@ export class BodaService {
 
       if( data1!.Estado != 'activo' )throw new HttpException( 'Documento no disponible', HttpStatus.CONFLICT);
 
+      delete dto.id;
       await this.datosModel.update({ uu_id : uuID } , dto );
       
       let data = await this.datosModel.createQueryBuilder('c')

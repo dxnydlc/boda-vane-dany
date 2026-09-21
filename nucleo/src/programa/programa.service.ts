@@ -340,7 +340,7 @@ export class ProgramaService {
           Estado: Not('anulado') // Agrega esta línea
         } ,
         order : {
-          id : 'DESC'
+          Hora : 'ASC'
         }
       });
   

@@ -1,4 +1,4 @@
-import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
+import { BadRequestException, HttpException, HttpStatus, Injectable, InternalServerErrorException } from '@nestjs/common';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 
@@ -40,7 +40,6 @@ export class UsersService {
   // ...................................................................
   // ...................................................................
   async demoFuncion() {
-    
     try {
       
       let data = await this.datosModel.find({
@@ -50,6 +49,8 @@ export class UsersService {
         }
       });
   
+      // throw new BadRequestException('Usuario no existe');
+
       return {
         data , 
         version : '1' , 
@@ -58,12 +59,19 @@ export class UsersService {
 
     } catch (error) {
 
-      varDump( error );
-      throw new HttpException(
-        'Error en el servicio', 
-        HttpStatus.INTERNAL_SERVER_ERROR,
-        { cause: error } // Optional: passes the original error for debugging logs
-      );
+      // Para depuración local
+      varDump(error); 
+
+      // SI EL ERROR YA ES DE NESTJS (ej. BadRequestException), LO RELANZAMOS DIRECTO
+      if (error instanceof HttpException) {
+        throw error;
+      }
+
+      // SI ES UN ERROR INESPERADO (ej. caída de BD, error de sintaxis), ENVIAMOS UN 500
+      throw new InternalServerErrorException({
+        message: 'Error en el servicio de usuarios',
+        cause: error // Mantiene el rastro del error original en logs internos
+      });
 
     }
 
@@ -206,7 +214,7 @@ export class UsersService {
         },
       });
 
-      if( data1!.Estado != 'Activo' )throw new HttpException( 'Documento no disponible', HttpStatus.CONFLICT);
+      if( data1!.Estado != 'active' )throw new HttpException( 'Documento no disponible', HttpStatus.CONFLICT);
 
       await this.datosModel.update({ uu_id : uuID } , dto );
       let dataP = await this.datosModel.findOne({
@@ -266,8 +274,71 @@ export class UsersService {
   }
   // ...................................................................
   // ...................................................................
+  // CAMBIAR CONTRASEÑA
+  async cambiarClaveUsuario1(Token: string, Clave: string) {
+    //
+    let dataUsuario = await this.datosModel.findOne({
+      where: {
+        uu_id: Token
+      }
+    });
+    console.log(Token);
+    if (!dataUsuario) throw new HttpException('Usuario no existe', HttpStatus.CONFLICT);
+    let d = await this.datosModel.update({ id: dataUsuario.id }, { Password_hash : Clave });
+
+    console.log(dataUsuario.uu_id);
+    return {
+      version: '1',
+      d,
+      mail: dataUsuario.Email,
+      estado: 'Correcto'
+    };
+  }
   // ...................................................................
   // ...................................................................
+  async cambiarClaveUsuario( Token : string , Clave : string ) {
+    try {
+      
+      let dataUsuario = await this.datosModel.findOne({
+      where: {
+        uu_id: Token
+      }
+    });
+    console.log(Token);
+    
+    if (!dataUsuario) throw new BadRequestException('Usuario no existe');
+
+    // throw new BadRequestException('Usuario no existe');
+
+    let d = await this.datosModel.update({ id: dataUsuario.id }, { Password_hash : Clave });
+  
+      
+
+      return {
+        data : {} , 
+        version : '1' , 
+        msg : { titulo : 'Correcto' , texto : 'Registros cargados' , clase : 'success' , call : 'tostada2' }
+      }
+
+    } catch (error) {
+
+      // Para depuración local
+      varDump(error); 
+
+      // SI EL ERROR YA ES DE NESTJS (ej. BadRequestException), LO RELANZAMOS DIRECTO
+      if (error instanceof HttpException) {
+        throw error;
+      }
+
+      // SI ES UN ERROR INESPERADO (ej. caída de BD, error de sintaxis), ENVIAMOS UN 500
+      throw new InternalServerErrorException({
+        message: 'Error en el servicio de usuarios',
+        cause: error // Mantiene el rastro del error original en logs internos
+      });
+
+    }
+
+  }
   // ...................................................................
   // ...................................................................
   // ...................................................................

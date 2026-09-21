@@ -1,6 +1,6 @@
 
 <!-- start of hero -->
-<section class="static-hero">
+<section class="static-hero" >
     <div class="static-main-box">
         <div class="static-inner-box">
             <div class="container">
@@ -17,7 +17,7 @@
                             </div>
                         </div>
                     </div>
-                    <div class="col col-xl-6 col-lg-6 col-12">
+                    <div class="col col-xl-6 col-lg-6 col-12 mi-div " >
                         <div class="wpo-static-hero-text-box">
                             <div class="slide-title">
                                 <h2 id="lblNovios01" class="poort-text poort-in-up" >- & -</h2>
@@ -212,6 +212,11 @@ ssdssd
                                 <h2>¿Tienes un invitado?</h2>
                             </div>
                             <form method="post" class="contact-validation-active" id="contact-form-main" autocomplete="off" >
+
+                                <input type="hidden" id="id" name="id" value="0" />
+	                            <input type="hidden" id="uu_id" name="uu_id" value="" />
+                                <input type="hidden" id="Foto" name="Foto" value="img/512x512.png" />
+
                                 <div>
                                     <input type="text" class="form-control" name="Nombre" id="Nombre" placeholder="Nombre" />
                                 </div>
@@ -220,7 +225,7 @@ ssdssd
                                 </div>
                                 <div class="radio-buttons">
                                     <p>
-                                        <input type="radio" id="attend" name="Estado" checked value="confirmado" >
+                                        <input type="radio" id="attend" name="Estado" value="confirmado" >
                                         <label for="attend">Si asistirá</label>
                                     </p>
                                     <p>
@@ -258,20 +263,23 @@ ssdssd
 <!-- end of wpo-contact-section -->
 
 
-<!-- start wpo-event-section -->
+
+
+
+<!-- Cronograma -->
 <section class="wpo-event-section section-padding pt-0" id="event">
     <div class="container">
         <div class="wpo-section-title">
-            <h4 class="poort-text poort-in-right">When & Where</h4>
-            <h2 class="poort-text poort-in-right">Our Wedding Programs</h2>
+            <h4 class="poort-text poort-in-right" >Cuando y donde</h4>
+            <h2 class="poort-text poort-in-right">Nuestro programa de boda</h2>
         </div>
         <div class="wpo-event-main">
             <div class="event-description">
-                <p>Monday, 12 Apr. 2024, 2.00 PM – 11.00 PM</p>
-                <p>4517 Washington Ave. Manchester, Kentucky 39495</p>
+                <p id="lblFechaP1" >Monday, 12 Apr. 2024, 2.00 PM – 11.00 PM</p>
+                <p id="lblDireP1" >4517 Washington Ave. Manchester, Kentucky 39495</p>
             </div>
             <div class="wpo-event-wrap">
-                <div class="wpo-event-inner">
+                <div id="wrapperPrograma" class="wpo-event-inner" >
                     <div class="wpo-event-item">
                         <div class="wpo-event-text">
                             <i><img src="<?php echo $URL_ASSETS ?>assets/images/icon/1.svg" alt=""></i>
@@ -282,166 +290,86 @@ ssdssd
                             <i class="fa fa-heart"></i>
                         </div>
                     </div>
-                    <div class="wpo-event-item">
-                        <div class="wpo-event-text">
-                            <i><img src="<?php echo $URL_ASSETS ?>assets/images/icon/2.svg" alt=""></i>
-                            <span>Ceremony</span>
-                        </div>
-                        <div class="wpo-event-time">
-                            <h4>3.00 PM</h4>
-                            <i class="fa fa-heart"></i>
-                        </div>
-                    </div>
-                    <div class="wpo-event-item">
-                        <div class="wpo-event-text">
-                            <i><img src="<?php echo $URL_ASSETS ?>assets/images/icon/3.svg" alt=""></i>
-                            <span>Party Photos</span>
-                        </div>
-                        <div class="wpo-event-time">
-                            <h4>5.00 PM</h4>
-                            <i class="fa fa-heart"></i>
-                        </div>
-                    </div>
-                    <div class="wpo-event-item">
-                        <div class="wpo-event-text">
-                            <i><img src="<?php echo $URL_ASSETS ?>assets/images/icon/4.svg" alt=""></i>
-                            <span>Dinner</span>
-                        </div>
-                        <div class="wpo-event-time">
-                            <h4>7.00 PM</h4>
-                            <i class="fa fa-heart"></i>
-                        </div>
-                    </div>
-                    <div class="wpo-event-item">
-                        <div class="wpo-event-text">
-                            <i><img src="<?php echo $URL_ASSETS ?>assets/images/icon/5.svg" alt=""></i>
-                            <span>Cake Cutting</span>
-                        </div>
-                        <div class="wpo-event-time">
-                            <h4>9.00 PM</h4>
-                            <i class="fa fa-heart"></i>
-                        </div>
-                    </div>
-                    <div class="wpo-event-item">
-                        <div class="wpo-event-text">
-                            <i><img src="<?php echo $URL_ASSETS ?>assets/images/icon/6.svg" alt=""></i>
-                            <span>First Dance</span>
-                        </div>
-                        <div class="wpo-event-time">
-                            <h4>10.00 PM</h4>
-                            <i class="fa fa-heart"></i>
-                        </div>
-                    </div>
-                    <div class="wpo-event-item">
-                        <div class="wpo-event-text">
-                            <i><img src="<?php echo $URL_ASSETS ?>assets/images/icon/7.svg" alt=""></i>
-                            <span>Depart</span>
-                        </div>
-                        <div class="wpo-event-time">
-                            <h4>11.00 PM</h4>
-                            <i class="fa fa-heart"></i>
-                        </div>
-                    </div>
+
                     <div class="line"></div>
                 </div>
+
                 <div class="shape-1"><img src="<?php echo $URL_ASSETS ?>assets/images/event/shape-1.png" alt=""></div>
                 <div class="shape-2"><img src="<?php echo $URL_ASSETS ?>assets/images/event/shape-1.png" alt=""></div>
                 <div class="shape-3"><img src="<?php echo $URL_ASSETS ?>assets/images/event/shape-2.png" alt=""></div>
+
             </div>
         </div>
+
+        <div class="line"></div>
+
+        
+
+        
 
     </div> <!-- end container -->
 </section>
 <!-- end wpo-event-section -->
 
-<!-- start wpo-blog-section -->
-<section class="wpo-blog-section section-padding">
+
+
+
+<!-- Codigo de vestimenta -->
+<section class="wpo-couple-section section-padding pt-2" id="couple">
     <div class="container">
         <div class="wpo-section-title">
-            <h4 class="poort-text poort-in-right">Latest News</h4>
-            <h2 class="poort-text poort-in-right">Our Latest Wedding News</h2>
+            <h4 class="poort-text poort-in-right" >Código de vestimenta</h4>
         </div>
-        <div class="wpo-blog-items">
-            <div class="row">
-                <div class="col col-lg-4 col-md-6 col-12">
-                    <div class="wpo-blog-item wow fadeInUp" data-wow-duration="1000ms">
-                        <div class="wpo-blog-img">
-                            <img src="<?php echo $URL_ASSETS ?>assets/images/blog/img-1.jpg" alt="">
-                        </div>
-                        <div class="wpo-blog-content">
-                            <ul>
-                                <li>By <a href="blog-single.html">Robertson Doe</a></li>
-                                <li>25 Sep 2024</li>
-                            </ul>
-                            <h2><a href="blog.html">Best Wedding Gown For Your Dream Day</a></h2>
-                        </div>
-                    </div>
-                </div>
-                <div class="col col-lg-4 col-md-6 col-12">
-                    <div class="wpo-blog-item wow fadeInUp" data-wow-duration="1200ms">
-                        <div class="wpo-blog-img">
-                            <img src="<?php echo $URL_ASSETS ?>assets/images/blog/img-2.jpg" alt="">
-                        </div>
-                        <div class="wpo-blog-content">
-                            <ul>
-                                <li>By <a href="blog-single.html">David Luis</a></li>
-                                <li>23 Sep 2024</li>
-                            </ul>
-                            <h2><a href="blog.html">You Must Need a Great Photographer</a></h2>
-                        </div>
-                    </div>
-                </div>
-                <div class="col col-lg-4 col-md-6 col-12">
-                    <div class="wpo-blog-item wow fadeInUp" data-wow-duration="1400ms">
-                        <div class="wpo-blog-img">
-                            <img src="<?php echo $URL_ASSETS ?>assets/images/blog/img-3.jpg" alt="">
-                        </div>
-                        <div class="wpo-blog-content">
-                            <ul>
-                                <li>By <a href="blog-single.html">Aliana de</a></li>
-                                <li>21 Sep 2024</li>
-                            </ul>
-                            <h2><a href="blog.html">Top 10 Wedding Bouquet Arranging Idea </a>
-                            </h2>
-                        </div>
-                    </div>
-                </div>
+        <div class="wpo-event-main">
+            <div class="event-description">
+                <p id="lblFechaP1" >Por favor considera esto:</p>
+            </div>
+            <div class="wpo-event-wrap">
+                <img src="<?php echo $URL_ASSETS ?>assets/images/person/codigo-vestimenta-2.jpeg" class="mi-imagen" alt="">
             </div>
         </div>
     </div> <!-- end container -->
 </section>
+
+<!-- Confirmar asistencia -->
+
+<section class="wpo-couple-section section-padding pt-2" id="wrapperConfirmar">
+    <div class="container">
+        <div class="wpo-section-title">
+            <h4 class="poort-text poort-in-right" >Gracias =)</h4>
+        </div>
+        <div class="wpo-event-main">
+            <div class=" row " style="margin-bottom:15px;" >
+                <div class=" col-lg-4 col-md-4 " ></div>
+                <!-- ./col -->
+                <div class=" col-lg-4 col-md-4 " >
+                    <a id="btnConfirmarAsistencia" href="#" class="view-cart-btn" >¡Confirmo mi asistencia!</a>
+                    <a id="btnCancelarAsistencia" href="#" class="view-cart-btn s1">Gracias,no podré asistir.</a>
+                </div>
+                <!-- ./col -->
+                <div class=" col-lg-4 col-md-4 " ></div>
+                <!-- ./col -->
+            </div>
+            <!-- ./row -->
+        </div>
+    </div> <!-- end container -->
+</section>
+
+
+
+
+
+<!-- start wpo-blog-section -->
 <!-- end wpo-blog-section -->
 
 
 
 <!-- start wpo-partners-section -->
-<section class="wpo-partners-section section-padding">
-    <h2 class="hidden">Partners</h2>
-    <div class="container">
-        <div class="row">
-            <div class="col col-xs-12">
-                <div class="partner-grids partners-slider owl-carousel">
-                    <div class="grid">
-                        <img src="<?php echo $URL_ASSETS ?>assets/images/partners/1.png" alt>
-                    </div>
-                    <div class="grid">
-                        <img src="<?php echo $URL_ASSETS ?>assets/images/partners/2.png" alt>
-                    </div>
-                    <div class="grid">
-                        <img src="<?php echo $URL_ASSETS ?>assets/images/partners/3.png" alt>
-                    </div>
-                    <div class="grid">
-                        <img src="<?php echo $URL_ASSETS ?>assets/images/partners/4.png" alt>
-                    </div>
-                    <div class="grid">
-                        <img src="<?php echo $URL_ASSETS ?>assets/images/partners/5.png" alt>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div> <!-- end container -->
-</section>
+
 <!-- end wpo-partners-section-->
+
+
+
 
 
 
@@ -450,3 +378,34 @@ ssdssd
 <script type="text/javascript" >
     let uuID = '<?php echo $uuID; ?>';
 </script>
+
+
+
+
+
+<!-- La etiqueta de audio está oculta por defecto -->
+<audio id="musica-fondo" loop></audio>
+
+<!-- Botón flotante -->
+<button id="btn-play" class="btn-flotante">
+  ▶️
+</button>
+
+
+
+
+<!-- Estructura del Modal de Bootstrap 5 -->
+<div class="modal fade" id="mapaModal" tabindex="-1" aria-labelledby="mapaModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-lg modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="mapaModalLabel">Ubicación del Evento</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+      </div>
+      <div class="modal-body p-0">
+        <!-- Contenedor del mapa. Es crucial definir una altura fija -->
+        <div id="contenedor-mapa" style="width: 100%; height: 450px;"></div>
+      </div>
+    </div>
+  </div>
+</div>

@@ -28,18 +28,116 @@
 
 
 
-    <meta property="og:title" content="Título de tu página" />
-    <meta property="og:description" content="Breve descripción de qué trata tu sitio (máx. 200 caracteres)." />
-    <meta property="og:image" content="https://tudominio.com" />
-    <meta property="og:url" content="https://tudominio.com" />
+    <!-- Etiquetas Open Graph Básicas (Para WhatsApp, Facebook, LinkedIn) -->
     <meta property="og:type" content="website" />
+    <meta property="og:title" content="<?php echo htmlspecialchars($titulo) ?>" />
+    <meta property="og:description" content="<?php echo htmlspecialchars($descripcion) ?>" />
+    <meta property="og:url" content="<?php echo $imagenUrl ?>" />
+
+    <!-- La imagen es crucial: debe ser una URL absoluta -->
+    <meta property="og:image" content="<?php echo $imagenUrl ?>" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+
+    <!-- Opcional: Etiquetas para Twitter -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="<?php echo htmlspecialchars($titulo) ?>">
+    <meta name="twitter:description" content="<?php echo htmlspecialchars($descripcion) ?>">
+    <meta name="twitter:image" content="<?php echo $imagenUrl ?>">
+
 
     <!-- page level styles -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.css" integrity="sha512-3pIirOrwegjM6erE5gPSwkUzO+3cTjpnV9lexlNZqvupR64iZBnOOTiiLPb9M36zpMScbmUNIcHUqKD47M719g==" crossorigin="anonymous" referrerpolicy="no-referrer">
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.30.1/moment.js" integrity="sha512-3CuraBvy05nIgcoXjVN33mACRyI89ydVHg7y/HMN9wcTVbHeur0SeBzweSd/rxySapO7Tmfu68+JlKkLTnDFNg==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 
+    <!-- <?php echo $URL_ASSETS ?>assets/images/person/fondo-bonito.jpeg -->
+    <style>
+        /* Código base (Escritorio / Pantallas grandes) */
+        body {
+        position: relative;
+        /* El body debe ser transparente */
+        margin: 0;
+        padding: 0;
+        }
 
+        body::before {
+        content: "";
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        /* Imagen original para escritorio (image_42.png) */
+        background-image: url('<?php echo $URL_ASSETS ?>assets/images/person/fondo-bonito.jpeg');
+        background-size: cover;
+        background-position: center;
+        z-index: -1;
+        /* Mantiene el fondo estático, pero usando el pseudo-elemento */
+        }
+
+        /* --- Código Responsivo (Móviles / Pantallas pequeñas) --- */
+        @media (max-width: 768px) {
+        body::before {
+            /* Nueva imagen con márgenes estrechos, adaptada para móvil (image_44.png) */
+            background-image: url('<?php echo $URL_ASSETS ?>assets/images/person/fondo-bonito-2.jpeg');
+            /* Mantenemos cover porque la imagen ya está adaptada a la verticalidad, no se recortará */
+            background-size: cover;
+            background-position: center top; /* Centrado arriba para que el inicio de la invitación se vea perfecto */
+        }
+        }
+
+        /* Y para el scroll suave, aplicarlo al html */
+        html {
+        scroll-behavior: smooth;
+        }
+
+
+
+        .mi-div {
+            background-color: #ffffff; /* Fondo blanco sólido */
+            opacity: 0.9; /* 10% de transparencia a todo el elemento */
+        }
+        
+        
+        
+        
+        .mi-imagen {
+            border-radius: 15px; /* Ajusta la cantidad de píxeles según lo que necesites */
+        }
+        .btn-flotante {
+            position: fixed;
+            top: 30px; /* Separación desde abajo */
+            right: 30px;  /* Separación desde la derecha */
+            width: 60px;
+            height: 60px;
+            background-color: #4682B4; /* Tono azul acero */
+            color: white;
+            border: none;
+            border-radius: 50%; /* Bordes completamente redondeados */
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3); /* Sombra para dar profundidad */
+            font-size: 24px;
+            cursor: pointer;
+            z-index: 1000; /* Asegura que siempre esté por encima de otros elementos */
+            
+            /* Centrar el ícono dentro del botón */
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            transition: transform 0.2s ease-in-out;
+        }
+
+        /* Pequeño efecto al pasar el mouse por encima */
+        .btn-flotante:hover {
+            transform: scale(1.1); 
+        }
+
+
+
+        
+    </style>
+
+    <!-- <?php echo $rutaArchivo; ?> -->
     <script type="text/javascript">
     let URL_API         = '<?php echo $API; ?>';
     // Leer el token guardado
@@ -47,6 +145,8 @@
     </script>
 
     <?php echo $archivoCSS ?>
+
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
     
 </head>
@@ -70,226 +170,6 @@
         <!-- end preloader -->
         <!-- Start header -->
         <header id="header">
-            <div class="wpo-site-header wpo-header-style-1">
-                <nav class="navigation navbar navbar-expand-lg navbar-light">
-                    <div class="container-fluid">
-                        <div class="row align-items-center">
-                            <div class="col-lg-3 col-md-3 col-3 d-lg-none dl-block">
-                                <div class="mobail-menu">
-                                    <button type="button" class="navbar-toggler open-btn">
-                                        <span class="sr-only">Toggle navigation</span>
-                                        <span class="icon-bar first-angle"></span>
-                                        <span class="icon-bar middle-angle"></span>
-                                        <span class="icon-bar last-angle"></span>
-                                    </button>
-                                </div>
-                            </div>
-                            <div class="col-lg-2 col-md-6 col-6">
-                                <div class="navbar-header">
-                                    <a class="navbar-brand" href="index.html"><img src="<?php echo $URL_ASSETS ?>assets/images/logo.svg"
-                                            alt=""></a>
-                                </div>
-                            </div>
-                            <div class="col-lg-8 col-md-1 col-1">
-                                <div id="navbar" class="collapse navbar-collapse navigation-holder">
-                                    <button class="menu-close"><i class="ti-close"></i></button>
-                                    <ul class="nav navbar-nav mb-2 mb-lg-0">
-                                        <li class="menu-item-has-children">
-                                            <a class="active" href="#">Home</a>
-                                            <ul class="sub-menu">
-                                                <li><a class="active" href="index.html">Wedding Home Style 1</a></li>
-                                                <li><a href="index-2.html">Wedding Home Style 2</a></li>
-                                                <li><a href="index-3.html">Announcement Home 1</a></li>
-                                                <li><a href="index-4.html">Announcement Home 2</a></li>
-                                                <li><a href="index-5.html">Announcement Home 3</a></li>
-                                                <li><a href="index-6.html">Asian Wedding Home</a></li>
-                                                <li><a href="index-7.html">Muslim Wedding Home</a></li>
-                                                <li><a href="index-rtl.html">Muslim Wedding (RTL)</a></li>
-                                                <li><a href="invitation-1.html">Wedding Invitation 1</a></li>
-                                                <li><a href="invitation-2.html">Wedding Invitation 2</a></li>
-                                                <li class="menu-item-has-children">
-                                                    <a href="#">Event Planner Homes</a>
-                                                    <ul class="sub-menu">
-                                                        <li><a href="index-8.html">Wedding Planner 1</a></li>
-                                                        <li><a href="index-9.html">Wedding Planner 2</a></li>
-                                                    </ul>
-                                                </li>
-                                                <li class="menu-item-has-children">
-                                                    <a href="#">Wedding Shop Homes</a>
-                                                    <ul class="sub-menu">
-                                                        <li><a href="shop-home.html">Bridal Shop</a></li>
-                                                        <li><a href="shop-home-2.html">Wedding Cake Shop</a></li>
-                                                    </ul>
-                                                </li>
-                                            </ul>
-                                        </li>
-                                        <li class="menu-item-has-children">
-                                            <a href="#">Pages</a>
-                                            <ul class="sub-menu">
-                                                <li><a href="about.html">About</a></li>
-                                                <li class="menu-item-has-children">
-                                                    <a href="story.html">Our Story</a>
-                                                    <ul class="sub-menu">
-                                                        <li><a href="story.html">Our Story Style 1</a></li>
-                                                        <li><a href="story-2.html">Our Story Style 2</a></li>
-                                                        <li><a href="story-3.html">Our Story Style 3</a></li>
-                                                        <li><a href="story-4.html">Our Story Style 4</a></li>
-                                                        <li><a href="story-5.html">Our Story Style 5</a></li>
-                                                        <li><a href="story-6.html">Our Story Style 6</a></li>
-                                                        <li><a href="story-7.html">Our Story Style 7</a></li>
-                                                    </ul>
-                                                </li>
-                                                <li><a href="accomodation.html">Accomodation</a></li>
-                                                <li class="menu-item-has-children">
-                                                    <a href="rsvp.html">RSVP</a>
-                                                    <ul class="sub-menu">
-                                                        <li><a href="rsvp.html">RSVP Style 1</a></li>
-                                                        <li><a href="rsvp-2.html">RSVP Style 2</a></li>
-                                                        <li><a href="rsvp-3.html">RSVP Style 3</a></li>
-                                                        <li><a href="rsvp-4.html">RSVP Style 4</a></li>
-                                                        <li><a href="rsvp-5.html">RSVP Style 5</a></li>
-                                                        <li><a href="rsvp-6.html">RSVP Style 6</a></li>
-                                                        <li><a href="rsvp-7.html">RSVP Style 7</a></li>
-                                                    </ul>
-                                                </li>
-                                                <li><a href="gallery.html">Gallery</a></li>
-                                                <li><a href="planner.html">Planners</a></li>
-                                                <li><a href="team-single.html">Planner Single</a></li>
-                                                <li><a href="groom-bride.html">Brides & Grooms</a></li>
-                                                <li class="menu-item-has-children">
-                                                    <a href="service.html">Serevice</a>
-                                                    <ul class="sub-menu">
-                                                        <li><a href="service.html">Serevice</a></li>
-                                                        <li><a href="service-s2.html">Serevice S2</a></li>
-                                                        <li><a href="service-s3.html">Serevice S3</a></li>
-                                                        <li><a href="service-single.html">Serevice Single</a></li>
-                                                    </ul>
-                                                </li>
-                                                <li><a href="pricing.html">Pricing</a></li>
-                                                <li class="menu-item-has-children">
-                                                    <a href="#">Auth Pages</a>
-                                                    <ul class="sub-menu">
-                                                        <li><a href="login.html">Login</a>
-                                                        </li>
-                                                        <li><a href="register.html">Register</a></li>
-                                                        <li><a href="forgot.html">Forgot Password</a></li>
-                                                    </ul>
-                                                </li>
-                                                <li><a href="coming.html">Coming Soon</a></li>
-                                                <li><a href="404.html">404 Error</a></li>
-                                            </ul>
-                                        </li>
-                                        <li class="menu-item-has-children">
-                                            <a href="portfolio-grid.html">Portfolio</a>
-                                            <ul class="sub-menu">
-                                                <li><a href="portfolio-grid.html">Portfolio Grid</a></li>
-                                                <li><a href="portfolio-grid-s2.html">Portfolio Grid S2</a></li>
-                                                <li><a href="portfolio-grid-s3.html">Portfolio Grid S3</a></li>
-                                                <li><a href="portfolio-masonary.html">Portfolio Masonary</a></li>
-                                                <li><a href="portfolio-masonary-s2.html">Portfolio Masonary S2</a></li>
-                                                <li><a href="portfolio-masonary-s3.html">Portfolio Masonary S3</a></li>
-                                                <li><a href="portfolio-slide.html">Portfolio Slide</a></li>
-                                                <li><a href="portfolio-single.html">Portfolio Single</a></li>
-                                            </ul>
-                                        </li>
-                                        <li class="menu-item-has-children">
-                                            <a href="shop.html">Shop</a>
-                                            <ul class="sub-menu">
-                                                <li><a href="shop.html">Shop</a></li>
-                                                <li><a href="shop-single.html">Shop Single</a></li>
-                                                <li><a href="cart.html">Cart</a></li>
-                                                <li><a href="wishlist.html">Wishlist</a></li>
-                                                <li><a href="checkout.html">Checkout</a></li>
-                                            </ul>
-                                        </li>
-                                        <li class="menu-item-has-children">
-                                            <a href="blog.html">Blog</a>
-                                            <ul class="sub-menu">
-                                                <li><a href="blog.html">Blog right sidebar</a></li>
-                                                <li><a href="blog-left-sidebar.html">Blog left sidebar</a></li>
-                                                <li><a href="blog-fullwidth.html">Blog fullwidth</a></li>
-                                                <li class="menu-item-has-children">
-                                                    <a href="#">Blog details</a>
-                                                    <ul class="sub-menu">
-                                                        <li><a href="blog-single.html">Blog details right sidebar</a>
-                                                        </li>
-                                                        <li><a href="blog-single-left-sidebar.html">Blog details left
-                                                                sidebar</a></li>
-                                                        <li><a href="blog-single-fullwidth.html">Blog details
-                                                                fullwidth</a></li>
-                                                    </ul>
-                                                </li>
-                                            </ul>
-                                        </li>
-                                        <li><a href="contact.html">Contact</a></li>
-                                    </ul>
-
-                                </div><!-- end of nav-collapse -->
-                            </div>
-                            <div class="col-lg-2 col-md-2 col-2">
-                                <div class="header-right">
-                                    <div class="header-search-form-wrapper">
-                                        <div class="cart-search-contact">
-                                            <button class="search-toggle-btn"><i
-                                                    class="fi flaticon-search"></i></button>
-                                            <div class="header-search-form">
-                                                <form>
-                                                    <div>
-                                                        <input type="text" class="form-control"
-                                                            placeholder="Search here...">
-                                                        <button type="submit"><i
-                                                                class="fi flaticon-search"></i></button>
-                                                    </div>
-                                                </form>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="mini-cart">
-                                        <button class="cart-toggle-btn"> <i class="fi flaticon-shopping-cart"></i>
-                                            <span class="cart-count">2</span></button>
-                                        <div class="mini-cart-content">
-                                            <button class="mini-cart-close"><i class="ti-close"></i></button>
-                                            <div class="mini-cart-items">
-                                                <div class="mini-cart-item clearfix">
-                                                    <div class="mini-cart-item-image">
-                                                        <a href="shop.html"><img
-                                                                src="<?php echo $URL_ASSETS ?>assets/images/shop/mini-cart/img-1.jpg" alt></a>
-                                                    </div>
-                                                    <div class="mini-cart-item-des">
-                                                        <a href="shop.html">Wedding Gown</a>
-                                                        <span class="mini-cart-item-price">$20.15 x 1</span>
-                                                        <span class="mini-cart-item-quantity"><a href="#"><i
-                                                                    class="ti-close"></i></a></span>
-                                                    </div>
-                                                </div>
-                                                <div class="mini-cart-item clearfix">
-                                                    <div class="mini-cart-item-image">
-                                                        <a href="shop.html"><img
-                                                                src="<?php echo $URL_ASSETS ?>assets/images/shop/mini-cart/img-2.jpg" alt></a>
-                                                    </div>
-                                                    <div class="mini-cart-item-des">
-                                                        <a href="shop.html">Bridal Flower</a>
-                                                        <span class="mini-cart-item-price">$13.25 x 2</span>
-                                                        <span class="mini-cart-item-quantity"><a href="#"><i
-                                                                    class="ti-close"></i></a></span>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <div class="mini-cart-action clearfix">
-                                                <span class="mini-checkout-price">Subtotal:
-                                                    <span>$215.14</span></span>
-                                                <div class="mini-btn">
-                                                    <a href="checkout.html" class="view-cart-btn s1">Checkout</a>
-                                                    <a href="cart.html" class="view-cart-btn">View Cart</a>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div><!-- end of container -->
-                </nav>
-            </div>
+            
         </header>
         <!-- end of header -->

@@ -1,4 +1,4 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete, ValidationPipe, UseGuards, UsePipes, HttpCode, Req } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, ValidationPipe, UseGuards, UsePipes, HttpCode, Req, UseInterceptors, UploadedFile } from '@nestjs/common';
 import { BodaService } from './boda.service';
 import { CreateBodaDto } from './dto/create-boda.dto';
 import { UpdateBodaDto } from './dto/update-boda.dto';
@@ -19,6 +19,12 @@ import * as express from 'express';
 import { UtilidadesService } from 'src/utilidades/utilidades.service';
 import { JwtGuardGuard } from 'src/guards/jwt-guard/jwt-guard.guard';
 
+
+import { Multer } from 'multer'; // Importa el tipo si es necesario
+import { storage } from 'src/utils/media.hadle';
+import * as path from 'path';
+import sharp from 'sharp';
+import { FileInterceptor } from '@nestjs/platform-express';
 
 // Para activar el auth JwTokenAuth..
 @UseGuards( JwtGuardGuard )
@@ -55,8 +61,55 @@ export class BodaController {
   // ................................................................
   // ................................................................
   // ................................................................
+  @Post('musica')
+  @UseInterceptors( FileInterceptor('formData', { storage }))
+  async uploadMusica( @UploadedFile() file: Express.Multer.File) {
+
+    // 1200 x 630 píxeles
+
+    const originalPath    = file.path; // ruta del archivo subido
+    const ext             = path.extname(file.filename); // extensión
+    const nameOnly        = file.filename.replace(ext, ''); // nombre sin extensión
+
+    const resizedName     = `${nameOnly}-200x200${ext}`;
+    const resizedPath     = path.join(path.dirname(originalPath), resizedName);
+
+    return {
+      message   : 'Archivo subido y redimensionado',
+      original  : `uploads/${file.filename}`,
+      resized   : `uploads/${resizedName}`,
+      resizedPath
+    };
+  }
   // ................................................................
   // ................................................................
+  // ................................................................
+  // ................................................................
+  @Post('upload')
+  @UseInterceptors( FileInterceptor('formData', { storage }))
+  async uploadFile( @UploadedFile() file: Express.Multer.File) {
+
+    // 1200 x 630 píxeles
+
+    const originalPath    = file.path; // ruta del archivo subido
+    const ext             = path.extname(file.filename); // extensión
+    const nameOnly        = file.filename.replace(ext, ''); // nombre sin extensión
+
+    const resizedName     = `${nameOnly}-200x200${ext}`;
+    const resizedPath     = path.join(path.dirname(originalPath), resizedName);
+
+    // Crear la versión redimensionada
+    await sharp(originalPath)
+      .resize(1200 , 630 )
+      .toFile(resizedPath);
+
+    return {
+      message   : 'Archivo subido y redimensionado',
+      original  : `uploads/${file.filename}`,
+      resized   : `uploads/${resizedName}`,
+      resizedPath
+    };
+  }
   // ................................................................
   // ................................................................
   @Get('get-activos')

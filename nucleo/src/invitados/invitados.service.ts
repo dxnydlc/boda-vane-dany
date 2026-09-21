@@ -6,10 +6,14 @@ import { UpdateInvitadoDto } from './dto/update-invitado.dto';
 import { readFileSync, writeFileSync } from 'fs';
 const execShPromise = require("exec-sh").promise;
 
-//import * as moment from 'moment';
-//import 'moment/locale/pt-br';
+import { Logger } from '@nestjs/common';
 
 const moment = require('moment');
+//const moment = require('moment');
+require('moment/locale/es');
+
+import * as fs from 'fs/promises'; // Importamos la versión de promesas
+import * as path from 'path';
 
 import { v4 as uuidv4 } from 'uuid';
 import { InvitadoModel } from './entities/invitado.entity';
@@ -107,10 +111,13 @@ export class InvitadosService {
         }
       });
 
+      // Generamos el txt que va a contener el
+      await this.guardarDatosOG( data! );
+
       return {
         data , 
         version : '1' , 
-        msg : { titulo : 'Correcto' , texto : 'Registro guardado' , clase : 'success' , call : 'tostada2' }
+        msg : { titulo : 'Correcto' , texto : 'Se guardó el invitado' , clase : 'success' , call : 'tostada2' }
       }
 
     } catch (error) {
@@ -131,6 +138,61 @@ export class InvitadosService {
 
     }
 
+  }
+  // ...................................................................
+  // ...................................................................
+  async guardarDatosOG( dataCab : InvitadoModel ) {
+
+    let PATH_PROYECTO              = `${process.env.PATH_PROYECTO}`;
+    let URL_PROYECTO               = `${process.env.URL_PROYECTO}`;
+    
+
+    // Definimos la ruta del archivo (se guardará en la raíz de tu proyecto por defecto)
+    const rutaArchivo               = `${PATH_PROYECTO}public/uploads/ogg_${dataCab.uu_id}.txt`;// path.join(process.cwd() , `ogg_${dataCab.id}v` );
+
+    let dataBoda                    = await this.srvBoda.getbyId( dataCab.IdBoda );
+
+    // Asegurar que el idioma está configurado en español
+    moment.locale('es');
+
+    // Definir la fecha exacta (Formato ISO: YYYY-MM-DD)
+    const fecha                     = moment( dataBoda.data.Fecha );
+
+    // D    -> Día del mes sin ceros iniciales (10)
+    // MMMM -> Nombre completo del mes (octubre)
+    // YYYY -> Año de cuatro dígitos (2026)
+    // []   -> El texto entre corchetes se imprime literalmente sin alteraciones
+    const fechaFormateado     = fecha.format('D [de] MMMM [del] YYYY');
+
+    // Opción A: Usando \n para los saltos de línea
+    //const contenido = "Nuestra boda\nTe esperamos el 10 de Octubre\nhttps://tuweb.com/imagen.jpg";
+
+    /**/
+    // Opción B: Usando comillas invertidas (backticks) es más visual:
+    const texto                 = dataCab.Nombre.toLowerCase();
+
+    const nombreFromateado      = texto
+      .split(' ')
+      .map(palabra => palabra.charAt(0).toUpperCase() + palabra.slice(1).toLowerCase())
+      .join(' ');
+
+    console.log(nombreFromateado); // Resultado: "Pamela Prada"
+
+const contenido = `Hola ${nombreFromateado}
+Te esperamos el ${fechaFormateado} a nuestra boda ${dataBoda.data.Nombre.toLowerCase()}.
+${URL_PROYECTO}${dataBoda.data.Portada}
+`;
+    /**/
+
+    try {
+      // writeFile crea el archivo o sobrescribe todo si ya existe
+      await fs.writeFile(rutaArchivo, contenido, 'utf8');
+      varDump('El archivo TXT se guardó correctamente.');
+      return true;
+    } catch (error) {
+      varDump('Hubo un error al guardar el archivo'+ error);
+      return false;
+    }
   }
   // ...................................................................
   // ...................................................................
@@ -334,12 +396,15 @@ export class InvitadosService {
 
       if( data1!.Estado != 'activo' )throw new HttpException( `Documento no disponible: ${data1!.Estado}` , HttpStatus.CONFLICT);
 
+      delete dto.id;
       await this.datosModel.update({ uu_id : uuID } , dto );
       let dataP = await this.datosModel.findOne({
         where : {
           uu_id : uuID
         }
       });
+
+      await this.guardarDatosOG( dataP! );
 
       return {
         data : dataP , 
@@ -424,7 +489,8 @@ export class InvitadosService {
         "i.Estado as Estado" , 
         "b.Nombre" , 
         "b.id as IdBoda" , 
-        "i.IdNovio as IdNovio" 
+        "i.IdNovio as IdNovio" , 
+        "i.IdInvitado as IdInvitado" 
       ])
       .getRawOne();
 
@@ -443,10 +509,15 @@ export class InvitadosService {
       let dataPrograma = await this.srvPrograma.getbyBoda( IdBoda );
       // Historia Boda
       let dataHistoria = await this.srvHistoria.getbyBoda( IdBoda );
+      // Tiene invitado¿?
+      // 1. Tipar correctamente permitiendo null
+      let dataInvitado: InvitadoModel | null = null;
+      dataInvitado = await this.datosModel.findOne({ where: { IdInvitado : data.id } });
+      
 
       return {
         data , novios : dataNovios.data , boda : dataBoda.data , fotos : dataFoto.data , programa : dataPrograma.data , 
-        historia : dataHistoria.data , 
+        historia : dataHistoria.data , invitado_adicional : dataInvitado , 
         version : '1' , 
         msg : { titulo : 'Correcto' , texto : 'Registros cargados' , clase : 'success' , call : 'tostada2' }
       }
@@ -480,10 +551,171 @@ export class InvitadosService {
   // ...................................................................
   // ...................................................................
   // ...................................................................
+  async guardar_invitado_extra( dto : CreateInvitadoDto ) {
+    try {
+
+      //Comprobar si el codigo ya existe
+      const mipPlagaInit = await this.datosModel.findOne({
+        where: {
+          Nombre : dto.Nombre , IdBoda : dto.IdBoda
+        }
+      });
+
+      if (mipPlagaInit) throw new BadRequestException('El invitado ya existe' );
+
+      let IdInvitadoPrincipal = dto.IdInvitado;
+      //dto.IdInvitado = 0;
+      
+      const newArea = await this.datosModel.create( dto );
+      let dataSave  = await this.datosModel.save( newArea );
+
+      let data = await this.datosModel.findOne({
+        where : {
+          id : dataSave.id
+        }
+      });
+
+      // Ahora actualizamos al invitado principal
+      //await this.datosModel.update({ id :IdInvitadoPrincipal },{ IdInvitado : dataSave.id });
+
+      return {
+        data , 
+        version : '1' , 
+        msg : { titulo : 'Correcto' , texto : 'Se guardó el invitado' , clase : 'success' , call : 'tostada2' }
+      }
+
+    } catch (error) {
+      
+      // Para depuración local
+      varDump(error); 
+
+      // SI EL ERROR YA ES DE NESTJS (ej. BadRequestException), LO RELANZAMOS DIRECTO
+      if (error instanceof HttpException) {
+        throw error;
+      }
+
+      // SI ES UN ERROR INESPERADO (ej. caída de BD, error de sintaxis), ENVIAMOS UN 500
+      throw new InternalServerErrorException({
+        message: 'Error en el servicio de Invitados',
+        cause: error // Mantiene el rastro del error original en logs internos
+      });
+
+    }
+
+  }
+  // ...................................................................
+  // ...................................................................
+  async ActualizarInvitado( uuID : string , dto : UpdateInvitadoDto ) {
+    try {
+
+      // Primero ver si esta activo o no {-.-}
+
+      await this.datosModel.update({ uu_id : uuID } , dto );
+      let dataP = await this.datosModel.findOne({
+        where : {
+          uu_id : uuID
+        }
+      });
+
+      return {
+        data : dataP , 
+        version : '1' , 
+        msg : { titulo : 'Correcto' , texto : 'Registro actualizado' , clase : 'success' , call : 'tostada2' }
+      }
+      
+    } catch (error) {
+
+      // Para depuración local
+      varDump(error); 
+
+      // SI EL ERROR YA ES DE NESTJS (ej. BadRequestException), LO RELANZAMOS DIRECTO
+      if (error instanceof HttpException) {
+        throw error;
+      }
+
+      // SI ES UN ERROR INESPERADO (ej. caída de BD, error de sintaxis), ENVIAMOS UN 500
+      throw new InternalServerErrorException({
+        message: 'Error en el servicio de Invitados',
+        cause: error // Mantiene el rastro del error original en logs internos
+      });
+      
+    }
+
+  }
   // ...................................................................
   // ...................................................................
   // ...................................................................
   // ...................................................................
+  async confirmarAsistencia( uuID : string ) {
+    try {
+
+      const updatedAt = moment().format('YYYY-MM-DD HH:mm:ss');
+      
+      let data = await this.datosModel.update({ uu_id : uuID },{ Estado : 'confirmado' , updated_at : updatedAt });
+  
+      // throw new BadRequestException('Usuario no existe');
+
+      return {
+        data , 
+        version : '1' , 
+        msg : { titulo : 'Correcto' , texto : 'Gracias por confirmar' , clase : 'success' , call : 'tostada2' }
+      }
+
+    } catch (error) {
+
+      // Para depuración local
+      varDump(error); 
+
+      // SI EL ERROR YA ES DE NESTJS (ej. BadRequestException), LO RELANZAMOS DIRECTO
+      if (error instanceof HttpException) {
+        throw error;
+      }
+
+      // SI ES UN ERROR INESPERADO (ej. caída de BD, error de sintaxis), ENVIAMOS UN 500
+      throw new InternalServerErrorException({
+        message: 'Error en el servicio de Invitados',
+        cause: error // Mantiene el rastro del error original en logs internos
+      });
+
+    }
+
+  }
+  // ...................................................................
+  // ...................................................................
+  async cancelarAsistencia( uuID : string ) {
+    try {
+
+      const updatedAt = moment().format('YYYY-MM-DD HH:mm:ss');
+      
+      let data = await this.datosModel.update({ uu_id : uuID },{ Estado : 'no-podra' , updated_at : updatedAt });
+  
+      // throw new BadRequestException('Usuario no existe');
+
+      return {
+        data , 
+        version : '1' , 
+        msg : { titulo : 'Correcto' , texto : '¡Gracias! apreciamos tu sinceridad.' , clase : 'success' , call : 'tostada2' }
+      }
+
+    } catch (error) {
+
+      // Para depuración local
+      varDump(error); 
+
+      // SI EL ERROR YA ES DE NESTJS (ej. BadRequestException), LO RELANZAMOS DIRECTO
+      if (error instanceof HttpException) {
+        throw error;
+      }
+
+      // SI ES UN ERROR INESPERADO (ej. caída de BD, error de sintaxis), ENVIAMOS UN 500
+      throw new InternalServerErrorException({
+        message: 'Error en el servicio de Invitados',
+        cause: error // Mantiene el rastro del error original en logs internos
+      });
+
+    }
+
+  }
   // ...................................................................
   // ...................................................................
   // ...................................................................

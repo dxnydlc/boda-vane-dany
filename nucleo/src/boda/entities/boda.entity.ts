@@ -30,7 +30,13 @@ export class BodaModel {
     Estado : string = 'activo'
 
     @Column()
+    Portada! : string
+
+    @Column()
     IdUsuario : number = 0
+
+    @Column()
+    Musica : string = ''
 
     @Column()
     DniUsuarioMod! : string

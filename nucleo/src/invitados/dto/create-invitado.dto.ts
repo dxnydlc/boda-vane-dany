@@ -1,7 +1,14 @@
+import { Optional } from "@nestjs/common"
 import { ApiProperty } from "@nestjs/swagger"
 import { IsNotEmpty } from "class-validator"
 
 export class CreateInvitadoDto {
+
+    @Optional()
+    IdInvitado : number = 0
+
+    @Optional()
+    id : number = 0
 
     // ************************************************
 
