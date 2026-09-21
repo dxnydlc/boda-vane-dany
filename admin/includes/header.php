@@ -40,6 +40,7 @@
 
     <script type="text/javascript">
     let URL_API         = '<?php echo $API; ?>';
+    let URL_WEB         = '<?php echo $URL; ?>';
     // Leer el token guardado
     const tokenBackend  = localStorage.getItem('auth_token');
     </script>

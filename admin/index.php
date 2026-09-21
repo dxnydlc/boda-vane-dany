@@ -68,7 +68,7 @@ switch ( $ruta_base ) {
     case '':
     case '/':
         $title                  = 'Inicio';
-        $content                = 'pages/home.php';
+        $content                = 'pages/home/inicio.php';
     break;
     case 'login':
         $title                  = 'Login';
