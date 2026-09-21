@@ -964,7 +964,7 @@ function handleSuccess( json , textStatus , xhr , tipoReq ) {
                 $('#wrapperPrograma').html( htmlPrograma );
 
                 // Simulación de la URL obtenida del servicio:
-                const urlDinamica               = `${URL_API}${dataBoda.Musica}}`; 
+                const urlDinamica               = `${URL_API}${dataBoda.Musica}`; 
                 
                 // 2. Asignar la ruta al audio
                 audio.src = urlDinamica;
