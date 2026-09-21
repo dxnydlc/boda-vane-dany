@@ -1167,6 +1167,16 @@ function openEditorTab( rowData , isNew = false )
     const newTab = new bootstrap.Tab(document.getElementById(tabId));
     newTab.show();
 
+    let formBlock = $(`#${xIdForm}`);
+
+    formBlock.block({
+        message:'<div class="d-flex justify-content-center"><p class="mb-0 text-white fs-4" >Espere...</p></div>',
+        css: { backgroundColor: 'transparent', color: 'var(--bs-card-bg)', border: '0' },
+        overlayCSS  : { opacity: 0.5 },
+        onUnblock   : function () {}
+    });
+
+
     // dibujar assets
     setTimeout(function(){
         if( idCab == 0 ){
@@ -1178,6 +1188,8 @@ function openEditorTab( rowData , isNew = false )
             idBoda      = $(this).val();
             ejecutarDoc( 'get-novios' );
         });
+        //
+        $(formBlock).unblock(); 
     }, 1000 );
 }
 /* ------------------------------------------------------------- */
