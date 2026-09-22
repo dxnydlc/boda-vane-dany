@@ -27,7 +27,9 @@
 
                         <button class="btn btn-success mb-3" id="btnmAbrirModal" >Cargar</button>
 
-                        <table id="tblUsuarios" class="table table-striped table-bordered"></table>
+                        <div style="width: 100%; overflow-x: auto;">
+                        <table id="tblUsuarios" class="table table-striped table-bordered" style="width:100%" ></table>
+                        </div>
                     </div>
                 </div>
                 <!-- =================================================================================================== -->
