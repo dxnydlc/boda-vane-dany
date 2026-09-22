@@ -1453,6 +1453,7 @@ function getRandomColor() {
 }
 /* ------------------------------------------------------------- */
 /* ------------------------------------------------------------- */
+/* ------------------------------------------------------------- *
 function renderInvitados() {
     const $contenedor = $('#lista-invitados');
     $contenedor.empty();
@@ -1476,6 +1477,42 @@ function renderInvitados() {
 
         $div.on('dragstart', function(e) {
             e.originalEvent.dataTransfer.setData('text/plain', inv.id);
+        });
+
+        $contenedor.append($div);
+    });
+}
+/* ------------------------------------------------------------- */
+function renderInvitados() {
+    const $contenedor =$('#lista-invitados');
+    $contenedor.empty();
+
+    $.each(invitados, function(index, inv) {
+        // 1. Verificamos si ya está en alguna mesa
+        const estaAsignado = mesas.some(mesa => mesa.invitados.some(i => String(i.id) === String(inv.id)));
+        
+        // 2. NUEVO: Si ya está asignado, omitimos este invitado y pasamos al siguiente
+        if (estaAsignado) {
+            return; // En un bucle $.each() de jQuery, 'return' funciona como un 'continue'
+        }
+
+        // 3. Verificamos si canceló su asistencia
+        const noAsistira = inv.Estado === 'no-podra'; 
+
+        // 4. Dibujamos solo a los que pasaron el filtro
+        const $div =$('<div>', {
+            class: `guest-card ${noAsistira ? 'disabled' : ''}`,
+            draggable: !noAsistira
+        }).html(`
+            <img src="${inv.Foto}" alt="${inv.Nombre}">
+            <div style="flex: 1;">
+                <strong>${inv.Nombre}</strong> ${getIconoEstado(inv.Estado)}<br>
+                <small style="color: #666;">${inv.Tipo}</small>
+            </div>
+        `);
+
+        $div.on('dragstart', function(e) {
+            e.originalEvent.dataTransfer.setData('text/plain', String(inv.id));
         });
 
         $contenedor.append($div);
