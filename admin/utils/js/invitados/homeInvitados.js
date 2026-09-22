@@ -1070,7 +1070,8 @@ function renderTable(data) {
         data,
         columns: cols,
         responsive: true,
-        autoWidth: false
+        autoWidth: false , 
+        //scrollX: true,
     });
 
     $.unblockUI();
