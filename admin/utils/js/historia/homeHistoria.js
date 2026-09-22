@@ -965,7 +965,7 @@ function renderTable(data) {
     $("#tblUsuarios").DataTable({
         data,
         columns: cols,
-        responsive: true,
+        //responsive: true,
         autoWidth: false
     });
 
