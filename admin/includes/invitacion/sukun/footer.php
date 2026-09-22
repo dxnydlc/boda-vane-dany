@@ -37,7 +37,8 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js" integrity="sha512-VEd+nq25CkR676O+pLBnDW09R7VQX9Mdiij052gVCp5yVH3jGtH70Ho/UUv4mJDsEdTvqRCFZg0NKGiojGnUCw==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 
     <!-- 1. Carga el script de Google Maps con tu API Key -->
-    <script src="https://maps.googleapis.com/maps/api/js?key=<?php echo $MAPS_KEY ?>"></script>
+    <!--<script src="https://maps.googleapis.com/maps/api/js?key=<?php echo $MAPS_KEY ?>"></script>-->
+    <script async defer src="https://maps.googleapis.com/maps/api/js?key=<?php echo $MAPS_KEY ?>&loading=async"></script>
 
     <!-- page specific script -->
     <?php echo $archivoJS ?>
