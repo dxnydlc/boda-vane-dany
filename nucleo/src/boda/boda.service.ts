@@ -187,7 +187,8 @@ export class BodaService {
         "RecepcionNombre as RecepcionNombre" ,
         "RecepcionLatLng as RecepcionLatLng" , 
         "RecepcionDireccion as RecepcionDireccion" , 
-        "RecepcionHora as RecepcionHora"
+        "RecepcionHora as RecepcionHora" , 
+        "Prologo as Prologo"
       ])
       .where(" Estado = 'activo' ")
       .getRawMany();

@@ -57,7 +57,8 @@ const formFields        = [
     "RecepcionLatLng" , 
     "RecepcionDireccion" , 
     "RecepcionHora" , 
-    "ReligiosoNombre"
+    "ReligiosoNombre" , 
+    "Prologo"
 ];
 
 // campos hidden
@@ -1270,7 +1271,24 @@ function renderFormInTab( rowData , formId ) {
                 `;
             break;
             // -----------------------------------------
+            case 'Prologo':
+                htmlForm += `
+                <div class=" col-md-6 ">
+                    <label for="Prologo" >Prólogo</label>
+                    <textarea name="${field}" id="${field}" class=" form-control " >${rowData[field] || defaultValues[field] || ""}</textarea>
+                </div>
+                <!-- ./form-group -->
+                `;
+            break;
             // -----------------------------------------
+            case 'Padrinos':
+                htmlForm += `
+                <div class="col-md-6">
+                    <label class="form-label" >Padrinos:</label>
+                    <input type="text" class="form-control" name="${field}" id="${field}" value="${rowData[field] || defaultValues[field] || ""}" placeholder="Padrino, Madrina (separado por comas)" />
+                </div>
+                `;
+            break;
             // -----------------------------------------
             // -----------------------------------------
             // -----------------------------------------

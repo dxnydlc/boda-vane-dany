@@ -55,6 +55,12 @@ export class BodaModel {
 
     @Column()
     DniUsuarioMod! : string
+
+    @Column()
+    Prologo : string = ''
+
+    @Column()
+    Padrinos : string = ''
     
     @Column()
     UsuarioMod! : string
