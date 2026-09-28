@@ -195,7 +195,7 @@ let optsLangDatatable = {
                 varDump(`#${xIdForm} #Foto`);
 
                 $(`#${xIdForm} #Icono`).val( response.resized );
-                $(`#${xIdForm} #laFoto`).attr( 'src' , `${URL_API}${response.resized}` );
+                $(`#${xIdForm} #laFoto`).attr( 'src' , `${URL_API}${response.Url}` );
                 //mdlArchivos
             },
 
@@ -759,7 +759,8 @@ function handleSuccess( json , textStatus , xhr , tipoReq ) {
                 llenarCombo( arrBodas , `#${xIdForm} #IdBoda` , true );
                 $(`#${xIdForm} #IdBoda`).val( data.IdBoda );
 
-                $(`#${xIdForm} #laFoto`).attr( 'src' , `${URL_API}${data.Portada}` );
+                varDump( `${URL_API}${data.Icono}` );
+                $(`#${xIdForm} #laFoto`).attr( 'src' , `${URL_API}${data.Icono}` );
 
             break;
             // -------------------------------------------------------------
