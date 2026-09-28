@@ -91,6 +91,11 @@ export class UsersController {
     console.log( 'Usuario'   , Usuario );
     console.log( 'IdUsuario' , IdUsuario );
 
+    if( dto.Password_hash ){
+      let Password        = await generateHash( dto.Password_hash );
+      dto.Password_hash   = Password;
+    }
+
     const bodyProocolo = {
       ...dto , 
       created_at  : createdAt , 

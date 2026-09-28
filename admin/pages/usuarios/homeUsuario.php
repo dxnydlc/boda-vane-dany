@@ -20,7 +20,7 @@
                 <!-- =================================================================================================== -->
                 <div class="tab-content" id="dynamicTabContent">
                     <div class="tab-pane fade show active" id="content-lista">
-                        <button class="btn btn-success mb-3" id="btnNuevo">Nuevo</button>
+                        <button class="btn btn-success mb-3" id="btnNuevo" >Nuevo</button>
 
                         <div style="width: 100%; overflow-x: auto;">
                         <table id="tblUsuarios" class="table table-striped table-bordered" style="width:100%" ></table>

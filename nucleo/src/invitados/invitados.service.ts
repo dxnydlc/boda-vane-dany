@@ -251,6 +251,7 @@ ${URL_PROYECTO}${dataBoda.data.Portada}
         "c.IdNovio as IdNovio" , 
         "c.IdBoda as IdBoda" , 
         "c.Foto as Foto" , 
+        "n.Nombre as Novio" 
       ])
       .innerJoin( "tbl_boda" , "b" , " c.IdBoda = b.id " )
       .innerJoin( "tbl_novios" , "n" , " c.IdNovio = n.id " )
@@ -695,6 +696,58 @@ ${URL_PROYECTO}${dataBoda.data.Portada}
         data , 
         version : '1' , 
         msg : { titulo : 'Correcto' , texto : '¡Gracias! apreciamos tu sinceridad.' , clase : 'success' , call : 'tostada2' }
+      }
+
+    } catch (error) {
+
+      // Para depuración local
+      varDump(error); 
+
+      // SI EL ERROR YA ES DE NESTJS (ej. BadRequestException), LO RELANZAMOS DIRECTO
+      if (error instanceof HttpException) {
+        throw error;
+      }
+
+      // SI ES UN ERROR INESPERADO (ej. caída de BD, error de sintaxis), ENVIAMOS UN 500
+      throw new InternalServerErrorException({
+        message: 'Error en el servicio de Invitados',
+        cause: error // Mantiene el rastro del error original en logs internos
+      });
+
+    }
+
+  }
+  // ...................................................................
+  // ...................................................................
+  async gegActivosFiltro( IdBoda : number = 0 ) {
+    try {
+      
+      let data = await this.datosModel.createQueryBuilder('c')
+      .select([ 
+        "c.id as id" , 
+        "c.uu_id as uu_id" , 
+        "b.Nombre as Boda" , 
+        "b.Nombre as Novio_a" , 
+        "c.Nombre as Nombre" , 
+        "c.group_name as Grupo" , 
+        "c.Email as Email" , 
+        "c.phone as Celular" , 
+        "c.max_companions as Adicional" , 
+        "c.Estado as Estado" , 
+        "c.IdNovio as IdNovio" , 
+        "c.IdBoda as IdBoda" , 
+        "c.Foto as Foto" , 
+        "n.Nombre as Novio" 
+      ])
+      .innerJoin( "tbl_boda" , "b" , " c.IdBoda = b.id " )
+      .innerJoin( "tbl_novios" , "n" , " c.IdNovio = n.id " )
+      .where(" c.Estado <> 'anulado' AND c.IdBoda = :IdBoda " , { IdBoda } )
+      .getRawMany();
+  
+      return {
+        data , 
+        version : '1' , 
+        msg : { titulo : 'Correcto' , texto : 'Registros cargados' , clase : 'success' , call : 'tostada2' }
       }
 
     } catch (error) {

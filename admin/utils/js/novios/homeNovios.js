@@ -39,7 +39,7 @@ let dataJson = [];
 const columnasVisibles  = [ "id" , "Tipo" , "Boda" , "Nombre" , "Apellidos" , "DNI" , "Email" , "Estado" ];
 
 // campos que tendrá el formulario
-const formFields        = [ "Tipo" , "Nombre" , "Apellidos" , "Descripcion" , "Email" , "DNI" , "IdBoda" , "Estado" ];
+const formFields        = [ "Tipo" , "Nombre" , "Apellidos" , "Descripcion" , "Email" , "DNI" , "IdBoda" , "Estado" , "Padre" , "Madre" ];
 
 // campos hidden
 const hiddenFields      = ["id", "uu_id"];
@@ -47,7 +47,7 @@ const hiddenFields      = ["id", "uu_id"];
 // valores por defecto
 const defaultValues = {
     id      : 0 , 
-    uu_id   : crypto.randomUUID() , Descripcion : ''
+    uu_id   : crypto.randomUUID() , Descripcion : '' , Padre : '' , Madre : ''
 };
 
 
@@ -1198,6 +1198,24 @@ function renderFormInTab( rowData , formId ) {
                 <div class=" col-md-6 ">
                     <label class="form-label" >Descripcion:</label>
                     <textarea name="${field}" id="${field}"  rows ="5" class=" form-control " >${rowData[field] || defaultValues[field] || ""}</textarea>
+                </div>
+                `;
+            break;
+            // -----------------------------------------
+            case 'Padre':
+                htmlForm += `
+                <div class="col-md-2 ">
+                    <label class="form-label" >Padre:</label>
+                    <input type="text" class="form-control" name="${field}" id="${field}" value="${rowData[field] || defaultValues[field] || ""}" placeholder="Sr. [Nombre]" />
+                </div>
+                `;
+            break;
+            // -----------------------------------------
+            case 'Madre':
+                htmlForm += `
+                <div class="col-md-2 ">
+                    <label class="form-label" >Madre:</label>
+                    <input type="text" class="form-control" name="${field}" id="${field}" value="${rowData[field] || defaultValues[field] || ""}" placeholder="Sra. [Nombre]" />
                 </div>
                 `;
             break;

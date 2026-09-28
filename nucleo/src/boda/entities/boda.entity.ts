@@ -39,6 +39,18 @@ export class BodaModel {
     Musica : string = ''
 
     @Column()
+    RecepcionNombre : string = ''
+
+    @Column()
+    RecepcionLatLng  : string = ''
+
+    @Column()
+    RecepcionDireccion : string = ''
+
+    @Column()
+    RecepcionHora : string = ''
+
+    @Column()
     DniUsuarioMod! : string
     
     @Column()

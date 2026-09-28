@@ -40,7 +40,7 @@ let arrNovio = [];
 let dataJson = [];
 /* ------------------------------------------------------------- */
 // columnas que se mostrarán en la tabla (1)
-const columnasVisibles  = [ "id" , "Boda" , "Nombre" , "Grupo" , "Adicional" , "Email" , "Celular" , "Estado" ];
+const columnasVisibles  = [ "id" , "Boda" , "Nombre" , "Grupo" , "Novio" , "Adicional" , "Email" , "Celular" , "Estado" ];
 
 // campos que tendrá el formulario
 const formFields        = [ "Nombre" , "IdBoda" , "IdNovio" , "email" , "phone" , "group_name" , "Estado" , "max_companions" , "Foto" ];
@@ -473,6 +473,14 @@ let optsLangDatatable = {
         });
         /* ------------------------------------------------------------- */
         /* ------------------------------------------------------------- */
+        $("#cboBoda").on( "click", function(e) {
+            e.preventDefault();
+            const ifboda = parseInt( $(this).val() );
+
+            if( ifboda > 0 ){
+                ejecutarDoc( 'listar-cab-filtro' );
+            }
+        });
         /* ------------------------------------------------------------- */
         /* ------------------------------------------------------------- */
         /* ------------------------------------------------------------- */
@@ -652,6 +660,8 @@ function ejecutarDoc( tipoReq ) {
             case 'guardar-cab' : objCargando = `#${xIdForm}`; break;
             case 'anular-cab'  : objCargando = `#wrapper_form`; break;
             case 'cargar-cab'  : objCargando = `#frmDocumento`; break;
+
+            case 'listar-cab-filtro'  : objCargando = `#TablaHomePs`; break;
         }
 
         mostrarLoader( objCargando );
@@ -743,6 +753,13 @@ function prepararRequest( tipoReq ) {
         break;
         // -------------------------------------------------------------
         // -------------------------------------------------------------
+        case 'listar-cab-filtro':
+            xUrl             = `${urlServicio}get-activos-filtro`, 
+            xMetodo          = `POST`;
+            data = {
+                IdBoda      : $('#cboBoda').val()
+            };
+        break;
         // -------------------------------------------------------------
         // -------------------------------------------------------------
         // -------------------------------------------------------------
@@ -782,9 +799,9 @@ function handleSuccess( json , textStatus , xhr , tipoReq ) {
             // -------------------------------------------------------------
             case 'listar-cab':
                 
-            dataJson = json.data;
-            //generarTabla( json.data );
-            renderTable( json.data ); 
+                dataJson = json.data;
+                //generarTabla( json.data );
+                renderTable( json.data ); 
 
             break;
             // -------------------------------------------------------------
@@ -812,7 +829,18 @@ function handleSuccess( json , textStatus , xhr , tipoReq ) {
                 });
 
                 toastr["success"]( json.msg.texto , 'Correcto' );
-                ejecutarDoc( 'listar-cab' );
+                
+                const ifboda = parseInt( $('#IdBoda').val() );
+
+                if( ifboda )
+                {
+                    ejecutarDoc( 'listar-cab-filtro' );
+                    //
+                }else{
+                    //
+                    ejecutarDoc( 'listar-cab' );
+                }
+                
 
             break;
             // -------------------------------------------------------------
@@ -868,6 +896,8 @@ function handleSuccess( json , textStatus , xhr , tipoReq ) {
                     let o = { id : value.id , text : value.Nombre };
                     arrBodas.push( o )
                 });
+                
+                llenarCombo( arrBodas , `#cboBoda` , true );
             break;
             // -------------------------------------------------------------
             // -------------------------------------------------------------
@@ -884,6 +914,11 @@ function handleSuccess( json , textStatus , xhr , tipoReq ) {
             break;
             // -------------------------------------------------------------
             // -------------------------------------------------------------
+            case 'listar-cab-filtro':
+                dataJson = json.data;
+                //generarTabla( json.data );
+                renderTable( json.data );
+            break;
             // -------------------------------------------------------------
             // -------------------------------------------------------------
             // -------------------------------------------------------------

@@ -1,7 +1,12 @@
+import { Optional } from "@nestjs/common"
 import { ApiProperty } from "@nestjs/swagger"
-import { IsNotEmpty } from "class-validator"
+import { IsNotEmpty, IsOptional, IsString } from "class-validator"
 
 export class CreateUserDto {
+
+    @IsOptional()
+    @IsString()
+    Password_hash?: string; // Se recibe como 'password' y es de solo lectura
 
     // ************************************************
 

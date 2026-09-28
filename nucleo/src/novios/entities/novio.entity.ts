@@ -50,6 +50,12 @@ export class NovioModel {
     @Column()
     UsuarioMod! : string
 
+    @Column()
+    Padre : string = ''
+
+    @Column()
+    Madre : string = ''
+
     @BeforeInsert()
     @BeforeUpdate()
     normalize() {

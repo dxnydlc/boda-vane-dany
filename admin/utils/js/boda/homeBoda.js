@@ -34,10 +34,30 @@ let xIdFormx = ``;
 let dataJson = [];
 /* ------------------------------------------------------------- */
 // columnas que se mostrarán en la tabla (1)
-const columnasVisibles  = [ "id" , "Nombre" , "Fecha" , "Hora" , "Direccion" , "Estado" ];
+const columnasVisibles  = [ 
+    "id" , 
+    "Nombre" , 
+    "Fecha" , 
+    "Hora" , 
+    "Direccion" , 
+    "Estado" 
+];
 
 // campos que tendrá el formulario
-const formFields        = [ "Nombre" , "Fecha" , "Hora" , "MapaLink" , "Direccion" , "Estado" , "Portada" , "Musica" ];
+const formFields        = [ 
+    "Nombre" , 
+    "Fecha" , 
+    "Hora" , 
+    "MapaLink" , 
+    "Direccion" , 
+    "Estado" , 
+    "Portada" , 
+    "Musica" , 
+    "RecepcionNombre" , 
+    "RecepcionLatLng" , 
+    "RecepcionDireccion" , 
+    "RecepcionHora"
+];
 
 // campos hidden
 const hiddenFields      = [ "id" , "uu_id" , "Portada" ];
@@ -1180,6 +1200,7 @@ function renderFormInTab( rowData , formId ) {
             case 'Portada':
                 htmlForm += `
                 <div class="mb-5 col-md-2 ">
+                    <label>Portada:</label>
                     <img id="laFoto" src="${URL_API}img/date-bg.png" class="img-thumbnail" alt="..." />
                     <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#mdlArchivos" >
                     Subir foto
@@ -1191,6 +1212,7 @@ function renderFormInTab( rowData , formId ) {
             case 'Musica':
                 htmlForm += `
                 <div class="mb-5 col-md-3 ">
+                    <label>Musica:</label>
                     <input type="text" class="form-control" name="${field}" id="${field}" value="${rowData[field] || defaultValues[field] || ""}" readonly />
                     <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#mdlArchivosMusica" >
                     Subir archivo
@@ -1198,6 +1220,44 @@ function renderFormInTab( rowData , formId ) {
                 </div>
                 `;
             break;
+            // -----------------------------------------
+            // -----------------------------------------
+            case 'RecepcionHora':
+                htmlForm += `
+                <div class=" col-md-2 ">
+                    <label class="form-label" >Hora recep.:</label>
+                    <input type="time" class="form-control" name="${field}" id="${field}" value="${rowData[field] || defaultValues[field] || ""}" />
+                </div>
+                `;
+            break;
+            // -----------------------------------------
+            case 'RecepcionNombre':
+                htmlForm += `
+                <div class="col-md-6">
+                    <label class="form-label" >Recepción nombre:</label>
+                    <input type="text" class="form-control" name="${field}" id="${field}" value="${rowData[field] || defaultValues[field] || ""}" placeholder="Nombre local" />
+                </div>
+                `;
+            break;
+            // -----------------------------------------
+            case 'RecepcionLatLng':
+                htmlForm += `
+                <div class="col-md-6">
+                    <label class="form-label" >Ubicación recepcion:</label>
+                    <input type="text" class="form-control" name="${field}" id="${field}" value="${rowData[field] || defaultValues[field] || ""}" placeholder="-11.859475,-77.0859254" />
+                </div>
+                `;
+            break;
+            // -----------------------------------------
+            case 'RecepcionDireccion':
+                htmlForm += `
+                <div class="col-md-6">
+                    <label class="form-label" >Ubicación dirección:</label>
+                    <input type="text" class="form-control" name="${field}" id="${field}" value="${rowData[field] || defaultValues[field] || ""}" placeholder="C. Santa Rosa Sur 240, Puente Piedra 15121" />
+                </div>
+                `;
+            break;
+            // -----------------------------------------
             // -----------------------------------------
             // -----------------------------------------
             // -----------------------------------------

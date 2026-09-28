@@ -171,7 +171,7 @@ export class BodaService {
     try {
       // '%Y-%m-%d'
       let data = await this.datosModel.createQueryBuilder('c')
-      .select([ 
+      .select([
         "id" , "uu_id" , 
         "Nombre" , 
         "DATE_FORMAT( c.Fecha , '%d/%m/%Y' ) as Fecha" , 
@@ -183,7 +183,11 @@ export class BodaService {
         "MapaLink" , 
         "Direccion" , 
         "Portada" , 
-        "Musica as Musica"
+        "Musica as Musica" , 
+        "RecepcionNombre as RecepcionNombre" ,
+        "RecepcionLatLng as RecepcionLatLng" , 
+        "RecepcionDireccion as RecepcionDireccion" , 
+        "RecepcionHora as RecepcionHora"
       ])
       .where(" Estado = 'activo' ")
       .getRawMany();
