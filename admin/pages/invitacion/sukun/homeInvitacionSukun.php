@@ -157,6 +157,23 @@
                 </div>
                 <!-- ./row -->
 
+
+                <div class="carrusel-contenedor">
+                    <!-- Contenedor principal de Swiper -->
+                    <div class="swiper mi-carrusel">
+                        <div class="swiper-wrapper" id="galeria-wrapper">
+                        <!-- Los slides se generarán aquí con JavaScript -->
+                        </div>
+                        
+                        <!-- Botones de navegación (opcionales) -->
+                        <div class="swiper-button-next"></div>
+                        <div class="swiper-button-prev"></div>
+                        
+                        <!-- Paginación (puntos debajo del carrusel) -->
+                        <div class="swiper-pagination"></div>
+                    </div>
+                </div>
+
                 
                 <p class="card-text" >Some quick example text to build on the card title and make up the bulk of the card’s content.</p>
                 <a href="#" class="btn btn-primary">Go somewhere</a>

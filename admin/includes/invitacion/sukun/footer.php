@@ -40,6 +40,10 @@
     <!--<script src="https://maps.googleapis.com/maps/api/js?key=<?php echo $MAPS_KEY ?>"></script>-->
     <script async defer src="https://maps.googleapis.com/maps/api/js?key=<?php echo $MAPS_KEY ?>&loading=async"></script>
 
+    <!-- Fancybox CSS & JS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/ui@5.0/dist/fancybox/fancybox.css" />
+    <script src="https://cdn.jsdelivr.net/npm/@fancyapps/ui@5.0/dist/fancybox/fancybox.umd.js"></script>
+
     <!-- page specific script -->
     <?php echo $archivoJS ?>
     <?php echo $archivoJS2 ?>

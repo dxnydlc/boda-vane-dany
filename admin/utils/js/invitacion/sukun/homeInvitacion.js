@@ -1065,6 +1065,60 @@ function handleSuccess( json , textStatus , xhr , tipoReq ) {
                 audio.src = urlDinamica;
                 audio.load(); // Fundamental: le dice al navegador que prepare el nuevo archivo
 
+                // Carrusel de las americas
+                // 1. Tu arreglo dinámico (Ejemplo)
+                const misFotos = json.fotos.Momentos;
+
+                // 2. Renderizar el arreglo en el HTML
+                const wrapper = document.getElementById('galeria-wrapper');
+
+                misFotos.forEach(foto => {
+                    // Crear el slide de Swiper
+                    const slide = document.createElement('div');
+                    slide.className = 'swiper-slide';
+                    
+                    // Crear el enlace de Fancybox y la imagen
+                    // El atributo data-fancybox="galeria" agrupa las fotos para poder navegar entre ellas en el popup
+                    slide.innerHTML = `
+                    <a href="${URL_API}${foto.url}" data-fancybox="galeria">
+                        <img src="${URL_API}${foto.urlThumb}" alt="${foto.NombreArchivo}" class="foto-carrusel" />
+                    </a>
+                    `;
+                    
+                    wrapper.appendChild(slide);
+                });
+
+                // 3. Inicializar Fancybox
+                Fancybox.bind("[data-fancybox]", {
+                    // Animaciones suaves y controles modernos
+                    Thumbs: { autoStart: true },
+                    Toolbar: { display: { left: ["infobar"], middle: [], right: ["close"] } }
+                });
+
+                // 4. Inicializar Swiper (Carrusel)
+                const swiper = new Swiper('.mi-carrusel', {
+                    loop: true, // Carrusel infinito
+                    spaceBetween: 20, // Espacio entre fotos
+                    grabCursor: true, // Cambia el cursor para indicar que se puede arrastrar
+                    
+                    // Controles
+                    pagination: {
+                    el: '.swiper-pagination',
+                    clickable: true,
+                    },
+                    navigation: {
+                    nextEl: '.swiper-button-next',
+                    prevEl: '.swiper-button-prev',
+                    },
+                    
+                    // Diseño responsivo (Cuántas fotos mostrar según el tamaño de pantalla)
+                    breakpoints: {
+                    320: { slidesPerView: 1 }, // Móviles: 1 foto
+                    768: { slidesPerView: 2 }, // Tablets: 2 fotos
+                    1024: { slidesPerView: 3 } // Escritorio: 3 fotos
+                    }
+                });
+
             break;
             // -------------------------------------------------------------
             // -------------------------------------------------------------
