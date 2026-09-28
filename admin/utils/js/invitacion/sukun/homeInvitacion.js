@@ -1,6 +1,10 @@
 // Usuarios
 /* ------------------------------------------------------------- */
 /* ------------------------------------------------------------- */
+// 1. Asegúrate de configurar el idioma a español
+moment.locale('es');
+/* ------------------------------------------------------------- */
+/* ------------------------------------------------------------- */
 let urlServicio = `${URL_API}v1/public/`;
 /* ------------------------------------------------------------- */
 /* ------------------------------------------------------------- */
@@ -711,14 +715,72 @@ function handleSuccess( json , textStatus , xhr , tipoReq ) {
 
                 // Fotos Boda
                 let dataFotos       = json.fotos;
+                let NroInvitados    = dataBoda.NComp;
+                let textoInvitado   = NroInvitados = 0 ? `tu entrada es personal,` : `Tienes una entrada adicional`;
 
+                $('#lblInitado2').html( `<b>${data.Nombre}</b> ${textoInvitado}` );
 
                 // Boda
+                let cHora               = dataBoda.Hora;
+                // 2. Aplicar el formato
+                const fechaBoda         = moment(dataBoda.Fecha ).format('dddd D [de] MMMM [del] YYYY');
+                varDump( `>cHora: ${cHora}`);
                 $('#lblRegilioso1').html(`
-                    CEREMONIA ${dataBoda.Nombre.toUpperCase()}<br/>
+                    <p class=" text-center fuente-normal" >CEREMONIA ${dataBoda.Nombre.toUpperCase()}<br/>
                     ${dataBoda.ReligiosoNombre}<br/>
-                    a las ${moment( dataBoda.Hora ).format('HH:mm')}
+                    a las</p>
+                    <br/>
+                    <h2 class="fuente-normal text-center" >${moment(dataBoda.Hora, 'HH:mm:ss').format('HH:mm')}</h2>
+                    <p class=" text-center fuente-normal" >${fechaBoda}</p>
+                    <br/>
                 `);
+                $('#frmMapa1').attr( 'src' , `https://www.google.com/maps/embed/v1/place?key=${mapKey}&q=${dataBoda.MapaLink}` );
+
+
+
+                // wrapperRecepcion
+                const fechaRecep         = moment(dataBoda.Fecha ).format('dddd D [de] MMMM [del] YYYY');
+                // TExtos del calendario:
+                // 1. Indicas la fecha/hora que tienes y el formato en que está escrita
+                const fechaInicio = moment( `${dataBoda.Fecha} ${dataBoda.RecepcionHora}` , "YYYY-MM-DD HH:mm:ss");
+
+                // 2. Le das el formato para Google Calendar: AñoMesDia[T]HoraMinutoSegundo
+                const stringInicio = fechaInicio.format("YYYYMMDD[T]HHmmss");
+                // Resultado: "20261010T133000"
+
+                // 3. Calculas la hora de fin (ejemplo: sumando 8 horas de celebración)
+                const fechaFin = fechaInicio.clone().add(8, 'hours');
+                const stringFin = fechaFin.format("YYYYMMDD[T]HHmmss");
+                // Resultado: "20261010T213000"
+
+                // 4. Unes ambas fechas con la barra que exige Google
+                const parametroDates = `${stringInicio}/${stringFin}`;
+                console.log(parametroDates); 
+                // Resultado final: "20261010T133000/20261010T213000"
+                let cal_text             = formatearParaCalendario(`${dataBoda.RecepcionNombre}`);
+                let cal_dates            = `${stringInicio}/${stringFin}`;
+                let cal_details          = `Nos+encantaria+contar+con+su+presencia`;
+                let cal_location         = `${dataBoda.RecepcionLatLng}`;
+                // Armas la URL
+                const urlCalendario = `https://calendar.google.com/calendar/render?action=TEMPLATE&text=${cal_text}&dates=${cal_dates}&details=${cal_details}&location=${cal_location}`;
+
+
+                let htmlRecep = `
+                <h2 class=" fuente-normal text-center " >INFO DE LA RECEPCIÓN</h2>
+                <p class=" text-center fuente-normal" >${dataBoda.RecepcionNombre}</p>
+                <h2 class="fuente-normal text-center" >${moment(dataBoda.RecepcionHora, 'HH:mm:ss').format('HH:mm')}</h2>
+                <p class=" text-center fuente-normal" >${fechaRecep}</p>
+
+                <a href="${urlCalendario}" target="_blank" class="btn-agendar" style="margin:0 auto;display:block;width:185px;" >
+                Agregar a Calendar
+                </a>
+                `;
+                $('#wrapperRecepcion').html( htmlRecep );
+
+                $('#frmMapa2').attr( 'src' , `https://www.google.com/maps/embed/v1/place?key=${mapKey}&q=${dataBoda.RecepcionLatLng}` );
+
+                // Agregar al calendario:
+                // https://calendar.google.com/calendar/render?action=TEMPLATE&text=Boda+de+Ricardo+y+Lucia&dates=20271119T160000/20271119T235900&details=Nos+encantaria+contar+con+su+presencia.&location=Hacienda+Los+Laureles,+Oaxaca
                 
 
                 for (let index = 0; index < arrNoviosx.length; index++) {
@@ -1065,6 +1127,7 @@ function handleSuccess( json , textStatus , xhr , tipoReq ) {
                 audio.src = urlDinamica;
                 audio.load(); // Fundamental: le dice al navegador que prepare el nuevo archivo
 
+                /**
                 // Carrusel de las americas
                 // 1. Tu arreglo dinámico (Ejemplo)
                 const misFotos = json.fotos.Momentos;
@@ -1080,7 +1143,7 @@ function handleSuccess( json , textStatus , xhr , tipoReq ) {
                     // Crear el enlace de Fancybox y la imagen
                     // El atributo data-fancybox="galeria" agrupa las fotos para poder navegar entre ellas en el popup
                     slide.innerHTML = `
-                    <a href="${URL_API}${foto.url}" data-fancybox="galeria">
+                    <a href="${URL_API}${foto.Url}" data-fancybox="galeria">
                         <img src="${URL_API}${foto.urlThumb}" alt="${foto.NombreArchivo}" class="foto-carrusel" />
                     </a>
                     `;
@@ -1118,6 +1181,7 @@ function handleSuccess( json , textStatus , xhr , tipoReq ) {
                     1024: { slidesPerView: 3 } // Escritorio: 3 fotos
                     }
                 });
+                /**/
 
             break;
             // -------------------------------------------------------------
@@ -1941,6 +2005,18 @@ function anular(id) {
 }
 /* ------------------------------------------------------------- */
 /* ------------------------------------------------------------- */
+function formatearParaCalendario(texto) {
+  if (!texto) return '';
+
+  // 1. Eliminar tildes y acentos (diacríticos)
+  const textoLimpio = texto
+    .normalize("NFD") 
+    .replace(/[\u0300-\u036f]/g, ""); 
+
+  // 2. Codificar para URL y reemplazar los espacios (%20) por el signo "+"
+  // encodeURIComponent también protege caracteres especiales como &, ?, =
+  return encodeURIComponent(textoLimpio).replace(/%20/g, '+');
+}
 /* ------------------------------------------------------------- */
 /* ------------------------------------------------------------- */
 /* ------------------------------------------------------------- */

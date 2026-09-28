@@ -229,6 +229,24 @@
 
 
 
+
+
+        .btn-agendar {
+            display: inline-block;
+            background-color: #0b1a30; /* El azul marino de tu diseño */
+            color: #ffffff;
+            padding: 12px 24px;
+            border-radius: 30px;
+            text-decoration: none;
+            font-family: 'Georgia', serif;
+            font-size: 16px;
+            transition: background-color 0.3s ease;
+        }
+
+        .btn-agendar:hover {
+            background-color: #1a355b;
+        }
+
         
     </style>
 
@@ -236,6 +254,7 @@
     <script type="text/javascript">
     let URL_API         = '<?php echo $API; ?>';
     let URL_WEB         = '<?php echo $URL; ?>';
+    const mapKey        = '<?php echo $MAPS_KEY ?>';
     // Leer el token guardado
     const tokenBackend  = localStorage.getItem('auth_token');
     </script>

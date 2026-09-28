@@ -133,7 +133,7 @@
                     <!-- ./col -->
                     <div class=" col-lg-4 col-md-4 " >
                         <p class=" text-center " >
-                            Con inmensa alegría anunciamos<br/>
+                            Hola <span id="lblInitado2" ></span><br/>Con inmensa alegría anunciamos<br/>
                             la boda de <span id="lblNovios76" >Maximiliano y Isabella</span>
                         </p>
                     </div>
@@ -149,13 +149,77 @@
                     <div class=" col-lg-4 col-md-4 " ></div>
                     <!-- ./col -->
                     <div class=" col-lg-4 col-md-4 " >
-                        <p class=" text-center " id="lblRegilioso1" >CEREMONIA RELIGIOSA</p>
+                        <div id="lblRegilioso1"></div>
                     </div>
                     <!-- ./col -->
                     <div class=" col-lg-4 col-md-4 " ></div>
                     <!-- ./col -->
                 </div>
                 <!-- ./row -->
+
+                <!-- Contenedor del Mapa -->
+                <div class=" row " style="margin-bottom:15px;" >
+                    <div class=" col-lg-3 col-md-3 " ></div>
+                    <!-- ./col -->
+                    <div class=" col-lg-6 col-md-6 " >
+                        <div class="mapa-wrapper">
+                            <iframe id="frmMapa1"
+                            width="100%" 
+                            height="350" 
+                            style="border:0;" 
+                            loading="lazy" 
+                            allowfullscreen 
+                            referrerpolicy="no-referrer-when-downgrade" 
+                            src="https://www.google.com/maps/embed/v1/place?key=<?php echo $MAPS_KEY ?>&q=Iglesia+de+San+Marcelo">
+                            </iframe>
+                        </div>
+                    </div>
+                    <!-- ./col -->
+                    <div class=" col-lg-3 col-md-3 " ></div>
+                    <!-- ./col -->
+                </div>
+                <!-- ./row -->
+
+                <div style="width:100%;height:50px;" ></div>
+                <hr>
+                <div style="width:100%;height:50px;" ></div>
+
+                <div class=" row " style="margin-bottom:15px;" >
+                    <div class=" col-lg-4 col-md-4 " ></div>
+                    <!-- ./col -->
+                    <div id="wrapperRecepcion" class=" col-lg-4 col-md-4 " ></div>
+
+                    
+                    <!-- ./col -->
+                    <div class=" col-lg-4 col-md-4 " ></div>
+                    <!-- ./col -->
+                </div>
+                <!-- ./row -->
+
+                <!-- Contenedor del Mapa -->
+                <div class=" row " style="margin-bottom:15px;" >
+                    <div class=" col-lg-3 col-md-3 " ></div>
+                    <!-- ./col -->
+                    <div class=" col-lg-6 col-md-6 " >
+                        <div class="mapa-wrapper">
+                            <iframe id="frmMapa2"
+                            width="100%" 
+                            height="350" 
+                            style="border:0;" 
+                            loading="lazy" 
+                            allowfullscreen 
+                            referrerpolicy="no-referrer-when-downgrade" 
+                            src="https://www.google.com/maps/embed/v1/place?key=<?php echo $MAPS_KEY ?>&q=Iglesia+de+San+Marcelo">
+                            </iframe>
+                        </div>
+                    </div>
+                    <!-- ./col -->
+                    <div class=" col-lg-3 col-md-3 " ></div>
+                    <!-- ./col -->
+                </div>
+                <!-- ./row -->
+
+                
 
 
                 <div class="carrusel-contenedor">
@@ -175,8 +239,22 @@
                 </div>
 
                 
-                <p class="card-text" >Some quick example text to build on the card title and make up the bulk of the card’s content.</p>
-                <a href="#" class="btn btn-primary">Go somewhere</a>
+                <div class=" row " style="margin-bottom:15px;" >
+                    <div class=" col-lg-3 col-md-3 " ></div>
+                    <!-- ./col -->
+                    <div class=" col-lg-3 col-md-3 " >
+                        <a id="btnConfirmarAsistencia" href="#" class="view-cart-btn" >Asistiré con gusto</a>
+                    </div>
+                    <!-- ./col -->
+                    <div class=" col-lg-3 col-md-3 " >
+                        <a id="btnCancelarAsistencia" href="#" class="view-cart-btn s1">Lamentablemente no podré asistir.</a>
+                    </div>
+                    <!-- ./col -->
+                    <div class=" col-lg-3 col-md-3 " ></div>
+                    <!-- ./col -->
+                </div>
+                <!-- ./row -->
+
             </div>
         </div>
     </div>
@@ -473,27 +551,7 @@
 
 <!-- Confirmar asistencia -->
 
-<section class="wpo-couple-section section-padding pt-2" id="wrapperConfirmar">
-    <div class="container">
-        <div class="wpo-section-title">
-            <h4 class="poort-text poort-in-right" >Gracias =)</h4>
-        </div>
-        <div class="wpo-event-main">
-            <div class=" row " style="margin-bottom:15px;" >
-                <div class=" col-lg-4 col-md-4 " ></div>
-                <!-- ./col -->
-                <div class=" col-lg-4 col-md-4 " >
-                    <a id="btnConfirmarAsistencia" href="#" class="view-cart-btn" >¡Confirmo mi asistencia!</a>
-                    <a id="btnCancelarAsistencia" href="#" class="view-cart-btn s1">Gracias,no podré asistir.</a>
-                </div>
-                <!-- ./col -->
-                <div class=" col-lg-4 col-md-4 " ></div>
-                <!-- ./col -->
-            </div>
-            <!-- ./row -->
-        </div>
-    </div> <!-- end container -->
-</section>
+
 
 
 
