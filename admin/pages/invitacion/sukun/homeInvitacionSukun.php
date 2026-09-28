@@ -587,9 +587,20 @@
                             <div class="mt-4">
                                 <!-- Aquí se pueden incluir los datos para transferencia o enlace a la lista de regalos -->
                                 
-                                <p class="mb-1"><strong>N° de Cuenta Vanessa:</strong> 0000-0000-0000-0000</p>
+                                <p class="mb-1"><strong>N° de Cuenta Vanessa:</strong>
+                                <br/>
+                                Mi número de cuenta BCP Soles es 19398141686014.
+                                Mi número de cuenta interbancaria es 00219319814168601416.
+                                </p>
                                 <p>Yape:</p>
-                                <img src="<?php echo $API; ?>img/qr-vane.jpeg" alt="">
+
+                                <div class=" row " style="margin-bottom:15px;" >
+                                    <div class=" col-lg-12 col-md-12 " >
+                                        <img src="<?php echo $API; ?>img/qr-vane.jpeg" alt="" />
+                                    </div>
+                                    <!-- ./col -->
+                                </div>
+                                <!-- ./row -->
 
                                 <hr>
 
@@ -599,7 +610,13 @@
                                 Mi número de cuenta interbancaria es 00219111828159605755.
                                 </p>
                                 <p>Yape:</p>
-                                <img src="<?php echo $API; ?>img/qr-dany.jpeg" alt="">
+                                <div class=" row " style="margin-bottom:15px;" >
+                                    <div class=" col-lg-12 col-md-12 " >
+                                        <img src="<?php echo $API; ?>img/qr-dany.jpeg" alt="" />
+                                    </div>
+                                    <!-- ./col -->
+                                </div>
+                                <!-- ./row -->
 
 
                                 <p class="small text-muted">Cualquier detalle es muy apreciado.</p>
