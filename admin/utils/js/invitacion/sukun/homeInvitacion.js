@@ -244,6 +244,10 @@ let optsLangDatatable = {
     btnAbrir.addEventListener('click', () => {
         // Aplicamos la animación de explosión al overlay principal
         overlay.classList.add('explode');
+
+        estaReproduciendo = true;
+        audio.play();
+        btnPlay.innerHTML = '⏸️';
         
         // Esperamos 800ms a que termine la animación
         setTimeout(() => {
@@ -1188,6 +1192,8 @@ function handleSuccess( json , textStatus , xhr , tipoReq ) {
                 // 2. Asignar la ruta al audio
                 audio.src = urlDinamica;
                 audio.load(); // Fundamental: le dice al navegador que prepare el nuevo archivo
+
+                
 
                 /**
                 // Carrusel de las americas
