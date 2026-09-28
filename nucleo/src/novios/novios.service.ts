@@ -231,7 +231,9 @@ export class NoviosService {
         "c.DNI as DNI" , 
         "c.Descripcion as Descripcion" , 
         "c.Email as Email" , 
-        "c.Estado as Estado" 
+        "c.Estado as Estado" ,
+        "c.Padre as Padre" , 
+        "c.Madre as Madre"
       ])
       .innerJoin( "tbl_boda" , "b" , " c.IdBoda = b.id " )
       .where(" c.Estado = 'activo' AND c.IdBoda = :IdBoda " , { IdBoda }  )

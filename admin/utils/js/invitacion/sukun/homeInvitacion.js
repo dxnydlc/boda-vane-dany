@@ -649,6 +649,10 @@ function handleSuccess( json , textStatus , xhr , tipoReq ) {
 
                 // Fotos Boda
                 let dataFotos   = json.fotos;
+
+
+                // Boda
+                // $('#infoPadres')
                 
 
                 for (let index = 0; index < arrNoviosx.length; index++) {
@@ -742,7 +746,8 @@ function handleSuccess( json , textStatus , xhr , tipoReq ) {
                 let fotosGalerias               = ``;
 
                 // Foto izquierda (1)
-                if( dataFotos.Momentos.length   >= 0 )
+                varDump(`> Momentos: ${dataFotos.Momentos.length}`);
+                if( dataFotos.Momentos.length   > 0 )
                 {
                     rsF                         = dataFotos.Momentos[ 0 ];
                     fotosGalerias               = `

@@ -23,7 +23,7 @@
                                 <h2 id="lblNovios01" class="poort-text poort-in-up" >- & -</h2>
                             </div>
                             <div class="slide-text wow fadeInUp" data-wow-duration="1600ms">
-                                <p>¡Nuestra historia continua!</p>
+                                <p id="infoPadres" >¡Nuestra historia continua!</p>
                             </div>
                             <div class="slide-date wow fadeInUp" data-wow-duration="1700ms">
                                 <p id="lblFecha1" >12 . 12 . 2024</p>
