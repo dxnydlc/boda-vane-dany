@@ -183,75 +183,47 @@ let optsLangDatatable = {
 };
 /* ------------------------------------------------------------- */
 /* ------------------------------------------------------------- */
-document.addEventListener('DOMContentLoaded', () => {
-    const overlay = document.getElementById('intro-overlay');
-    const btnAbrir = document.getElementById('btn-abrir');
-    const card = document.getElementById('invitation-card');
-    const particlesContainer = document.getElementById('particles-container');
-    const mainContent = document.getElementById('main-content');
-    
-    let particlesActive = true;
+    // 1. Bloquear el scroll al cargar la página
+    document.body.classList.add('bloquear-scroll');
 
-    // --- 1. Generador del sistema de partículas (Nieve/Estrellas) ---
-    function createParticles() {
-        const particleCount = 100; // Cantidad de copos/estrellas
+    // 2. Generar partículas
+    const particlesContainer = document.getElementById('particles-container');
+    const overlay = document.getElementById('intro-overlay');
+    
+    // Creamos 40 partículas
+    for (let i = 0; i < 40; i++) {
+        let particle = document.createElement('div');
+        particle.className = 'particle';
         
-        for (let i = 0; i < particleCount; i++) {
-            const particle = document.createElement('div');
-            
-            // Mezcla aleatoria entre copos redondos y estrellas
-            const isStar = Math.random() > 0.6;
-            particle.className = isStar ? 'particle star' : 'particle';
-            
-            // Tamaños y posiciones aleatorias
-            const size = Math.random() * 4 + 2; // Entre 2px y 6px
-            if (!isStar) {
-                particle.style.width = `${size}px`;
-                particle.style.height = `${size}px`;
-            }
-            
-            const leftPos = Math.random() * 100; // Posición horizontal 0 - 100vw
-            const animDuration = Math.random() * 5 + 4; // Duración de caída (4s a 9s)
-            const animDelay = Math.random() * 7; // Retraso inicial para efecto continuo
-            
-            particle.style.left = `${leftPos}vw`;
-            particle.style.animationDuration = `${animDuration}s`;
-            particle.style.animationDelay = `-${animDelay}s`; // Negativo para que ya haya partículas en pantalla
-            
-            // Opacidad y escala para dar profundidad
-            particle.style.opacity = Math.random() * 0.5 + 0.1;
-            particle.style.transform = `scale(${Math.random()})`;
-            
-            particlesContainer.appendChild(particle);
-        }
+        // Posición horizontal aleatoria
+        particle.style.left = Math.random() * 100 + 'vw';
+        
+        // Tamaño aleatorio entre 3px y 6px
+        let size = Math.random() * 3 + 3;
+        particle.style.width = size + 'px';
+        particle.style.height = size + 'px';
+        
+        // Duración y retraso aleatorios
+        particle.style.animationDuration = (Math.random() * 6 + 4) + 's';
+        particle.style.animationDelay = Math.random() * 5 + 's';
+        
+        particlesContainer.appendChild(particle);
     }
 
-    // Iniciar partículas
-    createParticles();
+    // 3. Lógica del botón Abrir
+    const btnAbrir = document.getElementById('btn-abrir');
 
-    // --- 2. Interacción al hacer clic en "Abrir" ---
+    // Al hacer clic en el botón
     btnAbrir.addEventListener('click', () => {
-        if (!particlesActive) return;
-        particlesActive = false;
-
-        // Añade la clase que dispara el efecto de zoom/explosión
-        card.classList.add('explode-transition');
+        // Aplicamos la animación de explosión al overlay principal
+        overlay.classList.add('explode');
         
-        // Desvanecer el fondo azul suavemente
-        overlay.style.backgroundColor = 'transparent';
-        particlesContainer.style.opacity = '0';
-        particlesContainer.style.transition = 'opacity 0.5s ease';
-
-        // Mostrar el contenido de la página sutilmente
-        mainContent.style.opacity = '1';
-
-        // Esperar a que termine la animación (0.9s coincidiendo con el CSS)
+        // Esperamos 800ms a que termine la animación
         setTimeout(() => {
-            overlay.remove(); // Elimina el overlay del DOM por completo para liberar recursos
-            document.body.style.overflow = 'auto'; // Restaura el scroll de la página principal
-        }, 900);
+        overlay.style.display = 'none'; // Desaparece la capa de entrada
+        document.body.classList.remove('bloquear-scroll'); // El usuario ya puede bajar
+        }, 800);
     });
-});
 /* ------------------------------------------------------------- */
 /* ------------------------------------------------------------- */
 /* ------------------------------------------------------------- */
@@ -722,20 +694,31 @@ function handleSuccess( json , textStatus , xhr , tipoReq ) {
         switch ( tipoReq ) {
             // -------------------------------------------------------------
             case 'get-invitado':
-                let txtNovia1   = ``;
-                let txtNovio1   = ``;
-                document.title  = data.Nombre;
-                arrNoviosx      = json.novios;
-                dataInvitado    = data;
+                let txtNovia1       = ``;
+                let txtNovio1       = ``;
+
+                let Padre_novia     = ``;
+                let Madre_novia     = ``;
+
+                let Padre_novio     = ``;
+                let Madre_novio     = ``;
+
+                document.title      = data.Nombre;
+                arrNoviosx          = json.novios;
+                dataInvitado        = data;
                 // Data Invitado
-                dataBoda        = json.boda;
+                dataBoda            = json.boda;
 
                 // Fotos Boda
-                let dataFotos   = json.fotos;
+                let dataFotos       = json.fotos;
 
 
                 // Boda
-                // $('#infoPadres')
+                $('#lblRegilioso1').html(`
+                    CEREMONIA ${dataBoda.Nombre.toUpperCase()}<br/>
+                    ${dataBoda.ReligiosoNombre}<br/>
+                    a las ${moment( dataBoda.Hora ).format('HH:mm')}
+                `);
                 
 
                 for (let index = 0; index < arrNoviosx.length; index++) {
@@ -745,15 +728,34 @@ function handleSuccess( json , textStatus , xhr , tipoReq ) {
                     if( rs.Tipo == 'Novio' ){
                         Novio       = g.charAt(0).toUpperCase() + g.slice(1);
                         txtNovio1   = rs.Descripcion;
+                        Padre_novio = rs.Padre;
+                        Madre_novio = rs.Madre;
                     }
                     if( rs.Tipo == 'Novia' ){
                         Novia       = g.charAt(0).toUpperCase() + g.slice(1);
                         txtNovia1   = rs.Descripcion;
+                        Padre_novia = rs.Padre;
+                        Madre_novia = rs.Madre;
                     }
                 }
 
                 $('#txtNovio2').html( Novio );
                 $('#txtNovia2').html( Novia );
+
+                $('#lblNovios76').html(`${Novia} & ${Novio}`);
+
+                // wrapper_papa
+                $('#wrapper_papa_novio').html(`<p class=" text-center " >
+                    <small>Sr. y Sra.</small><br/>
+                    ${Padre_novio}.<br/>
+                    ${Madre_novio}.
+                </p>`);
+
+                $('#wrapper_papa_novia').html(`<p class=" text-center " >
+                    <small>Sr. y Sra.</small><br/>
+                    ${Padre_novia}.<br/>
+                    ${Madre_novia}.
+                </p>`);
 
                 // Boda : 
                 fechaBoda               = moment(dataBoda.Fecha).format('YYYY-MM-DD');

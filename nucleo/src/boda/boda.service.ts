@@ -225,19 +225,7 @@ export class BodaService {
 
       let data = await this.datosModel.createQueryBuilder('c')
       .select([ 
-        "id" , 
-        "uu_id" , 
-        "Nombre" , 
-        "DATE_FORMAT( c.Fecha , '%Y-%m-%d') as Fecha" , 
-        "Estado" , 
-        "DniUsuarioMod" , 
-        "UsuarioMod" , 
-        "DATE_FORMAT( c.created_at , '%Y-%m-%d %H:%i:%s') as Creado" , 
-        "Hora" , 
-        "MapaLink" , 
-        "Direccion", 
-        "Portada", 
-        "Musica" , 
+        "c.*"
       ])
       .where(" c.id = :id" , { id } )
       .getRawOne();

@@ -56,7 +56,8 @@ const formFields        = [
     "RecepcionNombre" , 
     "RecepcionLatLng" , 
     "RecepcionDireccion" , 
-    "RecepcionHora"
+    "RecepcionHora" , 
+    "ReligiosoNombre"
 ];
 
 // campos hidden
@@ -786,6 +787,8 @@ function handleSuccess( json , textStatus , xhr , tipoReq ) {
                     // Input normal
                     $ctrl.val(valor);
                 });
+                const gFecha = moment( data.Fecha ).format('YYYY-MM-DD');
+                $('#'+xIdForm+' #Fecha').val( gFecha );
                 toastr["success"]( json.msg.texto , 'Correcto' );
 
                 $(`#${xIdForm} #laFoto`).attr( 'src' , `${URL_API}${data.Portada}` );
@@ -1258,6 +1261,14 @@ function renderFormInTab( rowData , formId ) {
                 `;
             break;
             // -----------------------------------------
+            case 'ReligiosoNombre':
+                htmlForm += `
+                <div class="col-md-6">
+                    <label class="form-label" >Nombre iglesia:</label>
+                    <input type="text" class="form-control" name="${field}" id="${field}" value="${rowData[field] || defaultValues[field] || ""}" placeholder="Iglesia..." />
+                </div>
+                `;
+            break;
             // -----------------------------------------
             // -----------------------------------------
             // -----------------------------------------

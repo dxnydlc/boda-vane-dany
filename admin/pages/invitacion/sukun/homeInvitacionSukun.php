@@ -59,7 +59,7 @@
         <p id="txtFecha2" class="text-gray-600 font-serif text-lg md:text-xl mb-4 z-10">19 de noviembre de 2027</p>
         
         <p class="text-[#0b1a30] text-xs md:text-sm tracking-[0.2em] uppercase mb-10 z-10 font-semibold">
-            Les Invitamos Cordialmente
+            Queremos compartir contigo.
         </p>
         
         <!-- Botón Abrir -->
@@ -117,10 +117,48 @@
 <section>
     <div class="container">
         <div class="card transparente " >
-            <img src="..." class="card-img-top" alt="...">
             <div class="card-body">
-                <h5 class="card-title">Card title</h5>
-                <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card’s content.</p>
+                <h2 class="card-title text-center fuente-normal ">Información de la ceremonia</h2>
+
+                <div class=" row " style="margin-bottom:15px;" >
+                    <div id="wrapper_papa_novio" class=" col-lg-6 col-md-6 " ></div>
+                    <!-- ./col -->
+                    <div id="wrapper_papa_novia" class=" col-lg-6 col-md-6 " style="border-left: 1px silver solid" ></div>
+                    <!-- ./col -->
+                </div>
+                <!-- ./row -->
+
+                <div class=" row " style="margin-bottom:15px;" >
+                    <div class=" col-lg-4 col-md-4 " ></div>
+                    <!-- ./col -->
+                    <div class=" col-lg-4 col-md-4 " >
+                        <p class=" text-center " >
+                            Con inmensa alegría anunciamos<br/>
+                            la boda de <span id="lblNovios76" >Maximiliano y Isabella</span>
+                        </p>
+                    </div>
+                    <!-- ./col -->
+                    <div class=" col-lg-4 col-md-4 " ></div>
+                    <!-- ./col -->
+                </div>
+                <!-- ./row -->
+
+
+
+                <div class=" row " style="margin-bottom:15px;" >
+                    <div class=" col-lg-4 col-md-4 " ></div>
+                    <!-- ./col -->
+                    <div class=" col-lg-4 col-md-4 " >
+                        <p class=" text-center " id="lblRegilioso1" >CEREMONIA RELIGIOSA</p>
+                    </div>
+                    <!-- ./col -->
+                    <div class=" col-lg-4 col-md-4 " ></div>
+                    <!-- ./col -->
+                </div>
+                <!-- ./row -->
+
+                
+                <p class="card-text" >Some quick example text to build on the card title and make up the bulk of the card’s content.</p>
                 <a href="#" class="btn btn-primary">Go somewhere</a>
             </div>
         </div>
@@ -260,7 +298,6 @@
 
 <!-- Invitado -->
 
-ssdssd
 <section class="wpo-contact-section section-padding pt-0" id="rsvp" style="display:none;" >
     <div class="container-fluid">
         <div class="contact-wrap">

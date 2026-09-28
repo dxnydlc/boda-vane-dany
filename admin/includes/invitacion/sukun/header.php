@@ -141,9 +141,13 @@
         }
         .transparente {
         /* 255, 255, 255 es el color blanco. El 0.9 es la opacidad */
-        background-color: rgba(255, 255, 255, 0.8); 
+        background-color: rgba(255, 255, 255, 0.6); 
         }
 
+        .fuente-normal{
+            font-family: "Mulish", sans-serif;
+            font-size: revert;
+        }
 
 
 
@@ -151,97 +155,71 @@
             --navy-blue: #0b1a30;
             --card-bg: #fdfcf8;
         }
-        /* Contenedor principal de la superposición */
+        /* =========================================
+        1. BLOQUEO DE SCROLL
+        ========================================= */
+        body.bloquear-scroll {
+        overflow: hidden;
+        }
+
+        /* =========================================
+        2. CAPA SUPERPUESTA (Tu ID: intro-overlay)
+        ========================================= */
         #intro-overlay {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background-color: var(--navy-blue);
-            z-index: 50;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            perspective: 1200px;
-            transition: background-color 0.8s ease;
-
-            /* AQUÍ APLICAMOS EL FONDO SOLO A LA CAPA DE ENTRADA */
-            background-image: url('<?php echo $URL_ASSETS ?>fondo-bonito.jpeg'); 
-            background-size: cover;
-            background-position: center;
-            background-repeat: no-repeat;
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100vw;
+        height: 100vh;
+        z-index: 9999;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        /* Fondo floral aplicado solo aquí */
+        background-image: url('<?php echo $API ?>img/fondo-bonito.jpeg');
+        background-size: cover;
+        background-position: center;
+        background-repeat: no-repeat;
         }
 
+        /* =========================================
+        3. ESTILOS DE TU TARJETA (Efecto Cristal)
+        ========================================= */
+        #invitation-card {
+        background-color: rgba(255, 255, 255, 0.85); /* Blanco al 85% */
+        backdrop-filter: blur(8px); /* Desenfoque del fondo trasero */
+        -webkit-backdrop-filter: blur(8px); /* Para compatibilidad con Safari */
+        }
+
+        /* =========================================
+        4. ANIMACIÓN DE EXPLOSIÓN
+        ========================================= */
+        .explode {
+        animation: explosion 0.8s forwards ease-in-out;
+        }
+
+        @keyframes explosion {
+        0% { transform: scale(1); opacity: 1; filter: blur(0px); }
+        100% { transform: scale(1.3); opacity: 0; filter: blur(15px); pointer-events: none; }
+        }
+
+        /* =========================================
+        5. PARTÍCULAS (Nieve/Estrellas)
+        ========================================= */
         .particle {
-            position: absolute;
-            background: white;
-            border-radius: 50%;
-            pointer-events: none;
-            animation: fall linear infinite;
-        }
-
-        /* Variación para que algunas parezcan estrellas */
-        .particle.star {
-            background: transparent;
-            width: 0;
-            height: 0;
-            border-left: 2px solid transparent;
-            border-right: 2px solid transparent;
-            border-bottom: 4px solid #fff;
-            transform: rotate(35deg);
-        }
-        .particle.star::before {
-            content: '';
-            position: absolute;
-            border-left: 2px solid transparent;
-            border-right: 2px solid transparent;
-            border-top: 4px solid #fff;
-            top: -2px;
-            left: -2px;
-            transform: rotate(-70deg);
+        position: absolute;
+        top: -10px;
+        background-color: rgba(100, 150, 200, 0.6); /* Azul suave */
+        border-radius: 50%;
+        animation: fall linear infinite;
+        /* El z-index 0 asegura que caigan detrás del texto/botones (z-10) pero visibles en el div */
+        z-index: 0; 
         }
 
         @keyframes fall {
-            0% { 
-                transform: translateY(-5vh) translateX(0px) rotate(0deg); 
-                opacity: 0.8;
-            }
-            100% { 
-                transform: translateY(105vh) translateX(25px) rotate(360deg); 
-                opacity: 0;
-            }
+        to {
+            transform: translateY(100vh);
         }
-
-        .explode-transition {
-            animation: explodeOut 0.9s cubic-bezier(0.25, 1, 0.5, 1) forwards;
-        }
-
-        @keyframes explodeOut {
-            0% {
-                transform: scale(1);
-                filter: blur(0px);
-                opacity: 1;
-            }
-            100% {
-                transform: scale(1.8) translateZ(150px);
-                filter: blur(20px);
-                opacity: 0;
-                visibility: hidden;
-            }
-        }
-
-        /* Estilos de la tarjeta */
-        .card-container {
-            background-color: var(--card-bg);
-            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.6);
-            transition: transform 0.3s ease;
-        }
-
-        /* Decoración floral (usaremos SVGs para garantizar que siempre se vean increíbles y no haya enlaces rotos) */
-        .floral-corner {
-            opacity: 0.9;
-            pointer-events: none;
         }
 
 

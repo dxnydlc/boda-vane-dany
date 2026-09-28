@@ -51,6 +51,9 @@ export class BodaModel {
     RecepcionHora : string = ''
 
     @Column()
+    ReligiosoNombre : string = ''
+
+    @Column()
     DniUsuarioMod! : string
     
     @Column()
