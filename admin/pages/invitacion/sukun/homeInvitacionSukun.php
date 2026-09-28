@@ -56,9 +56,9 @@
         </div>
 
         <!-- Detalles -->
-        <p id="txtFecha2" class="text-gray-600 font-serif text-lg md:text-xl mb-4 z-10">19 de noviembre de 2027</p>
+        <p id="txtFecha2" class=" fira-code text-gray-600 font-serif text-lg md:text-xl mb-4 z-10">19 de noviembre de 2027</p>
         
-        <p class="text-[#0b1a30] text-xs md:text-sm tracking-[0.2em] uppercase mb-10 z-10 font-semibold">
+        <p class=" fira-code text-[#0b1a30] text-xs md:text-sm tracking-[0.2em] uppercase mb-10 z-10 font-semibold">
             Queremos compartir contigo.
         </p>
         
@@ -118,12 +118,15 @@
     <div class="container">
         <div class="card transparente " >
             <div class="card-body">
-                <h2 class="card-title text-center fuente-normal ">Información de la ceremonia</h2>
 
-                <div class=" row " style="margin-bottom:15px;" >
-                    <div id="wrapper_papa_novio" class=" col-lg-6 col-md-6 " ></div>
+                <div class=" row " style="margin-bottom: 20px;" >
+                    <div class=" col-lg-12 col-md-12 " id="txtPrologo" ></div>
                     <!-- ./col -->
-                    <div id="wrapper_papa_novia" class=" col-lg-6 col-md-6 " style="border-left: 1px silver solid" ></div>
+                </div>
+                <!-- ./row -->
+
+                <div class=" row " style="margin-bottom: 20px;" >
+                    <div class=" col-lg-12 col-md-12 " id="txtPadrinos" ></div>
                     <!-- ./col -->
                 </div>
                 <!-- ./row -->
@@ -131,17 +134,24 @@
                 <div class=" row " style="margin-bottom:15px;" >
                     <div class=" col-lg-4 col-md-4 " ></div>
                     <!-- ./col -->
-                    <div class=" col-lg-4 col-md-4 " >
-                        <p class=" text-center " >
-                            Hola <span id="lblInitado2" ></span><br/>Con inmensa alegría anunciamos<br/>
-                            la boda de <span id="lblNovios76" >Maximiliano y Isabella</span>
-                        </p>
+                    <div class=" col-lg-4 col-md-4 " style="position:relative;" id="circulo_fecha" >
+
+                    <div id="dia1"  ></div>
+                    <div id="dia2"  ></div>
+                    <div id="mes1"  ></div>
+                    <div id="anio1" ></div>
+
+                        <img src="<?php echo $API; ?>img/date-bg.png" alt="" >
                     </div>
                     <!-- ./col -->
                     <div class=" col-lg-4 col-md-4 " ></div>
                     <!-- ./col -->
                 </div>
                 <!-- ./row -->
+
+                <h2 class="card-title text-center fuente-normal ">Información de la ceremonia</h2>
+
+                
 
 
 
@@ -163,15 +173,7 @@
                     <!-- ./col -->
                     <div class=" col-lg-6 col-md-6 " >
                         <div class="mapa-wrapper">
-                            <iframe id="frmMapa1"
-                            width="100%" 
-                            height="350" 
-                            style="border:0;" 
-                            loading="lazy" 
-                            allowfullscreen 
-                            referrerpolicy="no-referrer-when-downgrade" 
-                            src="https://www.google.com/maps/embed/v1/place?key=<?php echo $MAPS_KEY ?>&q=Iglesia+de+San+Marcelo">
-                            </iframe>
+                            
                         </div>
                     </div>
                     <!-- ./col -->
@@ -202,19 +204,26 @@
                     <!-- ./col -->
                     <div class=" col-lg-6 col-md-6 " >
                         <div class="mapa-wrapper">
-                            <iframe id="frmMapa2"
-                            width="100%" 
-                            height="350" 
-                            style="border:0;" 
-                            loading="lazy" 
-                            allowfullscreen 
-                            referrerpolicy="no-referrer-when-downgrade" 
-                            src="https://www.google.com/maps/embed/v1/place?key=<?php echo $MAPS_KEY ?>&q=Iglesia+de+San+Marcelo">
-                            </iframe>
+                            
                         </div>
                     </div>
                     <!-- ./col -->
                     <div class=" col-lg-3 col-md-3 " ></div>
+                    <!-- ./col -->
+                </div>
+                <!-- ./row -->
+
+
+                <div class=" row " style="margin-bottom:15px;" >
+                    <div class=" col-lg-4 col-md-4 " ></div>
+                    <!-- ./col -->
+                    <div class=" col-lg-4 col-md-4 " >
+                        <p class=" text-center fira-code " >
+                            <span id="lblInitado2" ></span>
+                        </p>
+                    </div>
+                    <!-- ./col -->
+                    <div class=" col-lg-4 col-md-4 " ></div>
                     <!-- ./col -->
                 </div>
                 <!-- ./row -->
@@ -259,6 +268,95 @@
         </div>
     </div>
 </section>
+
+
+<!-- Invitado -->
+<section class="wpo-contact-section section-padding pt-0" id="rsvp" style="display:none;" >
+    <div class="container-fluid">
+        <div class="contact-wrap">
+            <div class="row">
+                <div class="col col-xl-8 col-lg-7 col-md-12 col-12">
+                    <div class="contact-img-wrap">
+                        <div class="contact-img wow fadeInLeftSlow" data-wow-duration="1700ms">
+                            <img id="imgRegistro" src="<?php echo $URL_ASSETS ?>assets/images/rsvp/img-1.png" alt="" style="wdith:901px;" />
+                        </div>
+                        <div class="back-shape">
+                            <svg viewBox="0 0 693 954" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <path
+                                    d="M15 346.5C15 163.418 163.418 15 346.5 15C529.582 15 678 163.418 678 346.5V939H15V346.5Z"
+                                    stroke="#9F7B59" stroke-width="30" />
+                                <rect x="50" y="168" width="30" height="765" fill="#9F7B59" />
+                                <rect x="100" y="106" width="30" height="827" fill="#9F7B59" />
+                                <rect x="150" y="67" width="30" height="866" fill="#9F7B59" />
+                                <rect x="200" y="45" width="30" height="879" fill="#9F7B59" />
+                                <rect x="250" y="23" width="30" height="910" fill="#9F7B59" />
+                                <rect x="300" y="14" width="30" height="919" fill="#9F7B59" />
+                                <rect x="350" y="14" width="30" height="919" fill="#9F7B59" />
+                                <rect x="400" y="14" width="30" height="919" fill="#9F7B59" />
+                                <rect x="450" y="34" width="30" height="899" fill="#9F7B59" />
+                                <rect x="500" y="67" width="30" height="866" fill="#9F7B59" />
+                                <rect x="550" y="100" width="30" height="833" fill="#9F7B59" />
+                                <rect x="600" y="148" width="30" height="785" fill="#9F7B59" />
+                            </svg>
+                        </div>
+                    </div>
+                </div>
+                <div class="col col-xl-4 col-lg-5 col-md-12 col-12">
+                    <div class="wpo-contact-section-wrapper wow fadeInRightSlow" data-wow-duration="1700ms">
+                        <div class="wpo-contact-form-area">
+                            <div class="wpo-section-title">
+                                <h2 class=" fira-code " >¿Tienes un invitado?</h2>
+                            </div>
+                            <form method="post" class="contact-validation-active" id="contact-form-main" autocomplete="off" >
+
+                                <input type="hidden" id="id" name="id" value="0" />
+	                            <input type="hidden" id="uu_id" name="uu_id" value="" />
+                                <input type="hidden" id="Foto" name="Foto" value="img/512x512.png" />
+
+                                <div>
+                                    <input type="text" class="form-control" name="Nombre" id="Nombre" placeholder="Nombre" />
+                                </div>
+                                <div>
+                                    <input type="text" class="form-control" name="phone" id="phone" placeholder="Celular">
+                                </div>
+                                <div class="radio-buttons">
+                                    <p>
+                                        <input type="radio" id="attend" name="Estado" value="confirmado" >
+                                        <label for="attend">Si asistirá</label>
+                                    </p>
+                                    <p>
+                                        <input type="radio" id="not" name="Estado" value="activo" >
+                                        <label for="not">Aún va a confirmar</label>
+                                    </p>
+                                </div>
+
+                                <div class="submit-area">
+                                    <button id="btnConfirmaInvitado" type="button" class="theme-btn" >Confirmar</button>
+                                    <div id="c-loader">
+                                        <i class="ti-reload"></i>
+                                    </div>
+                                </div>
+                                <div class="clearfix error-handling-messages">
+                                    <div id="success">Gracias</div>
+                                    <div id="error"> Error occurred while sending email. Please try again later.
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="shape-1 wow fadeInLeftSlow" data-wow-duration="2000ms"><img
+                    src="<?php echo $URL_ASSETS ?>assets/images/rsvp/left-shape.png" alt=""></div>
+            <div class="shape-2 wow fadeInRightSlow" data-wow-duration="2000ms"><img
+                    src="<?php echo $URL_ASSETS ?>assets/images/rsvp/right-shape.png" alt=""></div>
+        </div>
+    </div>
+    <div class="bottom-text marquee">
+        <h2>Te esperamos para celebrar nuestro día.</h2>
+    </div>
+</section>
+<!-- Invitado -->
 
 
 <!-- start wpo-wedding-date -->
@@ -391,94 +489,7 @@
 
 
 
-<!-- Invitado -->
 
-<section class="wpo-contact-section section-padding pt-0" id="rsvp" style="display:none;" >
-    <div class="container-fluid">
-        <div class="contact-wrap">
-            <div class="row">
-                <div class="col col-xl-8 col-lg-7 col-md-12 col-12">
-                    <div class="contact-img-wrap">
-                        <div class="contact-img wow fadeInLeftSlow" data-wow-duration="1700ms">
-                            <img id="imgRegistro" src="<?php echo $URL_ASSETS ?>assets/images/rsvp/img-1.png" alt="" style="wdith:901px;" />
-                        </div>
-                        <div class="back-shape">
-                            <svg viewBox="0 0 693 954" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                <path
-                                    d="M15 346.5C15 163.418 163.418 15 346.5 15C529.582 15 678 163.418 678 346.5V939H15V346.5Z"
-                                    stroke="#9F7B59" stroke-width="30" />
-                                <rect x="50" y="168" width="30" height="765" fill="#9F7B59" />
-                                <rect x="100" y="106" width="30" height="827" fill="#9F7B59" />
-                                <rect x="150" y="67" width="30" height="866" fill="#9F7B59" />
-                                <rect x="200" y="45" width="30" height="879" fill="#9F7B59" />
-                                <rect x="250" y="23" width="30" height="910" fill="#9F7B59" />
-                                <rect x="300" y="14" width="30" height="919" fill="#9F7B59" />
-                                <rect x="350" y="14" width="30" height="919" fill="#9F7B59" />
-                                <rect x="400" y="14" width="30" height="919" fill="#9F7B59" />
-                                <rect x="450" y="34" width="30" height="899" fill="#9F7B59" />
-                                <rect x="500" y="67" width="30" height="866" fill="#9F7B59" />
-                                <rect x="550" y="100" width="30" height="833" fill="#9F7B59" />
-                                <rect x="600" y="148" width="30" height="785" fill="#9F7B59" />
-                            </svg>
-                        </div>
-                    </div>
-                </div>
-                <div class="col col-xl-4 col-lg-5 col-md-12 col-12">
-                    <div class="wpo-contact-section-wrapper wow fadeInRightSlow" data-wow-duration="1700ms">
-                        <div class="wpo-contact-form-area">
-                            <div class="wpo-section-title">
-                                <h2>¿Tienes un invitado?</h2>
-                            </div>
-                            <form method="post" class="contact-validation-active" id="contact-form-main" autocomplete="off" >
-
-                                <input type="hidden" id="id" name="id" value="0" />
-	                            <input type="hidden" id="uu_id" name="uu_id" value="" />
-                                <input type="hidden" id="Foto" name="Foto" value="img/512x512.png" />
-
-                                <div>
-                                    <input type="text" class="form-control" name="Nombre" id="Nombre" placeholder="Nombre" />
-                                </div>
-                                <div>
-                                    <input type="text" class="form-control" name="phone" id="phone" placeholder="Celular">
-                                </div>
-                                <div class="radio-buttons">
-                                    <p>
-                                        <input type="radio" id="attend" name="Estado" value="confirmado" >
-                                        <label for="attend">Si asistirá</label>
-                                    </p>
-                                    <p>
-                                        <input type="radio" id="not" name="Estado" value="activo" >
-                                        <label for="not">Aún va a confirmar</label>
-                                    </p>
-                                </div>
-
-                                <div class="submit-area">
-                                    <button id="btnConfirmaInvitado" type="button" class="theme-btn" >Confirmar</button>
-                                    <div id="c-loader">
-                                        <i class="ti-reload"></i>
-                                    </div>
-                                </div>
-                                <div class="clearfix error-handling-messages">
-                                    <div id="success">Gracias</div>
-                                    <div id="error"> Error occurred while sending email. Please try again later.
-                                    </div>
-                                </div>
-                            </form>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="shape-1 wow fadeInLeftSlow" data-wow-duration="2000ms"><img
-                    src="<?php echo $URL_ASSETS ?>assets/images/rsvp/left-shape.png" alt=""></div>
-            <div class="shape-2 wow fadeInRightSlow" data-wow-duration="2000ms"><img
-                    src="<?php echo $URL_ASSETS ?>assets/images/rsvp/right-shape.png" alt=""></div>
-        </div>
-    </div>
-    <div class="bottom-text marquee">
-        <h2>Te esperamos para celebrar nuestro día.</h2>
-    </div>
-</section>
-<!-- end of wpo-contact-section -->
 
 
 
@@ -493,8 +504,6 @@
         </div>
         <div class="wpo-event-main">
             <div class="event-description">
-                <p id="lblFechaP1" >Monday, 12 Apr. 2024, 2.00 PM – 11.00 PM</p>
-                <p id="lblDireP1" >4517 Washington Ave. Manchester, Kentucky 39495</p>
             </div>
             <div class="wpo-event-wrap">
                 <div id="wrapperPrograma" class="wpo-event-inner" >
@@ -559,12 +568,20 @@
 
 <!-- Regalos -->
 
-<section class="wpo-couple-section section-padding pt-2" id="couple">
+<section class="wpo-couple-section section-padding pt-2" id="couple" >
     <div class="container">
         <div class="wpo-section-title">
-            <h4 class="poort-text poort-in-right" >Código de vestimenta</h4>
         </div>
         <div class="wpo-event-main">
+
+            <div class=" card transparente " >
+                <div class="card-body">
+                    <h4 class=" poort-text poort-in-right fira-code " >El mejor regalo es tu presencia</h4>
+                    <p class="fira-code">Nos sentimos bendecidos por su compañia, los obsequios son recibidos con gratitud y agradecemos tu contibución a través del deposito de cuenta destinado a cumplir nuestros sueños.</p>
+                    <p class="fira-code">Así mismo cualquier presente que quiera hacer llegar, lo puede dejar en la dirección: Los paltos 293-295 Ubr. Ermitaño, Independencia</p>
+                </div>
+            </div>
+
             <!-- Contenedor del Regalo -->
             <div class="text-center">
                 <!-- Puedes cambiar el src por la ruta de tu propia imagen o SVG -->
@@ -680,3 +697,60 @@
     </div>
   </div>
 </div>
+
+
+
+
+<!-- Estructura del Modal de Bootstrap 5 -->
+<div class="modal fade" id="modalMapa1" tabindex="-1" aria-labelledby="mapaModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="mapaModalLabel" >Mapa 1</h5> 
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+            </div>
+            <div class="modal-body p-0">
+                <iframe id="frmMapa1"
+                    width="100%" 
+                    height="350" 
+                    style="border:0;" 
+                    loading="lazy" 
+                    allowfullscreen 
+                    referrerpolicy="no-referrer-when-downgrade" 
+                    src="https://www.google.com/maps/embed/v1/place?key=<?php echo $MAPS_KEY ?>&q=Iglesia+de+San+Marcelo">
+                </iframe>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+
+
+<!-- Estructura del Modal de Bootstrap 5 -->
+<div class="modal fade" id="modalMapa2" tabindex="-1" aria-labelledby="mapaModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="mapaModalLabel" >Mapa 1</h5> 
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+            </div>
+            <div class="modal-body p-0">
+                <iframe id="frmMapa2"
+                    width="100%" 
+                    height="350" 
+                    style="border:0;" 
+                    loading="lazy" 
+                    allowfullscreen 
+                    referrerpolicy="no-referrer-when-downgrade" 
+                    src="https://www.google.com/maps/embed/v1/place?key=<?php echo $MAPS_KEY ?>&q=Iglesia+de+San+Marcelo">
+                </iframe>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+

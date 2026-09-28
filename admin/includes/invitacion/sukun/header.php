@@ -57,14 +57,40 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&family=Montserrat:wght@300;400;500;600&display=swap" rel="stylesheet">
     
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Source+Code+Pro:ital,wght@0,200..900;1,200..900&display=swap" rel="stylesheet">
 
     <!-- Swiper CSS & JS -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css" />
     <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@300..700&family=Source+Code+Pro:ital,wght@0,200..900;1,200..900&display=swap" rel="stylesheet">
     
     
     <!-- <?php echo $URL_ASSETS ?>assets/images/person/fondo-bonito.jpeg -->
     <style>
+
+
+        .source-code-pro {
+            font-family         : "Source Code Pro", monospace;
+            font-optical-sizing : auto;
+            font-weight         : <weight>;
+            font-style          : normal;
+        }
+
+        
+        .fira-code {
+            font-family         : "Fira Code", monospace;
+            font-optical-sizing : auto;
+            font-weight         : normal    ;
+            font-style          : normal;
+            font-size           : 12px;
+            color : 666;
+        }
+
         /* Código base (Escritorio / Pantallas grandes) */
         body {
         position: relative;
@@ -281,6 +307,39 @@
         .animating {
             animation: shake 0.4s;
             animation-iteration-count: 2; /* Vibra 2 veces antes de abrir */
+        }
+
+        #circulo_fecha #dia1{
+            position : absolute;
+            top: 13px;
+            left: 101px;
+        }
+        #circulo_fecha #dia1 p{
+            font-size: 28px !important;
+        }
+        #circulo_fecha #dia2{
+            position : absolute;
+            top: 17px;
+            left: 103px;
+        }
+        #circulo_fecha #dia2 p {
+            font-size: 88px !important;
+        }
+        #circulo_fecha #mes1{
+            position : absolute;
+            top: 131px;
+            left: 93px;
+        }
+        #circulo_fecha #mes1 p {
+            font-size: 32px !important;
+        }
+        #circulo_fecha #anio1{
+            position : absolute;
+            bottom: 45px;
+            left: 132px;
+        }
+        #circulo_fecha #anio1 p {
+            font-size: 24px !important;
         }
 
         

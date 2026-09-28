@@ -398,6 +398,11 @@ let optsLangDatatable = {
         });
         /* ------------------------------------------------------------- */
         /* ------------------------------------------------------------- */
+        $(document).delegate('.delData', 'click', function(event) {
+            event.preventDefault();
+            let id = $(this).data('id');
+            $('#modalMapa1')
+        });
         /* ------------------------------------------------------------- */
         /* ------------------------------------------------------------- */
         /* ------------------------------------------------------------- */
@@ -739,9 +744,9 @@ function handleSuccess( json , textStatus , xhr , tipoReq ) {
                 // Fotos Boda
                 let dataFotos       = json.fotos;
                 let NroInvitados    = dataBoda.NComp;
-                let textoInvitado   = NroInvitados = 0 ? `tu entrada es personal,` : `Tienes una entrada adicional`;
+                let textoInvitado   = NroInvitados = 0 ? `tienes una entrada es personal,` : `Tienes una entrada <u>adicional</u>`;
 
-                $('#lblInitado2').html( `<b>${data.Nombre}</b> ${textoInvitado}` );
+                $('#lblInitado2').html( `Hola <b>${data.Nombre}</b> ${textoInvitado}` );
 
                 // Boda
                 let cHora               = dataBoda.Hora;
@@ -749,12 +754,13 @@ function handleSuccess( json , textStatus , xhr , tipoReq ) {
                 let fechaBoda         = moment(dataBoda.Fecha ).format('dddd D [de] MMMM [del] YYYY');
                 varDump( `>cHora: ${cHora}`);
                 $('#lblRegilioso1').html(`
-                    <p class=" text-center fuente-normal" >CEREMONIA ${dataBoda.Nombre.toUpperCase()}<br/>
+                    <p class=" fira-code text-center fuente-normal" >CEREMONIA ${dataBoda.Nombre.toUpperCase()}<br/>
                     ${dataBoda.ReligiosoNombre}<br/>
-                    a las</p>
+                    ${dataBoda.Direccion} <a href="#" id="abrirMapa1" data-bs-toggle="modal" data-bs-target="#modalMapa1"  >📍 Ver Ubicación</a>
                     <br/>
-                    <h2 class="fuente-normal text-center" >${moment(dataBoda.Hora, 'HH:mm:ss').format('HH:mm')}</h2>
-                    <p class=" text-center fuente-normal" >${fechaBoda}</p>
+                    Hora:</p>
+                    <br/>
+                    <h2 class=" fira-code fuente-normal text-center" >${moment(dataBoda.Hora, 'HH:mm:ss').format('HH:mm')}</h2>
                     <br/>
                 `);
 
@@ -792,10 +798,13 @@ function handleSuccess( json , textStatus , xhr , tipoReq ) {
 
 
                 let htmlRecep = `
-                <h2 class=" fuente-normal text-center " >INFO DE LA RECEPCIÓN</h2>
-                <p class=" text-center fuente-normal" >${dataBoda.RecepcionNombre}</p>
-                <h2 class="fuente-normal text-center" >${moment(dataBoda.RecepcionHora, 'HH:mm:ss').format('HH:mm')}</h2>
-                <p class=" text-center fuente-normal" >${fechaRecep}</p>
+                <h2 class=" fira-code fuente-normal text-center " >RECEPCIÓN</h2>
+                <p class=" fira-code text-center fuente-normal" >
+                ${dataBoda.RecepcionNombre}<br/>
+                ${dataBoda.RecepcionDireccion} <a href="#" id="abrirMapa1" data-bs-toggle="modal" data-bs-target="#modalMapa2"  >📍 Ver Ubicación</a>
+                </p>
+                <h2 class=" fira-code fuente-normal text-center" >${moment(dataBoda.RecepcionHora, 'HH:mm:ss').format('HH:mm')}</h2>
+
 
                 <a href="${urlCalendario}" target="_blank" class="btn-agendar" style="margin:0 auto;display:block;width:185px;" >
                 Agregar a Calendar
@@ -835,6 +844,30 @@ function handleSuccess( json , textStatus , xhr , tipoReq ) {
                 $('#lblNovios76').html(`${Novia} & ${Novio}`);
 
                 // wrapper_papa
+                $('#txtPrologo').html( `<p class=" fira-code " >${dataBoda.Prologo}</p>` );
+
+                let xPadrinos       = dataBoda.Padrinos;
+                let arPadrinos      = xPadrinos.split(',')
+                $('#txtPadrinos').html( `
+                    <p class=" fira-code " >Nuestos padrinos:</p>
+                    <ul>
+                        <li><p class=" fira-code " >${arPadrinos[0]}</p></li>
+                        <li><p class=" fira-code " >${arPadrinos[1]}</p></li>
+                    </ul>
+                ` );
+
+                // moment(dataBoda.Fecha ).format('dddd D [de] MMMM [del] YYYY');
+                let dia1        = moment(dataBoda.Fecha ).format('dddd');
+                let dia2        = moment(dataBoda.Fecha ).format('D');
+                let mes1        = moment(dataBoda.Fecha ).format('MMMM');
+                let anio1       = moment(dataBoda.Fecha ).format('YYYY');
+                
+                $('#dia1').html(`<p class=" fira-code " >${dia1}</p>`);
+                $('#dia2').html(`<p class=" fira-code " >${dia2}</p>`);
+                $('#mes1').html(`<p class=" fira-code " >${mes1}</p>`);
+                $('#anio1').html(`<p class=" fira-code " >${anio1}</p>`);
+
+                /**
                 $('#wrapper_papa_novio').html(`<p class=" text-center " >
                     <small>Sr. y Sra.</small><br/>
                     ${Padre_novio}.<br/>
@@ -846,12 +879,13 @@ function handleSuccess( json , textStatus , xhr , tipoReq ) {
                     ${Padre_novia}.<br/>
                     ${Madre_novia}.
                 </p>`);
+                /**/
 
                 // Boda : 
                 fechaBoda               = moment(dataBoda.Fecha).format('YYYY-MM-DD');
                 $('#lblFecha1').html(`${moment(dataBoda.Fecha).format('DD.MM.YYYY')}`);
 
-                $('#txtFecha2').html(`${moment(dataBoda.Fecha).format('DD.MM.YYYY')}`);
+                $('#txtFecha2').html(`${fechaRecep}`);
 
                 $('#clock').countdown( fechaBoda , function (event) {
                     var $this = $(this).html(event.strftime(''
@@ -1118,15 +1152,15 @@ function handleSuccess( json , textStatus , xhr , tipoReq ) {
                 const textoFormateado           = fecha.format('D [de] MMMM [del] YYYY');
                 let textoMapa                   = dataBoda.MapaLink;
                 let arMapa                      = textoMapa.split(',');
-                $('#lblFechaP1').html( textoFormateado );
-                $('#lblDireP1').html( dataBoda.Direccion+` <a id="lblVerMapa" href="#" 
+                //$('#lblFechaP1').html( textoFormateado );
+                /*$('#lblDireP1').html( dataBoda.Direccion+` <a id="lblVerMapa" href="#" 
                     class="btn btn-outline-primary" 
                     data-bs-toggle="modal" 
                     data-bs-target="#mapaModal" 
                     data-lat="${arMapa[0]}" 
                     data-lng="${arMapa[1]}">
                     📍 Ver Ubicación
-                    </a>` );
+                    </a>` );*/
 
                 let htmlPrograma                = ``;
                 let dataPrograma                = json.programa;
