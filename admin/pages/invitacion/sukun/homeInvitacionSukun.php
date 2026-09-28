@@ -1,4 +1,76 @@
 
+
+
+<!-- CAPA SUPERPUESTA DE LA INVITACIÓN -->
+<div id="intro-overlay">
+    <!-- Contenedor para las partículas de nieve/estrellas -->
+    <div id="particles-container" class="absolute inset-0 w-full h-full pointer-events-none overflow-hidden"></div>
+
+    <!-- Tarjeta de Invitación Central -->
+    <div id="invitation-card" class="card-container relative w-[90%] max-w-lg rounded-xl flex flex-col items-center p-10 md:p-14 text-center z-10 border border-gray-100">
+        
+        <!-- Flor Izquierda -->
+        <svg class="floral-corner absolute -left-12 top-1/2 -translate-y-1/2 w-32 md:w-40 h-auto text-blue-400 drop-shadow-md" viewBox="0 0 100 200" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+            <path d="M50 100 Q10 50 30 10 Q60 40 50 100 Z" fill="#60a5fa" opacity="0.8"/>
+            <path d="M50 100 Q0 120 10 170 Q40 140 50 100 Z" fill="#3b82f6" opacity="0.7"/>
+            <path d="M50 100 Q10 90 5 130 Q30 120 50 100 Z" fill="#2563eb" opacity="0.6"/>
+            <circle cx="25" cy="80" r="4" fill="#93c5fd" />
+            <circle cx="35" cy="130" r="3" fill="#93c5fd" />
+            <circle cx="15" cy="110" r="2.5" fill="#bfdbfe" />
+            <!-- Tallo -->
+            <path d="M50 100 Q40 150 45 200" stroke="#1e3a8a" stroke-width="2" fill="none" opacity="0.5"/>
+        </svg>
+        
+        <!-- Flor Derecha (espejada) -->
+        <svg class="floral-corner absolute -right-12 top-1/2 -translate-y-1/2 w-32 md:w-40 h-auto text-blue-400 drop-shadow-md transform scale-x-[-1]" viewBox="0 0 100 200" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+            <path d="M50 100 Q10 50 30 10 Q60 40 50 100 Z" fill="#60a5fa" opacity="0.8"/>
+            <path d="M50 100 Q0 120 10 170 Q40 140 50 100 Z" fill="#3b82f6" opacity="0.7"/>
+            <path d="M50 100 Q10 90 5 130 Q30 120 50 100 Z" fill="#2563eb" opacity="0.6"/>
+            <circle cx="25" cy="80" r="4" fill="#93c5fd" />
+            <circle cx="35" cy="130" r="3" fill="#93c5fd" />
+            <circle cx="15" cy="110" r="2.5" fill="#bfdbfe" />
+            <path d="M50 100 Q40 150 45 200" stroke="#1e3a8a" stroke-width="2" fill="none" opacity="0.5"/>
+        </svg>
+
+        <!-- Círculo Azul Superior -->
+        <div class="absolute -top-8 left-1/2 transform -translate-x-1/2 w-16 h-16 bg-[#0b1a30] rounded-full flex items-center justify-center shadow-lg border-4 border-[#fdfcf8] z-20">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-white" viewBox="0 0 20 20" fill="currentColor">
+                <path fill-rule="evenodd" d="M3.172 5.172a4 4 0 015.656 0L10 6.343l1.172-1.171a4 4 0 115.656 5.656L10 17.657l-6.828-6.829a4 4 0 010-5.656z" clip-rule="evenodd" />
+            </svg>
+        </div>
+
+        <!-- Nombres -->
+        <h1 class="font-serif text-4xl md:text-5xl text-[#0b1a30] mt-4 mb-2 relative z-10">
+            <span id="txtNovio2" >-</span><br>
+            <span class="text-2xl italic font-normal text-gray-500">&</span><br>
+            <span id="txtNovia2" >-</span>
+        </h1>
+        
+        <!-- Separador Decorativo -->
+        <div class="flex items-center justify-center w-full my-4 z-10 opacity-70">
+            <div class="h-[1px] bg-gray-400 w-12"></div>
+            <div class="mx-3 text-[#0b1a30]">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
+            </div>
+            <div class="h-[1px] bg-gray-400 w-12"></div>
+        </div>
+
+        <!-- Detalles -->
+        <p id="txtFecha2" class="text-gray-600 font-serif text-lg md:text-xl mb-4 z-10">19 de noviembre de 2027</p>
+        
+        <p class="text-[#0b1a30] text-xs md:text-sm tracking-[0.2em] uppercase mb-10 z-10 font-semibold">
+            Les Invitamos Cordialmente
+        </p>
+        
+        <!-- Botón Abrir -->
+        <button id="btn-abrir" class="bg-[#0b1a30] hover:bg-[#1a355b] text-white py-3 px-12 rounded-full font-serif text-lg md:text-xl shadow-lg hover:shadow-xl transition-all transform hover:-translate-y-1 z-10 focus:outline-none focus:ring-4 focus:ring-blue-200">
+            Abrir
+        </button>
+    </div>
+</div>
+<!-- AQUÍ EMPIEZA EL CONTENIDO NORMAL DE TU PÁGINA -->
+
+
 <!-- start of hero -->
 <section class="static-hero" >
     <div class="static-main-box">
@@ -40,6 +112,20 @@
     </div>
 </section>
 <!-- end of hero slider -->
+
+
+<section>
+    <div class="container">
+        <div class="card transparente " >
+            <img src="..." class="card-img-top" alt="...">
+            <div class="card-body">
+                <h5 class="card-title">Card title</h5>
+                <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card’s content.</p>
+                <a href="#" class="btn btn-primary">Go somewhere</a>
+            </div>
+        </div>
+    </div>
+</section>
 
 
 <!-- start wpo-wedding-date -->

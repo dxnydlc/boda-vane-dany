@@ -51,6 +51,14 @@
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.30.1/moment.js" integrity="sha512-3CuraBvy05nIgcoXjVN33mACRyI89ydVHg7y/HMN9wcTVbHeur0SeBzweSd/rxySapO7Tmfu68+JlKkLTnDFNg==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 
+
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&family=Montserrat:wght@300;400;500;600&display=swap" rel="stylesheet">
+    
+    
+    
     <!-- <?php echo $URL_ASSETS ?>assets/images/person/fondo-bonito.jpeg -->
     <style>
         /* Código base (Escritorio / Pantallas grandes) */
@@ -131,6 +139,111 @@
         .btn-flotante:hover {
             transform: scale(1.1); 
         }
+        .transparente {
+        /* 255, 255, 255 es el color blanco. El 0.9 es la opacidad */
+        background-color: rgba(255, 255, 255, 0.8); 
+        }
+
+
+
+
+        :root {
+            --navy-blue: #0b1a30;
+            --card-bg: #fdfcf8;
+        }
+        /* Contenedor principal de la superposición */
+        #intro-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: var(--navy-blue);
+            z-index: 50;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            perspective: 1200px;
+            transition: background-color 0.8s ease;
+
+            /* AQUÍ APLICAMOS EL FONDO SOLO A LA CAPA DE ENTRADA */
+            background-image: url('<?php echo $URL_ASSETS ?>fondo-bonito.jpeg'); 
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+        }
+
+        .particle {
+            position: absolute;
+            background: white;
+            border-radius: 50%;
+            pointer-events: none;
+            animation: fall linear infinite;
+        }
+
+        /* Variación para que algunas parezcan estrellas */
+        .particle.star {
+            background: transparent;
+            width: 0;
+            height: 0;
+            border-left: 2px solid transparent;
+            border-right: 2px solid transparent;
+            border-bottom: 4px solid #fff;
+            transform: rotate(35deg);
+        }
+        .particle.star::before {
+            content: '';
+            position: absolute;
+            border-left: 2px solid transparent;
+            border-right: 2px solid transparent;
+            border-top: 4px solid #fff;
+            top: -2px;
+            left: -2px;
+            transform: rotate(-70deg);
+        }
+
+        @keyframes fall {
+            0% { 
+                transform: translateY(-5vh) translateX(0px) rotate(0deg); 
+                opacity: 0.8;
+            }
+            100% { 
+                transform: translateY(105vh) translateX(25px) rotate(360deg); 
+                opacity: 0;
+            }
+        }
+
+        .explode-transition {
+            animation: explodeOut 0.9s cubic-bezier(0.25, 1, 0.5, 1) forwards;
+        }
+
+        @keyframes explodeOut {
+            0% {
+                transform: scale(1);
+                filter: blur(0px);
+                opacity: 1;
+            }
+            100% {
+                transform: scale(1.8) translateZ(150px);
+                filter: blur(20px);
+                opacity: 0;
+                visibility: hidden;
+            }
+        }
+
+        /* Estilos de la tarjeta */
+        .card-container {
+            background-color: var(--card-bg);
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.6);
+            transition: transform 0.3s ease;
+        }
+
+        /* Decoración floral (usaremos SVGs para garantizar que siempre se vean increíbles y no haya enlaces rotos) */
+        .floral-corner {
+            opacity: 0.9;
+            pointer-events: none;
+        }
+
 
 
 

@@ -183,6 +183,89 @@ let optsLangDatatable = {
 };
 /* ------------------------------------------------------------- */
 /* ------------------------------------------------------------- */
+document.addEventListener('DOMContentLoaded', () => {
+    const overlay = document.getElementById('intro-overlay');
+    const btnAbrir = document.getElementById('btn-abrir');
+    const card = document.getElementById('invitation-card');
+    const particlesContainer = document.getElementById('particles-container');
+    const mainContent = document.getElementById('main-content');
+    
+    let particlesActive = true;
+
+    // --- 1. Generador del sistema de partículas (Nieve/Estrellas) ---
+    function createParticles() {
+        const particleCount = 100; // Cantidad de copos/estrellas
+        
+        for (let i = 0; i < particleCount; i++) {
+            const particle = document.createElement('div');
+            
+            // Mezcla aleatoria entre copos redondos y estrellas
+            const isStar = Math.random() > 0.6;
+            particle.className = isStar ? 'particle star' : 'particle';
+            
+            // Tamaños y posiciones aleatorias
+            const size = Math.random() * 4 + 2; // Entre 2px y 6px
+            if (!isStar) {
+                particle.style.width = `${size}px`;
+                particle.style.height = `${size}px`;
+            }
+            
+            const leftPos = Math.random() * 100; // Posición horizontal 0 - 100vw
+            const animDuration = Math.random() * 5 + 4; // Duración de caída (4s a 9s)
+            const animDelay = Math.random() * 7; // Retraso inicial para efecto continuo
+            
+            particle.style.left = `${leftPos}vw`;
+            particle.style.animationDuration = `${animDuration}s`;
+            particle.style.animationDelay = `-${animDelay}s`; // Negativo para que ya haya partículas en pantalla
+            
+            // Opacidad y escala para dar profundidad
+            particle.style.opacity = Math.random() * 0.5 + 0.1;
+            particle.style.transform = `scale(${Math.random()})`;
+            
+            particlesContainer.appendChild(particle);
+        }
+    }
+
+    // Iniciar partículas
+    createParticles();
+
+    // --- 2. Interacción al hacer clic en "Abrir" ---
+    btnAbrir.addEventListener('click', () => {
+        if (!particlesActive) return;
+        particlesActive = false;
+
+        // Añade la clase que dispara el efecto de zoom/explosión
+        card.classList.add('explode-transition');
+        
+        // Desvanecer el fondo azul suavemente
+        overlay.style.backgroundColor = 'transparent';
+        particlesContainer.style.opacity = '0';
+        particlesContainer.style.transition = 'opacity 0.5s ease';
+
+        // Mostrar el contenido de la página sutilmente
+        mainContent.style.opacity = '1';
+
+        // Esperar a que termine la animación (0.9s coincidiendo con el CSS)
+        setTimeout(() => {
+            overlay.remove(); // Elimina el overlay del DOM por completo para liberar recursos
+            document.body.style.overflow = 'auto'; // Restaura el scroll de la página principal
+        }, 900);
+    });
+});
+/* ------------------------------------------------------------- */
+/* ------------------------------------------------------------- */
+/* ------------------------------------------------------------- */
+/* ------------------------------------------------------------- */
+/* ------------------------------------------------------------- */
+/* ------------------------------------------------------------- */
+/* ------------------------------------------------------------- */
+/* ------------------------------------------------------------- */
+/* ------------------------------------------------------------- */
+/* ------------------------------------------------------------- */
+/* ------------------------------------------------------------- */
+/* ------------------------------------------------------------- */
+/* ------------------------------------------------------------- */
+/* ------------------------------------------------------------- */
 //
 (function($){
 	$(document).ready(function()
@@ -660,7 +743,7 @@ function handleSuccess( json , textStatus , xhr , tipoReq ) {
                     let g       = rs.Nombre.toLowerCase();
 
                     if( rs.Tipo == 'Novio' ){
-                        Novio = g.charAt(0).toUpperCase() + g.slice(1);
+                        Novio       = g.charAt(0).toUpperCase() + g.slice(1);
                         txtNovio1   = rs.Descripcion;
                     }
                     if( rs.Tipo == 'Novia' ){
@@ -669,9 +752,14 @@ function handleSuccess( json , textStatus , xhr , tipoReq ) {
                     }
                 }
 
+                $('#txtNovio2').html( Novio );
+                $('#txtNovia2').html( Novia );
+
                 // Boda : 
                 fechaBoda               = moment(dataBoda.Fecha).format('YYYY-MM-DD');
                 $('#lblFecha1').html(`${moment(dataBoda.Fecha).format('DD.MM.YYYY')}`);
+
+                $('#txtFecha2').html(`${moment(dataBoda.Fecha).format('DD.MM.YYYY')}`);
 
                 $('#clock').countdown( fechaBoda , function (event) {
                     var $this = $(this).html(event.strftime(''
