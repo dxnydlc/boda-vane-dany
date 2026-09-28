@@ -723,7 +723,7 @@ function handleSuccess( json , textStatus , xhr , tipoReq ) {
                 // Boda
                 let cHora               = dataBoda.Hora;
                 // 2. Aplicar el formato
-                const fechaBoda         = moment(dataBoda.Fecha ).format('dddd D [de] MMMM [del] YYYY');
+                let fechaBoda         = moment(dataBoda.Fecha ).format('dddd D [de] MMMM [del] YYYY');
                 varDump( `>cHora: ${cHora}`);
                 $('#lblRegilioso1').html(`
                     <p class=" text-center fuente-normal" >CEREMONIA ${dataBoda.Nombre.toUpperCase()}<br/>
@@ -734,7 +734,10 @@ function handleSuccess( json , textStatus , xhr , tipoReq ) {
                     <p class=" text-center fuente-normal" >${fechaBoda}</p>
                     <br/>
                 `);
-                $('#frmMapa1').attr( 'src' , `https://www.google.com/maps/embed/v1/place?key=${mapKey}&q=${dataBoda.MapaLink}` );
+
+                let urlMapa                 = `https://www.google.com/maps/embed/v1/place?key=${mapKey}&q=${dataBoda.MapaLink}`;
+                varDump( urlMapa );
+                $('#frmMapa1').attr( 'src' , urlMapa );
 
 
 
@@ -777,7 +780,9 @@ function handleSuccess( json , textStatus , xhr , tipoReq ) {
                 `;
                 $('#wrapperRecepcion').html( htmlRecep );
 
-                $('#frmMapa2').attr( 'src' , `https://www.google.com/maps/embed/v1/place?key=${mapKey}&q=${dataBoda.RecepcionLatLng}` );
+                urlMapa                     = `https://www.google.com/maps/embed/v1/place?key=${mapKey}&q=${dataBoda.RecepcionLatLng}`;
+                varDump( urlMapa );
+                $('#frmMapa2').attr( 'src' , urlMapa );
 
                 // Agregar al calendario:
                 // https://calendar.google.com/calendar/render?action=TEMPLATE&text=Boda+de+Ricardo+y+Lucia&dates=20271119T160000/20271119T235900&details=Nos+encantaria+contar+con+su+presencia.&location=Hacienda+Los+Laureles,+Oaxaca
