@@ -58,7 +58,8 @@ const formFields        = [
     "RecepcionDireccion" , 
     "RecepcionHora" , 
     "ReligiosoNombre" , 
-    "Prologo"
+    "Prologo",
+    "Padrinos"
 ];
 
 // campos hidden
