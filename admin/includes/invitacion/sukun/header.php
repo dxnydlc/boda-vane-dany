@@ -247,6 +247,42 @@
             background-color: #1a355b;
         }
 
+
+
+
+        /* Animación de vibración (shake) para la caja de regalo */
+        @keyframes shake {
+            0% { transform: translate(1px, 1px) rotate(0deg); }
+            10% { transform: translate(-1px, -2px) rotate(-1deg); }
+            20% { transform: translate(-3px, 0px) rotate(1deg); }
+            30% { transform: translate(3px, 2px) rotate(0deg); }
+            40% { transform: translate(1px, -1px) rotate(1deg); }
+            50% { transform: translate(-1px, 2px) rotate(-1deg); }
+            60% { transform: translate(-3px, 1px) rotate(0deg); }
+            70% { transform: translate(3px, 1px) rotate(-1deg); }
+            80% { transform: translate(-1px, -1px) rotate(1deg); }
+            90% { transform: translate(1px, 2px) rotate(0deg); }
+            100% { transform: translate(1px, -2px) rotate(-1deg); }
+        }
+
+        /* Estilos de la imagen base */
+        .gift-box {
+            cursor: pointer;
+            transition: transform 0.3s ease;
+            width: 180px; 
+        }
+
+        /* Pequeño zoom al pasar el mouse por encima */
+        .gift-box:hover {
+            transform: scale(1.1);
+        }
+
+        /* Clase que se agrega con JS para ejecutar la animación */
+        .animating {
+            animation: shake 0.4s;
+            animation-iteration-count: 2; /* Vibra 2 veces antes de abrir */
+        }
+
         
     </style>
 

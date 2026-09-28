@@ -557,8 +557,64 @@
 
 
 
-<!-- start wpo-blog-section -->
-<!-- end wpo-blog-section -->
+<!-- Regalos -->
+
+<section class="wpo-couple-section section-padding pt-2" id="couple">
+    <div class="container">
+        <div class="wpo-section-title">
+            <h4 class="poort-text poort-in-right" >Código de vestimenta</h4>
+        </div>
+        <div class="wpo-event-main">
+            <!-- Contenedor del Regalo -->
+            <div class="text-center">
+                <!-- Puedes cambiar el src por la ruta de tu propia imagen o SVG -->
+                <img src="https://cdn-icons-png.flaticon.com/512/4213/4213958.png" alt="Caja de Regalo" id="giftImage" class="gift-box img-fluid" style="margin: 0 auto;" >
+                <p class="mt-3 text-muted fw-bold">¡Haz clic para abrir!</p>
+            </div>
+
+            <!-- Modal de Bootstrap 5 -->
+            <div class="modal fade" id="giftModal" tabindex="-1" aria-labelledby="giftModalLabel" aria-hidden="true">
+                <div class="modal-dialog modal-dialog-centered">
+                    <div class="modal-content text-center shadow-lg border-0">
+                        <div class="modal-header border-0 pb-0">
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body pb-5 px-4">
+                            <h2 class="modal-title mb-3" id="giftModalLabel">¡Mesa de Regalos! 🎁</h2>
+                            <p class="lead">Para acompañarnos en nuestro gran día.</p>
+                            <hr class="w-50 mx-auto">
+                            <p class="fs-5 mt-3"><strong>Vanessa y Dany</strong><br><span class="text-muted">10 de octubre</span></p>
+                            <div class="mt-4">
+                                <!-- Aquí se pueden incluir los datos para transferencia o enlace a la lista de regalos -->
+                                
+                                <p class="mb-1"><strong>N° de Cuenta Vanessa:</strong> 0000-0000-0000-0000</p>
+                                <p>Yape:</p>
+                                <img src="<?php echo $API; ?>img/qr-vane.jpeg" alt="">
+
+                                <hr>
+
+                                <p class="mb-1"><strong>N° de Cuenta Dany:</strong>
+                                <br/>
+                                Mi número de cuenta BCP Soles es 19118281596057.
+                                Mi número de cuenta interbancaria es 00219111828159605755.
+                                </p>
+                                <p>Yape:</p>
+                                <img src="<?php echo $API; ?>img/qr-dany.jpeg" alt="">
+
+
+                                <p class="small text-muted">Cualquier detalle es muy apreciado.</p>
+                            </div>
+                            <button class="btn btn-dark mt-3 px-4 rounded-pill" data-bs-dismiss="modal">Cerrar</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div> <!-- end container -->
+</section>
+
+<!-- Regalos -->
 
 
 

@@ -6,7 +6,7 @@
                 <div class="container">
                     <div class="row">
                         <div class="col col-xs-12">
-                            <p class="copyright"> &copy; Copyright 2026 | <a href="/">Sukun</a> | All right
+                            <p class="copyright"> &copy; Copyright 2026 | <a href="https://github.com/dxnydlc">DxnyDLC</a> | All right
                                 reserved.</p>
                         </div>
                     </div>
@@ -45,6 +45,8 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/ui@5.0/dist/fancybox/fancybox.css" />
     <script src="https://cdn.jsdelivr.net/npm/@fancyapps/ui@5.0/dist/fancybox/fancybox.umd.js"></script>
 
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    
     <!-- page specific script -->
     <?php echo $archivoJS ?>
     <?php echo $archivoJS2 ?>

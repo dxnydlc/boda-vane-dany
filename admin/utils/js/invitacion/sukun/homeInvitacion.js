@@ -92,7 +92,30 @@ let dataInvitadoForm = {
 
 
 
+document.addEventListener('DOMContentLoaded', function() {
+    const giftImage = document.getElementById('giftImage');
+    const giftModalElement = document.getElementById('giftModal');
+    
+    // Instanciar el modal utilizando la API de Bootstrap 5
+    const giftModal = new bootstrap.Modal(giftModalElement);
 
+    giftImage.addEventListener('click', function() {
+        // Prevenir clics múltiples si ya se está animando
+        if (giftImage.classList.contains('animating')) return;
+
+        // 1. Agregar la clase que dispara el keyframe en CSS
+        giftImage.classList.add('animating');
+
+        // 2. Esperar a que la animación termine (0.4s * 2 = 800ms)
+        setTimeout(function() {
+            // Limpiar la clase por si el usuario cierra el modal y quiere volver a hacer clic
+            giftImage.classList.remove('animating');
+            
+            // 3. Mostrar el modal
+            giftModal.show();
+        }, 800); 
+    });
+});
 
 
 
