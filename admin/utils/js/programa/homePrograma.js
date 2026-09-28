@@ -195,7 +195,7 @@ let optsLangDatatable = {
                 varDump(`#${xIdForm} #Foto`);
 
                 $(`#${xIdForm} #Icono`).val( response.resized );
-                $(`#${xIdForm} #laFoto`).attr( 'src' , `${URL_API}${response.Url}` );
+                $(`#${xIdForm} #laFoto`).attr( 'src' , `${URL_API}${response.original}` );
                 //mdlArchivos
             },
 
