@@ -885,16 +885,20 @@ function handleSuccess( json , textStatus , xhr , tipoReq ) {
                 $('#lblNovios76').html(`${Novia} & ${Novio}`);
 
                 // wrapper_papa
-                $('#txtPrologo').html( `<p class=" monallesia text-center " >${dataBoda.Prologo}</p>` );
+                $('#txtPrologo').html( `<p class=" fira-code text-center " >${dataBoda.Prologo}</p>` );
 
                 let xPadrinos       = dataBoda.Padrinos;
                 let arPadrinos      = xPadrinos.split(',')
                 $('#txtPadrinos').html( `
-                    <p class=" fira-code " >Nuestos padrinos:</p>
+                    <br/>
+                    <br/>
+                    <p class=" monallesia" >Nuestos padrinos:</p>
                     <ul>
-                        <li><p class=" fira-code monallesia " >${arPadrinos[0]}</p></li>
-                        <li><p class=" fira-code monallesia " >${arPadrinos[1]}</p></li>
+                        <li><p class=" fira-code  " >${arPadrinos[0]}</p></li>
+                        <li><p class=" fira-code  " >${arPadrinos[1]}</p></li>
                     </ul>
+                    <br/>
+                    <br/>
                 ` );
 
                 // moment(dataBoda.Fecha ).format('dddd D [de] MMMM [del] YYYY');
