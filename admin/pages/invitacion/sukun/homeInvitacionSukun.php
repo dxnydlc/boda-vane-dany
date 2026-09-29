@@ -275,8 +275,8 @@
                     <img id="imgRegistro" src="<?php echo $URL_ASSETS ?>assets/images/rsvp/img-1.png" alt=""  />
                     <div class="card transparente " >
                         <div class="card-body">
-                            <h2 class=" jost " >¿Tienes un invitado?</h2>
-                            <form method="post" class="contact-validation-active" id="contact-form-main" autocomplete="off" >
+                            <h2 class=" jost text-center " >¿Tienes un invitado?</h2>
+                            <form method="post" class="contact-validation-active" id="contact-form-main" autocomplete="off" style="margin-top:25px;" >
 
                                 <input type="hidden" id="id" name="id" value="0" />
                                 <input type="hidden" id="uu_id" name="uu_id" value="" />
