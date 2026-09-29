@@ -973,6 +973,7 @@ function handleSuccess( json , textStatus , xhr , tipoReq ) {
             // -------------------------------------------------------------
             case 'exportar-excel':
                 // BAJAOS EL ARCHIVO
+                descargarExcel( json.archivo );
             break;
             // -------------------------------------------------------------
             // -------------------------------------------------------------
@@ -2387,6 +2388,25 @@ $.fn.fileUploader = function (options) {
 };
 /* ------------------------------------------------------------- */
 /* ------------------------------------------------------------- */
+function descargarExcel(nombreArchivo) {
+  // Construyes la URL exacta
+  const url = `${URL_API}${nombreArchivo}`;
+
+  // Creas un elemento <a> en memoria
+  const link = document.createElement('a');
+  link.href = url;
+  
+  // El atributo download fuerza la descarga en lugar de intentar abrir el archivo
+  link.setAttribute('download', nombreArchivo);
+  
+  // Lo agregas temporalmente al DOM, haces clic y lo remueves
+  document.body.appendChild(link);
+  link.click();
+  document.body.removeChild(link);
+}
+
+// Uso al recibir la respuesta de tu backend:
+// descargarExcel('reporte_20260929_143015.xlsx');
 /* ------------------------------------------------------------- */
 /* ------------------------------------------------------------- */
 /* ------------------------------------------------------------- */

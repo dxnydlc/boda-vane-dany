@@ -862,10 +862,9 @@ ${URL_PROYECTO}${dataBoda.data.Portada}
       let dataW = this.datosModel.createQueryBuilder('c')
       .select([ 
         "c.id as id" , 
-        "c.uu_id as uu_id" , 
         "b.Nombre as Boda" , 
-        "b.Nombre as Novio_a" , 
-        "c.Nombre as Nombre" , 
+        "n.Nombre as Novio" ,
+        "c.Nombre as Invitado" , 
         "c.group_name as Grupo" , 
         "c.Email as Email" , 
         "c.phone as Celular" , 
@@ -873,8 +872,7 @@ ${URL_PROYECTO}${dataBoda.data.Portada}
         "c.Estado as Estado" , 
         "c.IdNovio as IdNovio" , 
         "c.IdBoda as IdBoda" , 
-        "c.Foto as Foto" , 
-        "n.Nombre as Novio" ,
+        
         "IFNULL(DATE_FORMAT( c.invitation_sent_at , '%d/%m/%y %H:%i'), '-') AS Enviado" 
       ])
       .innerJoin( "tbl_boda" , "b" , " c.IdBoda = b.id " )
@@ -885,14 +883,15 @@ ${URL_PROYECTO}${dataBoda.data.Portada}
         dataW.andWhere( " c.IdBoda = :IdBoda " , { IdBoda } )
       }
       
-      
+      let archivo       = `Invitados_${moment().format('DD-MM-YYYY_HH-mm')}.xlsx`;
 
-      let data = await dataW.getRawMany();
+      let data          = await dataW.getRawMany();
 
-      await this.guardarJsonAExcelFisico( data , 'invitados.xlsx' , 'Invitados' );
+      await this.guardarJsonAExcelFisico( data , archivo , 'Invitados' );
 
       return {
         data , 
+        archivo : `exports/${archivo}`, 
         version : '1' , 
         msg : { titulo : 'Correcto' , texto : 'Registros cargados' , clase : 'success' , call : 'tostada2' }
       }
@@ -937,7 +936,7 @@ ${URL_PROYECTO}${dataBoda.data.Portada}
 
     // PATH_PROYECTO
     let PATH_PROYECTO               = `${process.env.PATH_PROYECTO}`;
-    const exportFolder              = `${PATH_PROYECTO}exports/`; //path.join(process.cwd(), 'exports'); 
+    const exportFolder              = `${PATH_PROYECTO}public/exports/`; //path.join(process.cwd(), 'exports'); 
     
     // Validar y crear el directorio de forma asíncrona (No bloqueante)
     try {
