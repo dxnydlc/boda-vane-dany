@@ -768,6 +768,7 @@ function handleSuccess( json , textStatus , xhr , tipoReq ) {
                     <b>Pase: 1 persona</b>
                     </p>
                     `;
+                    $('#rsvp').hide();
                     //
                 }
                 if( NroInvitados > 0 )
@@ -786,6 +787,7 @@ function handleSuccess( json , textStatus , xhr , tipoReq ) {
                     ¡Será un gusto celebrar contigo y con la persona que elijas! ✨
                     </p>
                     `;
+                    $('#rsvp').show();
                 }
             
                 $('#lblInitado2').html( textoInvitado );
@@ -1174,7 +1176,7 @@ function handleSuccess( json , textStatus , xhr , tipoReq ) {
 
                 if( parseInt( dataInvitado.NComp ) > 0 )
                 {
-                    $('#rsvp').show();
+                    //$('#rsvp').show();
                 }
 
                 // Invitado adicional
