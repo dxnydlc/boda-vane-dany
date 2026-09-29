@@ -889,6 +889,8 @@ function handleSuccess( json , textStatus , xhr , tipoReq ) {
                 let xPadrinos       = dataBoda.Padrinos;
                 let arPadrinos      = xPadrinos.split(',')
                 $('#txtPadrinos').html( `
+                    <div style="height:50px;width:100%; display:block;" ></div>
+
                     <div class=" row " style="margin-bottom:15px;" >
                         <div class=" col-lg-4 col-md-4 col-2 " ></div>
                         <!-- ./col -->
@@ -913,10 +915,10 @@ function handleSuccess( json , textStatus , xhr , tipoReq ) {
                 let mes1        = moment(dataBoda.Fecha ).format('MMMM');
                 let anio1       = moment(dataBoda.Fecha ).format('YYYY');
                 
-                $('#dia1').html(`<p class=" jost " >${dia1}</p>`);
-                $('#dia2').html(`<p class=" jost " >${dia2}</p>`);
-                $('#mes1').html(`<p class=" jost " >${mes1}</p>`);
-                $('#anio1').html(`<p class=" jost " >${anio1}</p>`);
+                $('#dia1').html(`<p class=" jost text-center" >${dia1}</p>`);
+                $('#dia2').html(`<p class=" jost text-center " >${dia2}</p>`);
+                $('#mes1').html(`<p class=" jost text-center " >${mes1}</p>`);
+                $('#anio1').html(`<p class=" jost text-center " >${anio1}</p>`);
 
                 /**
                 $('#wrapper_papa_novio').html(`<p class=" text-center " >

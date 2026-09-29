@@ -330,16 +330,17 @@ body::before {
 
         #circulo_fecha #dia1{
             position : absolute;
-            top: 13px;
-            left: 135px;
+            left: 80px;
+            width: 200px;
         }
         #circulo_fecha #dia1 p{
             font-size: 28px !important;
         }
         #circulo_fecha #dia2{
             position : absolute;
-            top: 17px;
-            left: 130px;
+            top      : 17px;
+            left     : 80px;
+            width    : 200px;
         }
         #circulo_fecha #dia2 p {
             font-size: 88px !important;
@@ -347,7 +348,8 @@ body::before {
         #circulo_fecha #mes1{
             position : absolute;
             top: 131px;
-            left: 130px;
+            left: 80px;
+            width: 200px;
         }
         #circulo_fecha #mes1 p {
             font-size: 32px !important;
@@ -355,7 +357,8 @@ body::before {
         #circulo_fecha #anio1{
             position : absolute;
             bottom: 45px;
-            left: 155px;
+            left: 80px;
+            width: 200px;
         }
         #circulo_fecha #anio1 p {
             font-size: 24px !important;
