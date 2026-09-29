@@ -81,6 +81,9 @@
             font-style          : normal;
         }
 
+        .monallesia{
+            font-family: "monallesia" !important;
+        }
         
         .fira-code {
             font-family         : "Fira Code", monospace;
@@ -88,7 +91,7 @@
             font-weight         : normal    ;
             font-style          : normal;
             font-size           : 12px;
-            color : 666;
+            color               : #666 !important;
         }
 
         /* Código base (Escritorio / Pantallas grandes) */

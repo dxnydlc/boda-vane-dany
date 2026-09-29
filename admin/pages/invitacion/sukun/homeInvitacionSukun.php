@@ -217,11 +217,7 @@
                 <div class=" row " style="margin-bottom:15px;" >
                     <div class=" col-lg-4 col-md-4 " ></div>
                     <!-- ./col -->
-                    <div class=" col-lg-4 col-md-4 " >
-                        <p class=" text-center fira-code " >
-                            <span id="lblInitado2" ></span>
-                        </p>
-                    </div>
+                    <div class=" col-lg-4 col-md-4 " id="lblInitado2" ></div>
                     <!-- ./col -->
                     <div class=" col-lg-4 col-md-4 " ></div>
                     <!-- ./col -->
@@ -587,6 +583,15 @@
                 <!-- Puedes cambiar el src por la ruta de tu propia imagen o SVG -->
                 <img src="https://cdn-icons-png.flaticon.com/512/4213/4213958.png" alt="Caja de Regalo" id="giftImage" class="gift-box img-fluid" style="margin: 0 auto;" >
                 <p class="mt-3 text-muted fw-bold">¡Haz clic para abrir!</p>
+
+                <br>
+
+                <p class=" text-center fira-code " >
+                    ¡Una celebración solo para adultos! 🥂
+                    <br/>
+                    Amamos a los pequeños, pero en esta ocasión hemos decidido que nuestra celebración sea exclusivamente para adultos.
+                    <br/>
+                    ¡Gracias por comprender y acompañarnos en este día tan especial! ❤️</p>
             </div>
 
             <!-- Modal de Bootstrap 5 -->
@@ -678,6 +683,21 @@
 <button id="btn-play" class="btn-flotante">
   ▶️
 </button>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

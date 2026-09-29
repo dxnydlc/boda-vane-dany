@@ -750,7 +750,42 @@ function handleSuccess( json , textStatus , xhr , tipoReq ) {
                 let NroInvitados    = dataBoda.NComp;
                 let textoInvitado   = NroInvitados = 0 ? `tienes una entrada es personal,` : `Tienes una entrada <u>adicional</u>`;
 
-                $('#lblInitado2').html( `Hola <b>${data.Nombre}</b> ${textoInvitado}` );
+                // NroInvitados
+        
+                if( NroInvitados == 0 )
+                {
+                    textoInvitado = `
+                    <p class=" text-center fira-code " >
+                    ¡Hola, <b>${data.Nombre}</b>! 💕
+                    <br/>
+                    Tenemos una invitación especialmente para ti. ✨
+                    <br/>
+                    Tu invitación incluye 1 pase, exclusivamente para ti.
+                    <br/>
+                    Queremos compartir contigo este momento tan especial y nos encantará contar con tu presencia. 🥂✨
+                    <br/>
+                    <b>Pase: 1 persona</b>
+                    </p>
+                    `;
+                    //
+                }else if( NroInvitados > 0 ){
+                    //
+                    textoInvitado = `
+                    <p class=" text-center fira-code " >
+                    ¡Hola, <b>${data.Nombre}</b>! 💕
+                    <br/>
+                    Tenemos una invitación especialmente para ti. ✨
+                    <br/>
+                    Tu invitación incluye 2 pases: uno para ti y otro para que puedas compartir este momento con alguien especial que tú elijas. 🥂
+                    <br/>
+                    Por favor, completa los datos de tu acompañante para que podamos tener todo preparado:
+                    <br/>
+                    ¡Será un gusto celebrar contigo y con la persona que elijas! ✨
+                    </p>
+                    `;
+                }
+            
+                $('#lblInitado2').html( textoInvitado );
 
                 // Boda
                 let cHora               = dataBoda.Hora;
@@ -806,6 +841,8 @@ function handleSuccess( json , textStatus , xhr , tipoReq ) {
                 <p class=" fira-code text-center fuente-normal" >
                 ${dataBoda.RecepcionNombre}<br/>
                 ${dataBoda.RecepcionDireccion} <a href="#" id="abrirMapa1" data-bs-toggle="modal" data-bs-target="#modalMapa2"  >📍 Ver Ubicación</a>
+                <br/>
+                Hora:
                 </p>
                 <h2 class=" fira-code fuente-normal text-center" >${moment(dataBoda.RecepcionHora, 'HH:mm:ss').format('HH:mm')}</h2>
 
@@ -848,15 +885,15 @@ function handleSuccess( json , textStatus , xhr , tipoReq ) {
                 $('#lblNovios76').html(`${Novia} & ${Novio}`);
 
                 // wrapper_papa
-                $('#txtPrologo').html( `<p class=" fira-code " >${dataBoda.Prologo}</p>` );
+                $('#txtPrologo').html( `<p class=" fira-code text-center " >${dataBoda.Prologo}</p>` );
 
                 let xPadrinos       = dataBoda.Padrinos;
                 let arPadrinos      = xPadrinos.split(',')
                 $('#txtPadrinos').html( `
                     <p class=" fira-code " >Nuestos padrinos:</p>
                     <ul>
-                        <li><p class=" fira-code " >${arPadrinos[0]}</p></li>
-                        <li><p class=" fira-code " >${arPadrinos[1]}</p></li>
+                        <li><p class=" fira-code monallesia " >${arPadrinos[0]}</p></li>
+                        <li><p class=" fira-code monallesia " >${arPadrinos[1]}</p></li>
                     </ul>
                 ` );
 
