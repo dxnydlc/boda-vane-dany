@@ -768,7 +768,7 @@ function handleSuccess( json , textStatus , xhr , tipoReq ) {
                     <b>Pase: 1 persona</b>
                     </p>
                     `;
-                    $('#rsvp').fadeIN();
+                    $('#frmInvitado').fadeOut();
                     //
                 }
                 if( NroInvitados > 0 )
@@ -787,7 +787,7 @@ function handleSuccess( json , textStatus , xhr , tipoReq ) {
                     ¡Será un gusto celebrar contigo y con la persona que elijas! ✨
                     </p>
                     `;
-                    $('#rsvp').show();
+                    $('#frmInvitado').show();
                 }
             
                 $('#lblInitado2').html( textoInvitado );
