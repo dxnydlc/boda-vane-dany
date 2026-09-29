@@ -489,7 +489,7 @@
         </div>
         <div class="wpo-event-main">
             <div class="event-description">
-                <h2 class="poort-text poort-in-right">Nuestro programa de boda</h2>
+                <h2 class="poort-text ">Nuestro programa de boda</h2>
             </div>
             <div class="wpo-event-wrap">
                 <div id="wrapperPrograma" class="wpo-event-inner" >
