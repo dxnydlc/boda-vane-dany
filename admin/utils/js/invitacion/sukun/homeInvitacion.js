@@ -915,10 +915,10 @@ function handleSuccess( json , textStatus , xhr , tipoReq ) {
                 let mes1        = moment(dataBoda.Fecha ).format('MMMM');
                 let anio1       = moment(dataBoda.Fecha ).format('YYYY');
                 
-                $('#dia1').html(`<p class=" jost text-center" >${dia1}</p>`);
+                /*$('#dia1').html(`<p class=" jost text-center" >${dia1}</p>`);
                 $('#dia2').html(`<p class=" jost text-center " >${dia2}</p>`);
                 $('#mes1').html(`<p class=" jost text-center " >${mes1}</p>`);
-                $('#anio1').html(`<p class=" jost text-center " >${anio1}</p>`);
+                $('#anio1').html(`<p class=" jost text-center " >${anio1}</p>`);*/
 
                 /**
                 $('#wrapper_papa_novio').html(`<p class=" text-center " >

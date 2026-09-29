@@ -136,12 +136,12 @@
                     <!-- ./col -->
                     <div class=" col-lg-4 col-md-4 " style="position:relative;" id="circulo_fecha" >
 
-                    <div id="dia1"  ></div>
+                    <!-- <div id="dia1"  ></div>
                     <div id="dia2"  ></div>
                     <div id="mes1"  ></div>
-                    <div id="anio1" ></div>
+                    <div id="anio1" ></div> -->
 
-                        <img src="<?php echo $API; ?>img/date-bg.png" alt="" style="display: block;margin: 0 auto;" >
+                        <img src="<?php echo $API; ?>img/fondo-dia1.png" alt="" style="display: block;margin: 0 auto;" >
                     </div>
                     <!-- ./col -->
                     <div class=" col-lg-4 col-md-4 " ></div>
