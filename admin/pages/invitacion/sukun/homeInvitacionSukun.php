@@ -141,7 +141,7 @@
                     <div id="mes1"  ></div>
                     <div id="anio1" ></div>
 
-                        <img src="<?php echo $API; ?>img/date-bg.png" alt="" >
+                        <img src="<?php echo $API; ?>img/date-bg.png" alt="" style="display: block;margin: 0 auto;" >
                     </div>
                     <!-- ./col -->
                     <div class=" col-lg-4 col-md-4 " ></div>

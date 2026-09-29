@@ -889,13 +889,21 @@ function handleSuccess( json , textStatus , xhr , tipoReq ) {
                 let xPadrinos       = dataBoda.Padrinos;
                 let arPadrinos      = xPadrinos.split(',')
                 $('#txtPadrinos').html( `
-                    <br/>
-                    <br/>
-                    <p class=" monallesia" >Nuestos padrinos:</p>
-                    <ul>
-                        <li><p class=" jost  " >${arPadrinos[0]}</p></li>
-                        <li><p class=" jost  " >${arPadrinos[1]}</p></li>
-                    </ul>
+                    <div class=" row " style="margin-bottom:15px;" >
+                        <div class=" col-lg-4 col-md-4 col-2 " ></div>
+                        <!-- ./col -->
+                        <div class=" col-lg-4 col-md-4 col-8 " >
+                            <p class=" monallesia text-center" >Nuestros padrinos:</p>
+                            <ul>
+                                <li><p class=" jost text-center " >${arPadrinos[0]}</p></li>
+                                <li><p class=" jost text-center " >${arPadrinos[1]}</p></li>
+                            </ul>
+                        </div>
+                        <!-- ./col -->
+                        <div class=" col-lg-4 col-md-4 col-2 " ></div>
+                        <!-- ./col -->
+                    </div>
+                    <!-- ./row -->
                     <div style="height:100px;width:100%; display:block;" ></div>
                 ` );
 
