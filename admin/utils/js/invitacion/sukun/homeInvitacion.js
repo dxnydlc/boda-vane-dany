@@ -747,8 +747,8 @@ function handleSuccess( json , textStatus , xhr , tipoReq ) {
 
                 // Fotos Boda
                 let dataFotos       = json.fotos;
-                let NroInvitados    = dataBoda.NComp;
-                let textoInvitado   = NroInvitados = 0 ? `tienes una entrada es personal,` : `Tienes una entrada <u>adicional</u>`;
+                let NroInvitados    = parseInt( dataBoda.NComp );
+                let textoInvitado   = '';
 
                 // NroInvitados
         
@@ -768,7 +768,7 @@ function handleSuccess( json , textStatus , xhr , tipoReq ) {
                     </p>
                     `;
                     //
-                }else if( NroInvitados > 0 ){
+                }else{
                     //
                     textoInvitado = `
                     <p class=" text-center jost " >
