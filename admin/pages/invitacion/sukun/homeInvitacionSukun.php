@@ -227,21 +227,7 @@
                 
 
 
-                <div class="carrusel-contenedor">
-                    <!-- Contenedor principal de Swiper -->
-                    <div class="swiper mi-carrusel">
-                        <div class="swiper-wrapper" id="galeria-wrapper">
-                        <!-- Los slides se generarán aquí con JavaScript -->
-                        </div>
-                        
-                        <!-- Botones de navegación (opcionales) -->
-                        <div class="swiper-button-next"></div>
-                        <div class="swiper-button-prev"></div>
-                        
-                        <!-- Paginación (puntos debajo del carrusel) -->
-                        <div class="swiper-pagination"></div>
-                    </div>
-                </div>
+   
 
                 
                 <div class=" row " style="margin-bottom:15px;" >

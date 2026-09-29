@@ -102,36 +102,41 @@
         padding: 0;
         }
 
-        body::before {
-        content: "";
-        position: fixed;
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 100%;
-        /* Imagen original para escritorio (image_42.png) */
-        background-image: url('<?php echo $URL_ASSETS ?>assets/images/person/fondo-bonito.jpeg');
+        /* --- Fondo estático general --- */
+body::before {
+    content: "";
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    /* Imagen original para escritorio */
+    background-image: url('<?php echo $URL_ASSETS ?>assets/images/person/fondo-bonito.jpeg');
+    background-size: cover;
+    background-position: center;
+    z-index: -1;
+    
+    /* 🚀 OPTIMIZACIONES ANTI-BLOQUEO MÓVIL: */
+    pointer-events: none; /* Evita que el fondo intercepte el scroll de tu dedo */
+    will-change: transform; /* Fuerza a la GPU a procesar el fondo sin lag */
+}
+
+/* --- Código Responsivo (Móviles / Pantallas pequeñas) --- */
+@media (max-width: 768px) {
+    body::before {
+        /* Nueva imagen con márgenes estrechos, adaptada para móvil */
+        background-image: url('<?php echo $URL_ASSETS ?>assets/images/person/fondo-bonito-2.jpeg');
         background-size: cover;
-        background-position: center;
-        z-index: -1;
-        /* Mantiene el fondo estático, pero usando el pseudo-elemento */
-        }
+        background-position: center top; 
+    }
+}
 
-        /* --- Código Responsivo (Móviles / Pantallas pequeñas) --- */
-        @media (max-width: 768px) {
-        body::before {
-            /* Nueva imagen con márgenes estrechos, adaptada para móvil (image_44.png) */
-            background-image: url('<?php echo $URL_ASSETS ?>assets/images/person/fondo-bonito-2.jpeg');
-            /* Mantenemos cover porque la imagen ya está adaptada a la verticalidad, no se recortará */
-            background-size: cover;
-            background-position: center top; /* Centrado arriba para que el inicio de la invitación se vea perfecto */
-        }
-        }
-
-        /* Y para el scroll suave, aplicarlo al html */
-        html {
+/* --- SCROLL SUAVE (Solo en escritorio para evitar bugs en móviles) --- */
+@media (min-width: 768px) {
+    html {
         scroll-behavior: smooth;
-        }
+    }
+}
 
 
 
@@ -345,6 +350,27 @@
             font-size: 24px !important;
         }
 
+
+        html, body {
+        overflow-x: hidden;
+        width: 100%;
+        }
+        /* Esto hace que el mapa sea "intocable" al deslizar */
+        .mapa-wrapper iframe {
+        pointer-events: none;
+        }
+
+        /* Y vuelve a ser interactivo solo si tocan dentro de él */
+        .mapa-wrapper iframe:focus,
+        .mapa-wrapper iframe:active {
+        pointer-events: auto;
+        }
+
+        /* ESTO CAUSA PROBLEMAS DE SCROLL */
+        body {
+        height: 100vh; /* o height: 100%; */
+        overflow-y: auto; 
+        }
         
     </style>
 
