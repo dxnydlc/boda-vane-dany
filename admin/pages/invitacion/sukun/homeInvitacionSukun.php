@@ -560,8 +560,21 @@
                     <br/>
                     ¡Gracias por comprender y acompañarnos en este día tan especial! ❤️</p>
 
-                    <p>Comparte con nosotros, sube tus fotos a este drive ;)</p>
-                    <img src="<?= $API  ?>img/qr-boda1.png" alt="Drive" />
+                    <p class=" jost " >Comparte con nosotros, sube tus fotos a este drive ;)</p>
+                    <div class=" row " style="margin-bottom:15px;" >
+                        <div class=" col-lg-4 col-md-4  col-1 " ></div>
+                        <!-- ./col -->
+                        <div class=" col-lg-4 col-md-4 col-10 " >
+                            <img src="<?= $API  ?>img/qr-boda1.png" alt="Drive" />
+                        </div>
+                        <!-- ./col -->
+                        <div class=" col-lg-4 col-md-4  col-1" ></div>
+                        <!-- ./col -->
+                    </div>
+                    <!-- ./row -->
+
+                    <p class="jost">También puedes hacerlo haciendo click <a href="https://drive.google.com/drive/folders/1Lb4BKqha24H7U4n9AaRsfa_HWADDLfXv?usp=drive_link" >AQUI</a></p>
+
             </div>
 
             
@@ -714,7 +727,7 @@
     <div class="modal-dialog modal-lg modal-dialog-centered">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="mapaModalLabel" >Mapa 1</h5> 
+                <h5 class="modal-title" id="mapaModalLabel" >Iglesia</h5> 
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
             </div>
             <div class="modal-body p-0">
@@ -741,7 +754,7 @@
     <div class="modal-dialog modal-lg modal-dialog-centered">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="mapaModalLabel" >Mapa 1</h5> 
+                <h5 class="modal-title" id="mapaModalLabel" >Recepción</h5> 
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
             </div>
             <div class="modal-body p-0">
