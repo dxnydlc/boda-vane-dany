@@ -585,9 +585,10 @@
 
             <div class=" card transparente " >
                 <div class="card-body">
+                    <h2 class=" text-center " >Detalle para los novios</h2>
                     <h4 class=" poort-text poort-in-right jost " >El mejor regalo es tu presencia</h4>
                     <p class="jost">Nos sentimos bendecidos por su compañia, los obsequios son recibidos con gratitud y agradecemos tu contibución a través del deposito de cuenta destinado a cumplir nuestros sueños.</p>
-                    <p class="jost">Así mismo cualquier presente que quiera hacer llegar, lo puede dejar en la dirección: Los paltos 293-295 Ubr. Ermitaño, Independencia</p>
+                    <p class="jost">Así mismo si desean honrarnos con un obsequio les agradeceríamos que puedan enviarlo a la siguiente dirección: Los paltos 293-295 Ubr. Ermitaño, Independencia</p>
                 </div>
             </div>
 
@@ -652,6 +653,22 @@
                                     <!-- ./col -->
                                 </div>
                                 <!-- ./row -->
+
+                                <br>
+
+                                <p class=" jost " style="font-size:16px;" >Dirección de entrega de regalos: <a href="https://maps.app.goo.gl/y81NE3LEoythj3Me9" >los paltos 293-295 Urb. Ermitaño, Independencia</a>.</p>
+
+                                <br>
+
+                                <iframe 
+                                src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d952.272820923999!2d-77.0517215092068!3d-12.00005825602089!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x9105cf012be32a9d%3A0x7a9645a8c4760c41!2sLos%20Paltos%20295%2C%20Lima%2015333!5e0!3m2!1ses-419!2spe!4v1790657891193!5m2!1ses-419!2spe" 
+                                width="100%" 
+                                height="450" 
+                                style="border:0;" 
+                                allowfullscreen="" 
+                                loading="lazy" 
+                                referrerpolicy="strict-origin-when-cross-origin">
+                                </iframe>
 
 
                                 <p class="small text-muted">Cualquier detalle es muy apreciado.</p>
