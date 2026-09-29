@@ -559,7 +559,12 @@
                     Amamos a los pequeños, pero en esta ocasión hemos decidido que nuestra celebración sea exclusivamente para adultos.
                     <br/>
                     ¡Gracias por comprender y acompañarnos en este día tan especial! ❤️</p>
+
+                    <p>Comparte con nosotros, sube tus fotos a este drive ;)</p>
+                    <img src="<?= $API  ?>img/qr-boda1.png" alt="Drive" />
             </div>
+
+            
 
             <!-- Modal de Bootstrap 5 -->
             <div class="modal fade" id="giftModal" tabindex="-1" aria-labelledby="giftModalLabel" aria-hidden="true">
