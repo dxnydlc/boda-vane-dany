@@ -269,9 +269,10 @@
             <div class="row">
 
                 <div class="col-lg-4">
-                    <img id="imgRegistro" src="<?php echo $URL_ASSETS ?>assets/images/rsvp/img-1.png" alt=""  />
+                    
                 </div>
                 <div class="col col-xl-4 col-lg-5 col-md-12 col-12">
+                    <img id="imgRegistro" src="<?php echo $URL_ASSETS ?>assets/images/rsvp/img-1.png" alt=""  />
                     <div class="card transparente " >
                         <div class="card-body">
                             <h2 class=" jost " >¿Tienes un invitado?</h2>
