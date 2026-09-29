@@ -369,10 +369,10 @@
                     <div class="col col-md-6 col-12">
                         <div class="couple-item">
                             <div class="couple-img">
-                                <img src="<?php echo $URL_ASSETS ?>assets/images/couple/couple-img-1.jpg" alt="">
+                                <img id="imgNovia1" src="<?php echo $URL_ASSETS ?>assets/images/couple/couple-img-1.jpg" alt="">
                             </div>
                             <div class="couple-text">
-                                <i><img id="imgNovia1" src="<?php echo $URL_ASSETS ?>assets/images/couple/bride.svg" alt=""></i>
+                                <i><img  src="<?php echo $URL_ASSETS ?>assets/images/couple/bride.svg" alt=""></i>
                                 <h3 id="lblNovia1"  >Esabella Bell</h3>
                                 <p id="txtNovia1" >Lorem ipsum dolor sit amet, consectetur adipiscing elit. Urna orci auctor
                                     vitae nisl. fringilla pellesque amet tempus.</p>
@@ -396,10 +396,10 @@
                     <div class="col col-md-6 col-12">
                         <div class="couple-item">
                             <div class="couple-img">
-                                <img src="<?php echo $URL_ASSETS ?>assets/images/couple/couple-img-2.jpg" alt="">
+                                <img id="imgNovio1" src="<?php echo $URL_ASSETS ?>assets/images/couple/couple-img-2.jpg" alt="">
                             </div>
                             <div class="couple-text">
-                                <i><img id="imgNovio1" src="<?php echo $URL_ASSETS ?>assets/images/couple/groom.svg" alt=""></i>
+                                <i><img src="<?php echo $URL_ASSETS ?>assets/images/couple/groom.svg" alt=""></i>
                                 <h3 id="lblNovio1" >William Max</h3>
                                 <p id="txtNovio1" >Lorem ipsum dolor sit amet, consectetur adipiscing elit. Urna orci auctor
                                     vitae nisl. fringilla pellesque amet tempus.</p>

@@ -794,11 +794,10 @@ function handleSuccess( json , textStatus , xhr , tipoReq ) {
                 varDump( `>cHora: ${cHora}`);
                 $('#lblRegilioso1').html(`
                     <h2 class=" text-center fuente-normal monallesia " >Ceremonia ${dataBoda.Nombre}</h2><br/>
-                    <p class=" jost " >${dataBoda.ReligiosoNombre}<br/>
+                    <p class=" jost text-center " >${dataBoda.ReligiosoNombre}<br/>
                     ${dataBoda.Direccion} <a href="#" id="abrirMapa1" data-bs-toggle="modal" data-bs-target="#modalMapa1"  >📍 Ver Ubicación</a>
                     <br/>
                     Hora:</p>
-                    <br/>
                     <h2 class=" jost fuente-normal text-center" >${moment(dataBoda.Hora, 'HH:mm:ss').format('HH:mm')}</h2>
                     <br/>
                 `);
