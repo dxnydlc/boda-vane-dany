@@ -586,6 +586,7 @@
             <div class=" card transparente " >
                 <div class="card-body">
                     <h2 class=" text-center " >Detalle para los novios</h2>
+                    <br>
                     <h4 class=" poort-text poort-in-right jost " >El mejor regalo es tu presencia</h4>
                     <p class="jost">Nos sentimos bendecidos por su compañia, los obsequios son recibidos con gratitud y agradecemos tu contibución a través del deposito de cuenta destinado a cumplir nuestros sueños.</p>
                     <p class="jost">Así mismo si desean honrarnos con un obsequio les agradeceríamos que puedan enviarlo a la siguiente dirección: Los paltos 293-295 Ubr. Ermitaño, Independencia</p>
