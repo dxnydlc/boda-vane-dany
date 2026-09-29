@@ -837,6 +837,7 @@ function handleSuccess( json , textStatus , xhr , tipoReq ) {
 
                 let htmlRecep = `
                 <h2 class=" jost fuente-normal text-center monallesia " >Recepción</h2>
+                <br/>
                 <p class=" jost text-center fuente-normal" >
                 ${dataBoda.RecepcionNombre}<br/>
                 ${dataBoda.RecepcionDireccion} <a href="#" id="abrirMapa1" data-bs-toggle="modal" data-bs-target="#modalMapa2"  >📍 Ver Ubicación</a>
@@ -846,6 +847,7 @@ function handleSuccess( json , textStatus , xhr , tipoReq ) {
                 <h2 class=" jost fuente-normal text-center" >${moment(dataBoda.RecepcionHora, 'HH:mm:ss').format('HH:mm')}</h2>
 
 
+                <br/>
                 <a href="${urlCalendario}" target="_blank" class="btn-agendar" style="margin:0 auto;display:block;width:185px;" >
                 Agregar a Calendar
                 </a>
