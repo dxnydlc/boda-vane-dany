@@ -251,7 +251,8 @@ ${URL_PROYECTO}${dataBoda.data.Portada}
         "c.IdNovio as IdNovio" , 
         "c.IdBoda as IdBoda" , 
         "c.Foto as Foto" , 
-        "n.Nombre as Novio" 
+        "n.Nombre as Novio" , 
+        "IFNULL(DATE_FORMAT( c.invitation_sent_at , '%d/%m/%y %H:%i'), '-') AS Enviado" 
       ])
       .innerJoin( "tbl_boda" , "b" , " c.IdBoda = b.id " )
       .innerJoin( "tbl_novios" , "n" , " c.IdNovio = n.id " )
@@ -297,7 +298,7 @@ ${URL_PROYECTO}${dataBoda.data.Portada}
         "c.Nombre as Nombre" , 
         "c.group_name as Tipo" , 
         `CONCAT( '${urlProyeto}' , c.Foto) as Foto` , 
-        "c.Estado as Estado"
+        "c.Estado as Estado" 
       ])
       .where(" c.Estado <> 'anulado' AND c.IdBoda = :IdBoda " , { IdBoda } )
       .getRawMany();
@@ -737,7 +738,8 @@ ${URL_PROYECTO}${dataBoda.data.Portada}
         "c.IdNovio as IdNovio" , 
         "c.IdBoda as IdBoda" , 
         "c.Foto as Foto" , 
-        "n.Nombre as Novio" 
+        "n.Nombre as Novio" ,
+        "IFNULL(DATE_FORMAT( c.invitation_sent_at , '%d/%m/%y %H:%i'), '-') AS Enviado" 
       ])
       .innerJoin( "tbl_boda" , "b" , " c.IdBoda = b.id " )
       .innerJoin( "tbl_novios" , "n" , " c.IdNovio = n.id " )
@@ -807,6 +809,40 @@ ${URL_PROYECTO}${dataBoda.data.Portada}
   }
   // ...................................................................
   // ...................................................................
+  async marcarEnviado( id : number = 0 ) {
+    try {
+      
+      const updatedAt = moment().format('YYYY-MM-DD HH:mm:ss');
+
+      let data = await this.datosModel.update({ id }, { invitation_sent_at : updatedAt });
+  
+      // throw new BadRequestException('Usuario no existe');
+
+      return {
+        data , 
+        version : '1' , 
+        msg : { titulo : 'Correcto' , texto : 'Registros cargados' , clase : 'success' , call : 'tostada2' }
+      }
+
+    } catch (error) {
+
+      // Para depuración local
+      varDump(error); 
+
+      // SI EL ERROR YA ES DE NESTJS (ej. BadRequestException), LO RELANZAMOS DIRECTO
+      if (error instanceof HttpException) {
+        throw error;
+      }
+
+      // SI ES UN ERROR INESPERADO (ej. caída de BD, error de sintaxis), ENVIAMOS UN 500
+      throw new InternalServerErrorException({
+        message: 'Error en el servicio de Invitados',
+        cause: error // Mantiene el rastro del error original en logs internos
+      });
+
+    }
+
+  }
   // ...................................................................
   // ...................................................................
   // ...................................................................

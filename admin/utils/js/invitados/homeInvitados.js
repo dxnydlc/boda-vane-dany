@@ -40,7 +40,7 @@ let arrNovio = [];
 let dataJson = [];
 /* ------------------------------------------------------------- */
 // columnas que se mostrarán en la tabla (1)
-const columnasVisibles  = [ "id" , "Boda" , "Nombre" , "Grupo" , "Novio" , "Adicional" , "Email" , "Celular" , "Estado" ];
+const columnasVisibles  = [ "id" , "Boda" , "Nombre" , "Grupo" , "Novio" , "Adicional" , "Email" , "Enviado" , "Estado" ];
 
 // campos que tendrá el formulario
 const formFields        = [ "Nombre" , "IdBoda" , "IdNovio" , "email" , "phone" , "group_name" , "Estado" , "max_companions" , "Foto" ];
