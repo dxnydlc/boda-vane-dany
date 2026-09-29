@@ -2146,7 +2146,7 @@ function renderizarGaleria(images, containerId) {
   // Iteramos sobre el arreglo para crear cada columna con su imagen
   images.forEach(imagen => {
     html += `
-      <div class="col-lg-3 col-md-4 col-6 mb-4">
+      <div class="col-lg-3 col-md-4 col-12 mb-4">
         <a href="${URL_API}${imagen.Url}" class="fancybox" data-fancybox-group="gall-1" >
             <img src="${URL_API}${imagen.Url}" class=" img-thumbnail img-fluid rounded shadow-sm" alt="Imagen de galería">
         </a>
