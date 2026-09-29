@@ -793,7 +793,7 @@ function handleSuccess( json , textStatus , xhr , tipoReq ) {
                 let fechaBoda         = moment(dataBoda.Fecha ).format('dddd D [de] MMMM [del] YYYY');
                 varDump( `>cHora: ${cHora}`);
                 $('#lblRegilioso1').html(`
-                    <h2 class=" text-center fuente-normal monallesia " >CEREMONIA ${dataBoda.Nombre.toUpperCase()}</h2><br/>
+                    <h2 class=" text-center fuente-normal monallesia " >Ceremonia ${dataBoda.Nombre.toUpperCase()}</h2><br/>
                     <p class=" jost " >${dataBoda.ReligiosoNombre}<br/>
                     ${dataBoda.Direccion} <a href="#" id="abrirMapa1" data-bs-toggle="modal" data-bs-target="#modalMapa1"  >📍 Ver Ubicación</a>
                     <br/>
@@ -837,7 +837,7 @@ function handleSuccess( json , textStatus , xhr , tipoReq ) {
 
 
                 let htmlRecep = `
-                <h2 class=" jost fuente-normal text-center monallesia " >RECEPCIÓN</h2>
+                <h2 class=" jost fuente-normal text-center monallesia " >Recepción</h2>
                 <p class=" jost text-center fuente-normal" >
                 ${dataBoda.RecepcionNombre}<br/>
                 ${dataBoda.RecepcionDireccion} <a href="#" id="abrirMapa1" data-bs-toggle="modal" data-bs-target="#modalMapa2"  >📍 Ver Ubicación</a>
