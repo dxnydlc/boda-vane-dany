@@ -475,6 +475,9 @@
             <h2 class="poort-text poort-in-right">Las aventuras, las locuras y todo lo que nos hace ser Vane y Dany.</h2>
         </div>
         <div class="gallery-main-wrap">
+            <div class="container mt-5" id="mi-galeria" >
+                <!-- Las imágenes se insertarán aquí -->
+            </div>
             <div class="row align-items-center" id="wrapperMomentos" >
             </div>
         </div>

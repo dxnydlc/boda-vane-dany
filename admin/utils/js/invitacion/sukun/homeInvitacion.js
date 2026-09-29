@@ -1117,7 +1117,10 @@ function handleSuccess( json , textStatus , xhr , tipoReq ) {
                     </div>
                     `;
                 }
-                $('#wrapperMomentos').html( fotosGalerias );
+                // Galeria ]_[ 
+
+                //$('#wrapperMomentos').html( fotosGalerias );
+                renderizarGaleria( dataFotos.Momentos , "mi-galeria" );
                 $('.fancybox').fancybox();
 
                 // REGISTRO
@@ -2124,6 +2127,39 @@ function formatearParaCalendario(texto) {
 }
 /* ------------------------------------------------------------- */
 /* ------------------------------------------------------------- */
+/**
+ * Genera una galería de imágenes en Bootstrap 5
+ * @param {Array} images - Arreglo de objetos con la propiedad { Url: "..." }
+ * @param {String} containerId - El ID del elemento HTML donde se insertará la galería
+ */
+function renderizarGaleria(images, containerId) {
+  const contenedor = document.getElementById(containerId);
+  
+  if (!contenedor) {
+    console.error(`No se encontró el contenedor con ID: ${containerId}`);
+    return;
+  }
+
+  // Iniciamos el contenedor principal de la fila
+  let html = '<div class="row">';
+
+  // Iteramos sobre el arreglo para crear cada columna con su imagen
+  images.forEach(imagen => {
+    html += `
+      <div class="col-lg-3 col-md-4 col-6 mb-4">
+        <a href="${URL_API}${imagen.Url}" class="fancybox" data-fancybox-group="gall-1" >
+            <img src="${URL_API}${imagen.Url}" class=" img-thumbnail img-fluid rounded shadow-sm" alt="Imagen de galería">
+        </a>
+      </div>
+    `;
+  });
+
+  // Cerramos el div de la fila
+  html += '</div>';
+
+  // Insertamos el HTML generado en el DOM
+  contenedor.innerHTML = html;
+}
 /* ------------------------------------------------------------- */
 /* ------------------------------------------------------------- */
 /* ------------------------------------------------------------- */
