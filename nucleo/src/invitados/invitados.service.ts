@@ -771,6 +771,40 @@ ${URL_PROYECTO}${dataBoda.data.Portada}
   }
   // ...................................................................
   // ...................................................................
+  async generar_ogg( id : number = 0 ) {
+    try {
+      
+      let data = await this.datosModel.findOne({
+        where : { id }
+      });
+  
+      await this.guardarDatosOG( data! );
+
+      return {
+        data , 
+        version : '1' , 
+        msg : { titulo : 'Correcto' , texto : 'Registros cargados' , clase : 'success' , call : 'tostada2' }
+      }
+
+    } catch (error) {
+
+      // Para depuración local
+      varDump(error); 
+
+      // SI EL ERROR YA ES DE NESTJS (ej. BadRequestException), LO RELANZAMOS DIRECTO
+      if (error instanceof HttpException) {
+        throw error;
+      }
+
+      // SI ES UN ERROR INESPERADO (ej. caída de BD, error de sintaxis), ENVIAMOS UN 500
+      throw new InternalServerErrorException({
+        message: 'Error en el servicio de Invitados',
+        cause: error // Mantiene el rastro del error original en logs internos
+      });
+
+    }
+
+  }
   // ...................................................................
   // ...................................................................
   // ...................................................................

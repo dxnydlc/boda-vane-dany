@@ -445,6 +445,7 @@ let optsLangDatatable = {
             
             // 2. Obtenemos el uuid desde el atributo data-uuid que configuraste en el render
             const uuid                      = btn.data("uuid");
+            idCab                           = btn.data("id");
             
             // 3. Armamos el link completo que quieres copiar
             const linkParaCopiar            = `${URL_WEB}invitacion/sukun/${uuid}`;// Cambia esto por tu URL real
@@ -467,7 +468,8 @@ let optsLangDatatable = {
                 }, 2000);
 
                 // llamamos a guardar
-                ejecutarDoc( 'guardar-cab' );
+                ejecutarDoc( 'generar-ogg' );
+
                 
             } catch (err) {
                 console.error("Falló al copiar el texto: ", err);
@@ -765,6 +767,13 @@ function prepararRequest( tipoReq ) {
         break;
         // -------------------------------------------------------------
         // -------------------------------------------------------------
+        case 'generar-ogg':
+            xUrl             = `${urlServicio}generar-ogg`, 
+            xMetodo          = `POST`;
+            data = {
+                id      : idCab
+            };
+        break;
         // -------------------------------------------------------------
         // -------------------------------------------------------------
         // -------------------------------------------------------------
@@ -924,6 +933,8 @@ function handleSuccess( json , textStatus , xhr , tipoReq ) {
             break;
             // -------------------------------------------------------------
             // -------------------------------------------------------------
+            case 'generar-ogg':
+            break;
             // -------------------------------------------------------------
             // -------------------------------------------------------------
             // -------------------------------------------------------------
