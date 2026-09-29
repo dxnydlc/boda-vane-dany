@@ -433,10 +433,16 @@
 
 <!-- NUESTRA HISTORIA -->
 <section class="wpo-story-section section-padding pb-0" id="story">
+     <div class="card transparente " >
+        <div class="card-body">
+            <h4 class=" text-center " >Nuestra historia</h4>
+            <h2 class=" text-center " >Los momentos exactos que nos trajeron hasta aquí</h2>
+        </div>
+    </div>
     <div class="container">
         <div class="wpo-section-title">
-            <h4 class="poort-text poort-in-right" >Nuestra historia</h4>
-            <h2 class="poort-text poort-in-right" >Los momentos exactos que nos trajeron hasta aquí.</h2>
+            <h4 class="poort-text poort-in-right" ></h4>
+            <h2 class="poort-text poort-in-right" ></h2>
         </div>
         <div class="wpo-story-wrap" id="contenedorHistoria" >
         </div>

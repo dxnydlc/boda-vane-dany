@@ -747,7 +747,8 @@ function handleSuccess( json , textStatus , xhr , tipoReq ) {
 
                 // Fotos Boda
                 let dataFotos       = json.fotos;
-                let NroInvitados    = parseInt( dataBoda.NComp );
+                let NroInvitados    = data.NComp ;
+                alert( NroInvitados );
                 let textoInvitado   = '';
 
                 // NroInvitados
@@ -768,7 +769,9 @@ function handleSuccess( json , textStatus , xhr , tipoReq ) {
                     </p>
                     `;
                     //
-                }else{
+                }
+                if( NroInvitados > 0 )
+                {
                     //
                     textoInvitado = `
                     <p class=" text-center jost " >
