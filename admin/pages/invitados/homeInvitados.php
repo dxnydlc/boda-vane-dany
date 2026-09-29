@@ -37,9 +37,15 @@
                                         <!-- ./form-group -->
                                     </div>
                                     <!-- ./col -->
-                                    <div class=" col-lg-3 col-md-3 " ></div>
+                                    <div class=" col-lg-3 col-md-3 " ><div class=" form-group ">
+                                            <label for="cboNovioa" >Novio/a</label>
+                                            <select  id="cboNovioa" class="form-control" ></select>
+                                        </div>
+                                        <!-- ./form-group --></div>
                                     <!-- ./col -->
-                                    <div class=" col-lg-3 col-md-3 " ></div>
+                                    <div class=" col-lg-3 col-md-3 " >
+                                        <button id="btnExportar" >Exportar</button>
+                                    </div>
                                     <!-- ./col -->
                                 </div>
                                 <!-- ./row -->

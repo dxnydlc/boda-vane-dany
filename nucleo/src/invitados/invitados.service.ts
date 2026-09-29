@@ -12,7 +12,7 @@ const moment = require('moment');
 //const moment = require('moment');
 require('moment/locale/es');
 
-import * as fs from 'fs/promises'; // Importamos la versión de promesas
+//import * as fs from 'fs/promises'; // Importamos la versión de promesas
 import * as path from 'path';
 
 import { v4 as uuidv4 } from 'uuid';
@@ -25,6 +25,11 @@ import { BodaService } from 'src/boda/boda.service';
 import { FotosService } from 'src/fotos/fotos.service';
 import { ProgramaService } from 'src/programa/programa.service';
 import { HistoriaService } from 'src/historia/historia.service';
+
+
+import * as ExcelJS from 'exceljs';
+import * as fs from 'fs/promises'; // Importando la API de promesas
+
 
 require('colors');
 
@@ -723,7 +728,7 @@ ${URL_PROYECTO}${dataBoda.data.Portada}
   async gegActivosFiltro( IdBoda : number = 0 ) {
     try {
       
-      let data = await this.datosModel.createQueryBuilder('c')
+      let dataW = this.datosModel.createQueryBuilder('c')
       .select([ 
         "c.id as id" , 
         "c.uu_id as uu_id" , 
@@ -743,8 +748,14 @@ ${URL_PROYECTO}${dataBoda.data.Portada}
       ])
       .innerJoin( "tbl_boda" , "b" , " c.IdBoda = b.id " )
       .innerJoin( "tbl_novios" , "n" , " c.IdNovio = n.id " )
-      .where(" c.Estado <> 'anulado' AND c.IdBoda = :IdBoda " , { IdBoda } )
-      .getRawMany();
+      .where(" c.Estado <> 'anulado'");
+
+      if( IdBoda > 0 ){
+        dataW.andWhere( " c.IdBoda = :IdBoda " , { IdBoda } )
+      }
+      
+
+      let data = await dataW.getRawMany();
   
       return {
         data , 
@@ -843,6 +854,132 @@ ${URL_PROYECTO}${dataBoda.data.Portada}
     }
 
   }
+  // ...................................................................
+  // ...................................................................
+  async exportarInvitado( IdBoda : number = 0) {
+    try {
+      
+      let dataW = this.datosModel.createQueryBuilder('c')
+      .select([ 
+        "c.id as id" , 
+        "c.uu_id as uu_id" , 
+        "b.Nombre as Boda" , 
+        "b.Nombre as Novio_a" , 
+        "c.Nombre as Nombre" , 
+        "c.group_name as Grupo" , 
+        "c.Email as Email" , 
+        "c.phone as Celular" , 
+        "c.max_companions as Adicional" , 
+        "c.Estado as Estado" , 
+        "c.IdNovio as IdNovio" , 
+        "c.IdBoda as IdBoda" , 
+        "c.Foto as Foto" , 
+        "n.Nombre as Novio" ,
+        "IFNULL(DATE_FORMAT( c.invitation_sent_at , '%d/%m/%y %H:%i'), '-') AS Enviado" 
+      ])
+      .innerJoin( "tbl_boda" , "b" , " c.IdBoda = b.id " )
+      .innerJoin( "tbl_novios" , "n" , " c.IdNovio = n.id " )
+      .where(" c.Estado <> 'anulado'");
+
+      if( IdBoda > 0 ){
+        dataW.andWhere( " c.IdBoda = :IdBoda " , { IdBoda } )
+      }
+      
+      
+
+      let data = await dataW.getRawMany();
+
+      await this.guardarJsonAExcelFisico( data , 'invitados.xlsx' , 'Invitados' );
+
+      return {
+        data , 
+        version : '1' , 
+        msg : { titulo : 'Correcto' , texto : 'Registros cargados' , clase : 'success' , call : 'tostada2' }
+      }
+
+    } catch (error) {
+
+      // Para depuración local
+      varDump(error); 
+
+      // SI EL ERROR YA ES DE NESTJS (ej. BadRequestException), LO RELANZAMOS DIRECTO
+      if (error instanceof HttpException) {
+        throw error;
+      }
+
+      // SI ES UN ERROR INESPERADO (ej. caída de BD, error de sintaxis), ENVIAMOS UN 500
+      throw new InternalServerErrorException({
+        message: 'Error en el servicio de Invitados',
+        cause: error // Mantiene el rastro del error original en logs internos
+      });
+
+    }
+
+  }
+  // ...................................................................
+  // ...................................................................
+  async guardarJsonAExcelFisico(data: any[], nombreArchivo: string, nombreHoja: string = 'Datos'): Promise<string> {
+    const workbook = new ExcelJS.Workbook();
+    const worksheet = workbook.addWorksheet(nombreHoja);
+
+    if (data && data.length > 0) {
+      const headers = Object.keys(data[0]).map((key) => ({
+        header: key.toUpperCase(),
+        key: key,
+        width: 20
+      }));
+
+      worksheet.columns = headers;
+      worksheet.getRow(1).font = { bold: true };
+      worksheet.getRow(1).alignment = { vertical: 'middle', horizontal: 'center' };
+      worksheet.addRows(data);
+    }
+
+    // PATH_PROYECTO
+    let PATH_PROYECTO               = `${process.env.PATH_PROYECTO}`;
+    const exportFolder              = `${PATH_PROYECTO}exports/`; //path.join(process.cwd(), 'exports'); 
+    
+    // Validar y crear el directorio de forma asíncrona (No bloqueante)
+    try {
+      await fs.access(exportFolder);
+    } catch (error) {
+      // Si entra al catch, significa que la carpeta no existe, así que la creamos
+      await fs.mkdir(exportFolder, { recursive: true });
+    }
+
+    const filePath = path.join(exportFolder, nombreArchivo);
+
+    // Escribir el archivo físicamente
+    await workbook.xlsx.writeFile(filePath);
+    
+    return filePath;
+  }
+  // ...................................................................
+  // ...................................................................
+  // ...................................................................
+  // ...................................................................
+  // ...................................................................
+  // ...................................................................
+  // ...................................................................
+  // ...................................................................
+  // ...................................................................
+  // ...................................................................
+  // ...................................................................
+  // ...................................................................
+  // ...................................................................
+  // ...................................................................
+  // ...................................................................
+  // ...................................................................
+  // ...................................................................
+  // ...................................................................
+  // ...................................................................
+  // ...................................................................
+  // ...................................................................
+  // ...................................................................
+  // ...................................................................
+  // ...................................................................
+  // ...................................................................
+  // ...................................................................
   // ...................................................................
   // ...................................................................
   // ...................................................................

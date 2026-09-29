@@ -485,10 +485,15 @@ let optsLangDatatable = {
 
             if( ifboda > 0 ){
                 ejecutarDoc( 'listar-cab-filtro' );
+                // TODO: llenar los novios
             }
         });
         /* ------------------------------------------------------------- */
         /* ------------------------------------------------------------- */
+        $("#btnExportar").on( "click", function(e) {
+            e.preventDefault();
+            ejecutarDoc( 'exportar-excel' );
+        });
         /* ------------------------------------------------------------- */
         /* ------------------------------------------------------------- */
         /* ------------------------------------------------------------- */
@@ -662,13 +667,14 @@ function ejecutarDoc( tipoReq ) {
         varDump( tipoReq );
 
         switch (tipoReq) {
-            case 'listar-cab'  : objCargando = `#tblUsuarios`; break;
-            case 'guardar-cab' : objCargando = `#${xIdForm}`; break;
-            case 'anular-cab'  : objCargando = `#wrapper_form`; break;
-            case 'cargar-cab'  : objCargando = `#frmDocumento`; break;
+            case 'listar-cab'           : objCargando = `#tblUsuarios`; break;
+            case 'guardar-cab'          : objCargando = `#${xIdForm}`; break;
+            case 'anular-cab'           : objCargando = `#wrapper_form`; break;
+            case 'cargar-cab'           : objCargando = `#frmDocumento`; break;
 
-            case 'listar-cab-filtro'  : objCargando = `#tblUsuarios`; break;
-            case 'generar-ogg': objCargando = `#tblUsuarios`; break;
+            case 'listar-cab-filtro'    : objCargando = `#tblUsuarios`; break;
+            case 'generar-ogg'          : objCargando = `#tblUsuarios`; break;
+            case 'exportar-excel'       : objCargando = `#tblUsuarios`; break;
         }
 
         mostrarLoader( objCargando );
@@ -785,6 +791,23 @@ function prepararRequest( tipoReq ) {
                 id      : idCab
             };
         break;
+        // -------------------------------------------------------------
+        // -------------------------------------------------------------
+        case 'exportar-excel':
+            xUrl             = `${urlServicio}exportar`, 
+            xMetodo          = `POST`;
+            data = {
+                IdBoda      : $('#cboBoda').val()
+            };
+        break;
+        // -------------------------------------------------------------
+        // -------------------------------------------------------------
+        // -------------------------------------------------------------
+        // -------------------------------------------------------------
+        // -------------------------------------------------------------
+        // -------------------------------------------------------------
+        // -------------------------------------------------------------
+        // -------------------------------------------------------------
         // -------------------------------------------------------------
         // -------------------------------------------------------------
         // -------------------------------------------------------------
@@ -948,6 +971,9 @@ function handleSuccess( json , textStatus , xhr , tipoReq ) {
             case 'set-enviado':break;
             // -------------------------------------------------------------
             // -------------------------------------------------------------
+            case 'exportar-excel':
+                // BAJAOS EL ARCHIVO
+            break;
             // -------------------------------------------------------------
             // -------------------------------------------------------------
             // -------------------------------------------------------------
