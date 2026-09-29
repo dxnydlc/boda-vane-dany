@@ -1208,7 +1208,7 @@ function handleSuccess( json , textStatus , xhr , tipoReq ) {
                     htmlPrograma                += `
                     <div class="wpo-event-item">
                         <div class="wpo-event-text">
-                            <i><img src="${URL_API}${rs.Icono}" alt="" style="width:80px;" /></i>
+                            <i><img src="${URL_API}${rs.Icono}" alt="" style="width:80px;margin: 0 auto;" /></i>
                             <span>${rs.Descripcion}</span>
                         </div>
                         <div class="wpo-event-time">
