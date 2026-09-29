@@ -748,7 +748,7 @@ function handleSuccess( json , textStatus , xhr , tipoReq ) {
                 // Fotos Boda
                 let dataFotos       = json.fotos;
                 let NroInvitados    = data.NComp ;
-                alert( NroInvitados );
+                //alert( NroInvitados );
                 let textoInvitado   = '';
 
                 // NroInvitados
