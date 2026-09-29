@@ -667,6 +667,7 @@ function ejecutarDoc( tipoReq ) {
             case 'cargar-cab'  : objCargando = `#frmDocumento`; break;
 
             case 'listar-cab-filtro'  : objCargando = `#TablaHomePs`; break;
+            case 'generar-ogg': objCargando = `#tblUsuarios`; break;
         }
 
         mostrarLoader( objCargando );
