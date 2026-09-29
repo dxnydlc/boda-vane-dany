@@ -768,7 +768,7 @@ function handleSuccess( json , textStatus , xhr , tipoReq ) {
                     <b>Pase: 1 persona</b>
                     </p>
                     `;
-                    $('#rsvp').hide();
+                    $('#rsvp').fadeIN();
                     //
                 }
                 if( NroInvitados > 0 )
