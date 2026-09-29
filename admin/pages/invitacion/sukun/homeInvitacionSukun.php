@@ -256,7 +256,7 @@
 
 
 <!-- Invitado -->
-<section class="wpo-contact-section section-padding pt-0" id="rsvp"  >
+<section class="wpo-contact-section section-padding pt-0" id="frmInvitado"  >
     <div class="container-fluid">
         <div class="contact-wrap">
             <div class="row">
