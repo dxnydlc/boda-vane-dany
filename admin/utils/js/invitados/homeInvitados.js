@@ -465,6 +465,9 @@ let optsLangDatatable = {
                     btn.html(contenidoOriginal);
                     btn.removeClass("btn-success").addClass("btn-outline-info");
                 }, 2000);
+
+                // llamamos a guardar
+                ejecutarDoc( 'guardar-cab' );
                 
             } catch (err) {
                 console.error("Falló al copiar el texto: ", err);

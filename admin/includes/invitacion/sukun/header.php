@@ -81,7 +81,7 @@
             font-optical-sizing: auto;
             font-weight         : normal    ;
             font-style          : normal;
-            font-size           : 12px;
+            font-size           : 14px;
             color               : #666 !important;
         }
 

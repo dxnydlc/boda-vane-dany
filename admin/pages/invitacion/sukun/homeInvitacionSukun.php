@@ -361,7 +361,7 @@
 
 
 <!-- NOvios -->
-<section class="wpo-couple-section section-padding pt-2" id="couple">
+<section class="wpo-couple-section section-padding pt-2" id="couple" style="display:none;" >
     <div class="container">
         <div class="couple-area clearfix">
             <div class="couple-wrap">
