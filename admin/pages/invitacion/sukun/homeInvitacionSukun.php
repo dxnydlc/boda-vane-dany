@@ -457,8 +457,8 @@
 <section class="wpo-portfolio-section section-padding pt-0" id="gallery">
     <div class="container-fluid">
         <div class="wpo-section-title">
-            <h4 class="poort-text poort-in-right">Nosotros (sin filtros)</h4>
-            <h2 class="poort-text poort-in-right">Las aventuras, las locuras y todo lo que nos hace ser Vane y Dany.</h2>
+            <h4 class="">Nosotros (sin filtros)</h4>
+            <h2 class="">Las aventuras, las locuras y todo lo que nos hace ser Vane y Dany.</h2>
         </div>
         <div class="gallery-main-wrap">
             <div class="container mt-5" id="mi-galeria" >
@@ -483,13 +483,17 @@
 <!-- Cronograma -->
 <section class="wpo-event-section section-padding pt-0" id="event">
     <div class="container">
+        <div class="card transparente " >
+            <div class="card-body">
+                <h4 class="text-center" >Cuando y donde</h4>
+                <h2 class="text-center">Nuestro programa de boda</h2>
+            </div>
+        </div>
         <div class="wpo-section-title">
-            <h4 class="poort-text poort-in-right" >Cuando y donde</h4>
-            <h2 class="poort-text poort-in-right">Nuestro programa de boda</h2>
+            
         </div>
         <div class="wpo-event-main">
             <div class="event-description">
-                <h2 class="poort-text ">Nuestro programa de boda</h2>
             </div>
             <div class="wpo-event-wrap">
                 <div id="wrapperPrograma" class="wpo-event-inner" >
