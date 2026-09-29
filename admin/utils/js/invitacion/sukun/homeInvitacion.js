@@ -885,7 +885,7 @@ function handleSuccess( json , textStatus , xhr , tipoReq ) {
                 $('#lblNovios76').html(`${Novia} & ${Novio}`);
 
                 // wrapper_papa
-                $('#txtPrologo').html( `<p class=" fira-code text-center " >${dataBoda.Prologo}</p>` );
+                $('#txtPrologo').html( `<p class=" monallesia text-center " >${dataBoda.Prologo}</p>` );
 
                 let xPadrinos       = dataBoda.Padrinos;
                 let arPadrinos      = xPadrinos.split(',')
@@ -938,7 +938,7 @@ function handleSuccess( json , textStatus , xhr , tipoReq ) {
                 });
 
                 // Novios
-                $('#lblNovios01').html(`${Novia} & ${Novio}`);
+                $('#lblNovios01').html(`${Novia}<br>&<br/>${Novio}`);
                 
                 $('#lblNovia1').html( Novia );
                 $('#txtNovia1').html( txtNovia1 );

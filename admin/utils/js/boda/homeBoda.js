@@ -660,13 +660,19 @@ function prepararRequest( tipoReq ) {
     switch ( tipoReq ) {
         // -------------------------------------------------------------
         case 'guardar-cab':
-            data                = dataEnviarPost;
-            dataEnviarPost.id   = idCab;
+            data                            = dataEnviarPost;
+            dataEnviarPost.id               = idCab;
 
-            //if(! esNumerico( xIdForm ) ){ id = 0 ;dataEnviarPost.id = 0; }
+            let textoGuardadoEnBaseDeDatos = "";
+            // Aquí ya obtienes el texto del textarea gracias a .val()
+            let textoDelTextarea = $('#'+xIdForm+' #Prologo').val(); 
 
-            //idCab           = id;
-            //uuidCab         = uu_id;
+            // Aplicas el replace directamente a la variable de texto
+            textoGuardadoEnBaseDeDatos = textoDelTextarea.replace(/\n/g, '<br/>');
+
+            varDump( textoGuardadoEnBaseDeDatos );
+            dataEnviarPost.Prologo      = textoGuardadoEnBaseDeDatos;
+
             xUrl            = `${urlServicio}guardar`;
             xMetodo         = `POST`;
 
@@ -789,6 +795,16 @@ function handleSuccess( json , textStatus , xhr , tipoReq ) {
                     // Input normal
                     $ctrl.val(valor);
                 });
+
+                // 1. Obtienes el contenido HTML del div
+                let textoDelDiv = data.Prologo;
+
+                // 2. Reemplazas cualquier variante de <br> por un salto de línea real (\n)
+                let textoParaTextarea = textoDelDiv.replace(/<br\s*[\/]?>/gi, '\n');
+
+                // 3. Lo cargas en el textarea usando .val()
+                $('#'+xIdForm+' #Prologo').val(textoParaTextarea);
+
                 const gFecha = moment( data.Fecha ).format('YYYY-MM-DD');
                 $('#'+xIdForm+' #Fecha').val( gFecha );
                 toastr["success"]( json.msg.texto , 'Correcto' );
