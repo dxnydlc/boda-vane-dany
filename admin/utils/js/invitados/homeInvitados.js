@@ -1378,7 +1378,7 @@ function renderFormInTab( rowData , formId ) {
             break;
             // -----------------------------------------
             case 'Estado':
-                let arrEstados = [ 'activo', 'anulado', 'pausado' ];
+                let arrEstados = [ 'activo', 'anulado', 'no-podra' , 'confirmado' ];
                 htmlForm += `
                 <div class="mb-5 col-md-2 ">
                     <label for="Estado" class="form-label" >Estado</label>
