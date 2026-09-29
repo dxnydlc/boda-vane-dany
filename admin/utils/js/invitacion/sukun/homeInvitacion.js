@@ -755,7 +755,7 @@ function handleSuccess( json , textStatus , xhr , tipoReq ) {
                 if( NroInvitados == 0 )
                 {
                     textoInvitado = `
-                    <p class=" text-center fira-code " >
+                    <p class=" text-center jost " >
                     ¡Hola, <b>${data.Nombre}</b>! 💕
                     <br/>
                     Tenemos una invitación especialmente para ti. ✨
@@ -771,7 +771,7 @@ function handleSuccess( json , textStatus , xhr , tipoReq ) {
                 }else if( NroInvitados > 0 ){
                     //
                     textoInvitado = `
-                    <p class=" text-center fira-code " >
+                    <p class=" text-center jost " >
                     ¡Hola, <b>${data.Nombre}</b>! 💕
                     <br/>
                     Tenemos una invitación especialmente para ti. ✨
@@ -793,13 +793,13 @@ function handleSuccess( json , textStatus , xhr , tipoReq ) {
                 let fechaBoda         = moment(dataBoda.Fecha ).format('dddd D [de] MMMM [del] YYYY');
                 varDump( `>cHora: ${cHora}`);
                 $('#lblRegilioso1').html(`
-                    <p class=" fira-code text-center fuente-normal" >CEREMONIA ${dataBoda.Nombre.toUpperCase()}<br/>
-                    ${dataBoda.ReligiosoNombre}<br/>
+                    <h2 class=" text-center fuente-normal monallesia " >CEREMONIA ${dataBoda.Nombre.toUpperCase()}</h2><br/>
+                    <p class=" jost " >${dataBoda.ReligiosoNombre}<br/>
                     ${dataBoda.Direccion} <a href="#" id="abrirMapa1" data-bs-toggle="modal" data-bs-target="#modalMapa1"  >📍 Ver Ubicación</a>
                     <br/>
                     Hora:</p>
                     <br/>
-                    <h2 class=" fira-code fuente-normal text-center" >${moment(dataBoda.Hora, 'HH:mm:ss').format('HH:mm')}</h2>
+                    <h2 class=" jost fuente-normal text-center" >${moment(dataBoda.Hora, 'HH:mm:ss').format('HH:mm')}</h2>
                     <br/>
                 `);
 
@@ -837,14 +837,14 @@ function handleSuccess( json , textStatus , xhr , tipoReq ) {
 
 
                 let htmlRecep = `
-                <h2 class=" fira-code fuente-normal text-center " >RECEPCIÓN</h2>
-                <p class=" fira-code text-center fuente-normal" >
+                <h2 class=" jost fuente-normal text-center monallesia " >RECEPCIÓN</h2>
+                <p class=" jost text-center fuente-normal" >
                 ${dataBoda.RecepcionNombre}<br/>
                 ${dataBoda.RecepcionDireccion} <a href="#" id="abrirMapa1" data-bs-toggle="modal" data-bs-target="#modalMapa2"  >📍 Ver Ubicación</a>
                 <br/>
                 Hora:
                 </p>
-                <h2 class=" fira-code fuente-normal text-center" >${moment(dataBoda.RecepcionHora, 'HH:mm:ss').format('HH:mm')}</h2>
+                <h2 class=" jost fuente-normal text-center" >${moment(dataBoda.RecepcionHora, 'HH:mm:ss').format('HH:mm')}</h2>
 
 
                 <a href="${urlCalendario}" target="_blank" class="btn-agendar" style="margin:0 auto;display:block;width:185px;" >
@@ -885,7 +885,7 @@ function handleSuccess( json , textStatus , xhr , tipoReq ) {
                 $('#lblNovios76').html(`${Novia} & ${Novio}`);
 
                 // wrapper_papa
-                $('#txtPrologo').html( `<p class=" fira-code text-center " >${dataBoda.Prologo}</p>` );
+                $('#txtPrologo').html( `<p class=" jost text-center " >${dataBoda.Prologo}</p>` );
 
                 let xPadrinos       = dataBoda.Padrinos;
                 let arPadrinos      = xPadrinos.split(',')
@@ -894,11 +894,10 @@ function handleSuccess( json , textStatus , xhr , tipoReq ) {
                     <br/>
                     <p class=" monallesia" >Nuestos padrinos:</p>
                     <ul>
-                        <li><p class=" fira-code  " >${arPadrinos[0]}</p></li>
-                        <li><p class=" fira-code  " >${arPadrinos[1]}</p></li>
+                        <li><p class=" jost  " >${arPadrinos[0]}</p></li>
+                        <li><p class=" jost  " >${arPadrinos[1]}</p></li>
                     </ul>
-                    <br/>
-                    <br/>
+                    <div style="height:100px;width:100%; display:block;" ></div>
                 ` );
 
                 // moment(dataBoda.Fecha ).format('dddd D [de] MMMM [del] YYYY');
@@ -907,10 +906,10 @@ function handleSuccess( json , textStatus , xhr , tipoReq ) {
                 let mes1        = moment(dataBoda.Fecha ).format('MMMM');
                 let anio1       = moment(dataBoda.Fecha ).format('YYYY');
                 
-                $('#dia1').html(`<p class=" fira-code " >${dia1}</p>`);
-                $('#dia2').html(`<p class=" fira-code " >${dia2}</p>`);
-                $('#mes1').html(`<p class=" fira-code " >${mes1}</p>`);
-                $('#anio1').html(`<p class=" fira-code " >${anio1}</p>`);
+                $('#dia1').html(`<p class=" jost " >${dia1}</p>`);
+                $('#dia2').html(`<p class=" jost " >${dia2}</p>`);
+                $('#mes1').html(`<p class=" jost " >${mes1}</p>`);
+                $('#anio1').html(`<p class=" jost " >${anio1}</p>`);
 
                 /**
                 $('#wrapper_papa_novio').html(`<p class=" text-center " >
@@ -1200,15 +1199,7 @@ function handleSuccess( json , textStatus , xhr , tipoReq ) {
                 const textoFormateado           = fecha.format('D [de] MMMM [del] YYYY');
                 let textoMapa                   = dataBoda.MapaLink;
                 let arMapa                      = textoMapa.split(',');
-                //$('#lblFechaP1').html( textoFormateado );
-                /*$('#lblDireP1').html( dataBoda.Direccion+` <a id="lblVerMapa" href="#" 
-                    class="btn btn-outline-primary" 
-                    data-bs-toggle="modal" 
-                    data-bs-target="#mapaModal" 
-                    data-lat="${arMapa[0]}" 
-                    data-lng="${arMapa[1]}">
-                    📍 Ver Ubicación
-                    </a>` );*/
+
 
                 let htmlPrograma                = ``;
                 let dataPrograma                = json.programa;

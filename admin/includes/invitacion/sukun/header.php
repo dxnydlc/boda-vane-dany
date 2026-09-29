@@ -67,12 +67,23 @@
 
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@300..700&family=Source+Code+Pro:ital,wght@0,200..900;1,200..900&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Jost:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
+
+
     
-    
+
     <!-- <?php echo $URL_ASSETS ?>assets/images/person/fondo-bonito.jpeg -->
     <style>
 
+
+        .jost {
+            font-family: "Jost", sans-serif;
+            font-optical-sizing: auto;
+            font-weight         : normal    ;
+            font-style          : normal;
+            font-size           : 12px;
+            color               : #666 !important;
+        }
 
         .source-code-pro {
             font-family         : "Source Code Pro", monospace;

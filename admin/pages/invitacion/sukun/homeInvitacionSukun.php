@@ -56,9 +56,9 @@
         </div>
 
         <!-- Detalles -->
-        <p id="txtFecha2" class=" fira-code text-gray-600 font-serif text-lg md:text-xl mb-4 z-10">19 de noviembre de 2027</p>
+        <p id="txtFecha2" class=" jost text-gray-600 font-serif text-lg md:text-xl mb-4 z-10">-</p>
         
-        <p class=" fira-code text-[#0b1a30] text-xs md:text-sm tracking-[0.2em] uppercase mb-10 z-10 font-semibold">
+        <p class=" jost text-[#0b1a30] text-xs md:text-sm tracking-[0.2em] uppercase mb-10 z-10 font-semibold">
             Queremos compartir contigo.
         </p>
         
@@ -149,7 +149,10 @@
                 </div>
                 <!-- ./row -->
 
-                <h2 class="card-title text-center fuente-normal ">Información de la ceremonia</h2>
+                <!-- Separador -->
+                <div style="height:100px;width:100%; display:block;" ></div>
+
+                <!-- <h2 class="card-title text-center fuente-normal ">Información de la ceremonia</h2> -->
 
                 
 
@@ -287,7 +290,7 @@
                     <div class="wpo-contact-section-wrapper wow fadeInRightSlow" data-wow-duration="1700ms">
                         <div class="wpo-contact-form-area">
                             <div class="wpo-section-title">
-                                <h2 class=" fira-code " >¿Tienes un invitado?</h2>
+                                <h2 class=" jost " >¿Tienes un invitado?</h2>
                             </div>
                             <form method="post" class="contact-validation-active" id="contact-form-main" autocomplete="off" >
 
@@ -576,9 +579,9 @@
 
             <div class=" card transparente " >
                 <div class="card-body">
-                    <h4 class=" poort-text poort-in-right fira-code " >El mejor regalo es tu presencia</h4>
-                    <p class="fira-code">Nos sentimos bendecidos por su compañia, los obsequios son recibidos con gratitud y agradecemos tu contibución a través del deposito de cuenta destinado a cumplir nuestros sueños.</p>
-                    <p class="fira-code">Así mismo cualquier presente que quiera hacer llegar, lo puede dejar en la dirección: Los paltos 293-295 Ubr. Ermitaño, Independencia</p>
+                    <h4 class=" poort-text poort-in-right jost " >El mejor regalo es tu presencia</h4>
+                    <p class="jost">Nos sentimos bendecidos por su compañia, los obsequios son recibidos con gratitud y agradecemos tu contibución a través del deposito de cuenta destinado a cumplir nuestros sueños.</p>
+                    <p class="jost">Así mismo cualquier presente que quiera hacer llegar, lo puede dejar en la dirección: Los paltos 293-295 Ubr. Ermitaño, Independencia</p>
                 </div>
             </div>
 
@@ -590,7 +593,7 @@
 
                 <br>
 
-                <p class=" text-center fira-code " >
+                <p class=" text-center jost " >
                     ¡Una celebración solo para adultos! 🥂
                     <br/>
                     Amamos a los pequeños, pero en esta ocasión hemos decidido que nuestra celebración sea exclusivamente para adultos.
