@@ -601,7 +601,7 @@
 
                 <br>
 
-                <p class=" text-center jost " >
+                <p class=" text-center jost " style="font-size:16px;" >
                     ¡Una celebración solo para adultos! 🥂
                     <br/>
                     Amamos a los pequeños, pero en esta ocasión hemos decidido que nuestra celebración sea exclusivamente para adultos.
