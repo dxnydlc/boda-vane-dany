@@ -258,46 +258,7 @@
 <!-- Invitado -->
 
 
-<div class="card transparente " >
-    <div class="card-body">
-        <h2 class=" jost " >¿Tienes un invitado?</h2>
-        <form method="post" class="contact-validation-active" id="contact-form-main" autocomplete="off" >
 
-            <input type="hidden" id="id" name="id" value="0" />
-            <input type="hidden" id="uu_id" name="uu_id" value="" />
-            <input type="hidden" id="Foto" name="Foto" value="img/512x512.png" />
-
-            <div>
-                <input type="text" class="form-control" name="Nombre" id="Nombre" placeholder="Nombre" />
-            </div>
-            <div>
-                <input type="text" class="form-control" name="phone" id="phone" placeholder="Celular">
-            </div>
-            <div class="radio-buttons">
-                <p>
-                    <input type="radio" id="attend" name="Estado" value="confirmado" >
-                    <label for="attend">Si asistirá</label>
-                </p>
-                <p>
-                    <input type="radio" id="not" name="Estado" value="activo" >
-                    <label for="not">Aún va a confirmar</label>
-                </p>
-            </div>
-
-            <div class="submit-area">
-                <button id="btnConfirmaInvitado" type="button" class="theme-btn" >Confirmar</button>
-                <div id="c-loader">
-                    <i class="ti-reload"></i>
-                </div>
-            </div>
-            <div class="clearfix error-handling-messages">
-                <div id="success">Gracias</div>
-                <div id="error"> Error occurred while sending email. Please try again later.
-                </div>
-            </div>
-        </form>
-    </div>
-</div>
 
 
 
@@ -333,9 +294,44 @@
                     </div>
                 </div>
                 <div class="col col-xl-4 col-lg-5 col-md-12 col-12">
-                    <div class="wpo-contact-section-wrapper wow fadeInRightSlow" data-wow-duration="1700ms">
-                        <div class="wpo-contact-form-area">
-                            
+                    <div class="card transparente " >
+                        <div class="card-body">
+                            <h2 class=" jost " >¿Tienes un invitado?</h2>
+                            <form method="post" class="contact-validation-active" id="contact-form-main" autocomplete="off" >
+
+                                <input type="hidden" id="id" name="id" value="0" />
+                                <input type="hidden" id="uu_id" name="uu_id" value="" />
+                                <input type="hidden" id="Foto" name="Foto" value="img/512x512.png" />
+
+                                <div>
+                                    <input type="text" class="form-control" name="Nombre" id="Nombre" placeholder="Nombre" />
+                                </div>
+                                <div>
+                                    <input type="text" class="form-control" name="phone" id="phone" placeholder="Celular">
+                                </div>
+                                <div class="radio-buttons">
+                                    <p>
+                                        <input type="radio" id="attend" name="Estado" value="confirmado" >
+                                        <label for="attend">Si asistirá</label>
+                                    </p>
+                                    <p>
+                                        <input type="radio" id="not" name="Estado" value="activo" >
+                                        <label for="not">Aún va a confirmar</label>
+                                    </p>
+                                </div>
+
+                                <div class="submit-area">
+                                    <button id="btnConfirmaInvitado" type="button" class="theme-btn" >Confirmar</button>
+                                    <div id="c-loader">
+                                        <i class="ti-reload"></i>
+                                    </div>
+                                </div>
+                                <div class="clearfix error-handling-messages">
+                                    <div id="success">Gracias</div>
+                                    <div id="error"> Error occurred while sending email. Please try again later.
+                                    </div>
+                                </div>
+                            </form>
                         </div>
                     </div>
                 </div>
