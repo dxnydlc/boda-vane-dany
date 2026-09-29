@@ -662,12 +662,12 @@ function ejecutarDoc( tipoReq ) {
         varDump( tipoReq );
 
         switch (tipoReq) {
-            case 'listar-cab'  : objCargando = `#TablaHomePs`; break;
+            case 'listar-cab'  : objCargando = `#tblUsuarios`; break;
             case 'guardar-cab' : objCargando = `#${xIdForm}`; break;
             case 'anular-cab'  : objCargando = `#wrapper_form`; break;
             case 'cargar-cab'  : objCargando = `#frmDocumento`; break;
 
-            case 'listar-cab-filtro'  : objCargando = `#TablaHomePs`; break;
+            case 'listar-cab-filtro'  : objCargando = `#tblUsuarios`; break;
             case 'generar-ogg': objCargando = `#tblUsuarios`; break;
         }
 
