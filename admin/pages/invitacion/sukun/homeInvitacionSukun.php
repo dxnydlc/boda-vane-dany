@@ -455,10 +455,15 @@
 
 <!-- start wpo-portfolio-section -->
 <section class="wpo-portfolio-section section-padding pt-0" id="gallery">
+    <div class="card transparente " >
+        <div class="card-body">
+            <h4 class=" text-center " >Nosotros (sin filtros)</h4>
+            <h2 class=" text-center " >Las aventuras, las locuras y todo lo que nos hace ser Vane y Dany.</h2>
+        </div>
+    </div>
     <div class="container-fluid">
         <div class="wpo-section-title">
-            <h4 class="">Nosotros (sin filtros)</h4>
-            <h2 class="">Las aventuras, las locuras y todo lo que nos hace ser Vane y Dany.</h2>
+            
         </div>
         <div class="gallery-main-wrap">
             <div class="container mt-5" id="mi-galeria" >
@@ -533,13 +538,18 @@
 
 <!-- Codigo de vestimenta -->
 <section class="wpo-couple-section section-padding pt-2" id="couple">
+    <div class="card transparente " >
+        <div class="card-body">
+            <h4 class=" text-center " >Código de vestimenta</h4>
+            <h2 class=" text-center " >Por favor considera esto:</h2>
+        </div>
+    </div>
     <div class="container">
         <div class="wpo-section-title">
-            <h4 class="poort-text poort-in-right" >Código de vestimenta</h4>
+            <h4 class="poort-text poort-in-right" ></h4>
         </div>
         <div class="wpo-event-main">
             <div class="event-description">
-                <p id="lblFechaP1" >Por favor considera esto:</p>
             </div>
             <div class="wpo-event-wrap">
                 <img src="<?php echo $URL_ASSETS ?>assets/images/person/codigo-vestimenta-2.jpeg" class="mi-imagen" alt="">
