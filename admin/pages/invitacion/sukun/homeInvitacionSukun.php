@@ -237,7 +237,7 @@
                     <div class=" col-lg-3 col-md-3 " ></div>
                     <!-- ./col -->
                     <div class=" col-lg-3 col-md-3 " >
-                        <a id="btnConfirmarAsistencia" href="#" class="view-cart-btn" >Asistiré con gusto</a>
+                        <a id="btnConfirmarAsistencia" href="#" class="view-cart-btn" style="background:#de6acd" >Asistiré con gusto</a>
                     </div>
                     <!-- ./col -->
                     <div class=" col-lg-3 col-md-3 " >
