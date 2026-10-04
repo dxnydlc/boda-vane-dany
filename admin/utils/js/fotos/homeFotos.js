@@ -457,6 +457,7 @@ let optsLangDatatable = {
             clearPreviewAfterUpload: false , 
             allowedMime: [
                 "image/jpeg",
+                "image/jpg",
                 "image/png",
                 "application/pdf"
             ],
