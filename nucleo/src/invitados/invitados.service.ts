@@ -257,7 +257,8 @@ ${URL_PROYECTO}${dataBoda.data.Portada}
         "c.IdBoda as IdBoda" , 
         "c.Foto as Foto" , 
         "n.Nombre as Novio" , 
-        "IFNULL(DATE_FORMAT( c.invitation_sent_at , '%d/%m/%y %H:%i'), '-') AS Enviado" 
+        "IFNULL(DATE_FORMAT( c.invitation_sent_at , '%d/%m/%y %H:%i'), '-') AS Enviado" , 
+        "IF( IdInvitado <> 0, (SELECT Nombre FROM tbl_invitados i WHERE i.id = c.IdInvitado), '-' ) AS CompañiaDe"
       ])
       .innerJoin( "tbl_boda" , "b" , " c.IdBoda = b.id " )
       .innerJoin( "tbl_novios" , "n" , " c.IdNovio = n.id " )
@@ -744,7 +745,8 @@ ${URL_PROYECTO}${dataBoda.data.Portada}
         "c.IdBoda as IdBoda" , 
         "c.Foto as Foto" , 
         "n.Nombre as Novio" ,
-        "IFNULL(DATE_FORMAT( c.invitation_sent_at , '%d/%m/%y %H:%i'), '-') AS Enviado" 
+        "IFNULL(DATE_FORMAT( c.invitation_sent_at , '%d/%m/%y %H:%i'), '-') AS Enviado" ,
+        "IF( IdInvitado <> 0, (SELECT Nombre FROM tbl_invitados i WHERE i.id = c.IdInvitado), '-' ) AS CompañiaDe"
       ])
       .innerJoin( "tbl_boda" , "b" , " c.IdBoda = b.id " )
       .innerJoin( "tbl_novios" , "n" , " c.IdNovio = n.id " )
@@ -872,8 +874,8 @@ ${URL_PROYECTO}${dataBoda.data.Portada}
         "c.Estado as Estado" , 
         "c.IdNovio as IdNovio" , 
         "c.IdBoda as IdBoda" , 
-        
-        "IFNULL(DATE_FORMAT( c.invitation_sent_at , '%d/%m/%y %H:%i'), '-') AS Enviado" 
+        "IFNULL(DATE_FORMAT( c.invitation_sent_at , '%d/%m/%y %H:%i'), '-') AS Enviado" ,
+        "IF( IdInvitado <> 0, (SELECT Nombre FROM tbl_invitados i WHERE i.id = c.IdInvitado), '-' ) AS CompañiaDe"
       ])
       .innerJoin( "tbl_boda" , "b" , " c.IdBoda = b.id " )
       .innerJoin( "tbl_novios" , "n" , " c.IdNovio = n.id " )
