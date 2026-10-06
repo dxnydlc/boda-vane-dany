@@ -92,6 +92,13 @@ export class InvitadosController {
   }
   // ................................................................
   // ................................................................
+  @Get('get-activos/:IdBoda')
+  @HttpCode(200)
+  async getActivosbyId( @Param('IdBoda') IdBoda : number ) {
+    return this.invitadosService.getActivosByIdBoda( IdBoda );
+  }
+  // ................................................................
+  // ................................................................
   @Get('get-lista/:IdBoda')
   @HttpCode(200)
   async getListabyId( @Param('IdBoda') IdBoda : number ) {

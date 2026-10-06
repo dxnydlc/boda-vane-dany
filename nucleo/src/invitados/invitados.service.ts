@@ -357,6 +357,71 @@ ${URL_PROYECTO}${dataBoda.data.Portada}
   }
   // ...................................................................
   // ...................................................................
+  async getActivosByIdBoda( IdBoda : number ) {
+    try {
+      
+      // URL_PROYECTO.
+      let urlProyeto              = `${process.env.URL_PROYECTO}`;
+
+      let data = await this.datosModel.createQueryBuilder('c')
+      .select([ 
+        "c.id as id" , 
+        "c.Nombre as Nombre" , 
+        "c.group_name as Tipo" , 
+        `CONCAT( '${urlProyeto}' , c.Foto) as Foto` , 
+        "c.Estado as Estado" 
+      ])
+      .where(" c.Estado IN ( 'Activo' , 'Confirmado' ) AND c.IdBoda = :IdBoda " , { IdBoda } )
+      .getRawMany();
+
+      let dataout: Array<{
+        id: number;
+        Nombre: string;
+        Tipo: string;
+        Foto: string;
+        Estado : string;
+      }> = [];
+
+
+      for (let index = 0; index < data.length; index++) {
+        const rs = data[index];
+        let o = {
+          id      : parseInt( rs.id ) , 
+          Nombre  : rs.Nombre , 
+          Tipo    : rs.Tipo , 
+          Foto    : rs.Foto , 
+          Estado : rs.Estado , 
+        };
+        dataout.push( o );
+      }
+  
+      return {
+        data : dataout , 
+        version : '1' , 
+        msg : { titulo : 'Correcto' , texto : 'Registros cargados' , clase : 'success' , call : 'tostada2' }
+      }
+
+    } catch (error) {
+
+      // Para depuración local
+      varDump(error); 
+
+      // SI EL ERROR YA ES DE NESTJS (ej. BadRequestException), LO RELANZAMOS DIRECTO
+      if (error instanceof HttpException) {
+        throw error;
+      }
+
+      // SI ES UN ERROR INESPERADO (ej. caída de BD, error de sintaxis), ENVIAMOS UN 500
+      throw new InternalServerErrorException({
+        message: 'Error en el servicio de Invitados',
+        cause: error // Mantiene el rastro del error original en logs internos
+      });
+
+    }
+
+  }
+  // ...................................................................
+  // ...................................................................
   async getbyId( id : number ) {
     try {
 

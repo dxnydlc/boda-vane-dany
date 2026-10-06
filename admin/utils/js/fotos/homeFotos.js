@@ -130,28 +130,28 @@ let optsLangDatatable = {
     $.fn.fileUploader = function (options) {
 
         const settings = $.extend({
-            endpoint: "v1/tickets-archivos/upload",
-            token: "",
-            maxSizeMB: 10,
-            allowedMime: [],
-            extraData: {},
-            preview: true,
-            queue: true,
-            cancelable: true,
-            dragAndDrop: true,
+            endpoint        : "v1/tickets-archivos/upload",
+            token           : "",
+            maxSizeMB       : 10,
+            allowedMime     : [],
+            extraData       : {},
+            preview         : true,
+            queue           : true,
+            cancelable      : true,
+            dragAndDrop     : true,
             clearPreviewAfterUpload: false,
 
             // Hooks
-            beforeQueueStart: function (files) {},
-            beforeUpload: function (file) {},
-            afterUpload: function (file, response) {},
-            afterAllUploads: function () {},
-            onCancel: function (file) {},
-            onPreviewRender: function (file, previewElement) {},
-            onProgress: function (percent) {},
-            onError: function (err) {},
-            onSuccess: function (resp) {}
-        }, options);
+            beforeQueueStart    : function (files) {},
+            beforeUpload        : function (file) {},
+            afterUpload         : function (file, response) {},
+            afterAllUploads     : function () {},
+            onCancel            : function (file) {},
+            onPreviewRender     : function (file, previewElement) {},
+            onProgress          : function (percent) {},
+            onError             : function (err) {},
+            onSuccess           : function (resp) {}
+        }, options );
 
         return this.each(function () {
 
@@ -2234,16 +2234,16 @@ function cerrarModalArchivos() {
 /* ------------------------------------------------------------- */
 // Delegación para elementos dinámicos
 document.addEventListener("click", function(e) {
-    const a = e.target.closest("a[data-fx]");
+    const a         = e.target.closest("a[data-fx]");
     if (!a) return;
 
     e.preventDefault();
-    const url = a.getAttribute("href");
+    const url       = a.getAttribute("href");
 
-    const modal = document.getElementById("fxModal");
-    const img   = document.getElementById("fxImg");
+    const modal     = document.getElementById("fxModal");
+    const img       = document.getElementById("fxImg");
 
-    img.src = url;
+    img.src         = url;
     modal.style.display = "flex";
 
     setTimeout(() => {

@@ -34,10 +34,11 @@
 
                     <div class="demo-card  rounded-xl mb-5">
                         <div class="demo-card-header d-flex align-items-center justify-content-between px-6 py-5 ">
-                            <h3 class="demo-card-title m-0">Colores de mesa</h3>
+                            <h3 class="demo-card-title m-0">Opciones</h3>
                         </div>
                         <div class="demo-card-body">
                             
+                            <button id="btnExportarMesas" >Exportar Mesas con invitados</button>
                             <div id="panelColores" class="mt-2"></div>
 
                         </div>

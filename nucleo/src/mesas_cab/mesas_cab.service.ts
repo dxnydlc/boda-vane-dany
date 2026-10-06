@@ -11,6 +11,9 @@ const execShPromise = require("exec-sh").promise;
 
 const moment = require('moment');
 
+import * as ExcelJS from 'exceljs';
+import * as fs from 'fs';
+import * as path from 'path';
 
 
 import { v4 as uuidv4 } from 'uuid';
@@ -37,6 +40,16 @@ export interface Mesa {
   color: string;
   invitados: Invitado[];
 }
+
+interface InvitadoMesa {
+  IdMesa: number;
+  NombreMesa: string; // Nombre de la mesa
+  NroInvitados: number;
+  Invitado: string;
+  Tipo: string;
+  Novio: string;
+}
+
 
 
 // CreateMesasCabDto | UpdateMesasCabDto
@@ -471,6 +484,162 @@ export class MesasCabService {
   // ...................................................................
   // ...................................................................
   // ...................................................................
+  // Exportar a excel
+  async exportarExcel( IdBoda : number = 0 ) {
+    try {
+      
+      let _URL_PROYECTO       = process.env.URL_PROYECTO;
+
+      let invitados = await this.datosModel.createQueryBuilder('c')
+      .select([
+        "c.id as IdMesa" , 
+        "c.Nombre as NombreMesa", 
+        "c.NroInvitados as NroInvitados" , 
+        "i.Nombre as Invitado" , 
+        "i.group_name as Tipo" , 
+        "n.Nombre as Novio"
+      ])
+      .innerJoin( "tbl_mesas_det" , "d" , " d.IdMesa = c.id " )
+      .innerJoin( "tbl_invitados" , "i" , " i.id = d.IdInvitado " )
+      .innerJoin( "tbl_novios" , "n", " i.IdNovio = n.id " )
+      .where(" c.IdBoda = :IdBoda " , { IdBoda } )
+      .getRawMany();
+  
+      // ==============================================================
+      const workbook = new ExcelJS.Workbook();
+
+      /**
+      * =========================================
+      * HOJA MESAS
+      * =========================================
+      */
+      const wsMesas = workbook.addWorksheet('Mesas');
+      
+      wsMesas.columns = [
+      { header: 'IdMesa', key: 'IdMesa', width: 15 },
+      { header: 'Mesa', key: 'NombreMesa', width: 40 },
+      { header: 'NroInvitados', key: 'NroInvitados', width: 15 },
+      ];
+      
+      const mesas = [
+        ...new Map(
+        invitados.map(item => [
+        item.IdMesa,
+        {
+        IdMesa        : item.IdMesa,
+        NombreMesa    : item.NombreMesa,
+        NroInvitados  : item.NroInvitados,
+        },
+        ]),
+        ).values(),
+      ].sort((a, b) => a.IdMesa - b.IdMesa);
+      
+      wsMesas.addRows(mesas);
+      
+      /**
+      * =========================================
+      * HOJA INVITADOS
+      * =========================================
+      */
+      const wsInvitados = workbook.addWorksheet('Invitados');
+      
+      wsInvitados.columns = [
+      { header: 'IdMesa', key: 'IdMesa', width: 15 },
+      { header: 'Mesa', key: 'NombreMesa', width: 40 },
+      { header: 'Invitado', key: 'Invitado', width: 40 },
+      { header: 'Tipo', key: 'Tipo', width: 20 },
+      { header: 'Novio', key: 'Novio', width: 15 },
+      ];
+      
+      const invitadosOrdenados = [...invitados].sort((a, b) => {
+        const mesaCompare =
+        a.NombreMesa.localeCompare(b.NombreMesa);
+        
+        if (mesaCompare !== 0) {
+        return mesaCompare;
+        }
+        
+        return a.Invitado.localeCompare(b.Invitado);
+      });
+      
+      wsInvitados.addRows(invitadosOrdenados);
+      
+      /**
+      * =========================================
+      * ESTILOS
+      * =========================================
+      */
+      for (const sheet of workbook.worksheets) {
+        sheet.getRow(1).font = {
+          bold  : true,
+          color : { argb: 'FFFFFF' },
+        };
+      
+        sheet.getRow(1).fill = {
+        type    : 'pattern',
+        pattern : 'solid',
+        fgColor : { argb: '1F4E78' },
+        };
+      
+        sheet.views = [
+        {
+          state : 'frozen',
+          ySplit: 1,
+        },
+        ];
+      }
+      
+      /**
+      * =========================================
+      * EXPORTAR A DISCO
+      * =========================================
+      */
+      const exportsDir = path.join(
+      process.cwd(),
+      'public',
+      'exports',
+      );
+      
+      if (!fs.existsSync(exportsDir)) {
+        fs.mkdirSync(exportsDir, { recursive: true });
+      }
+
+      // Archivo de descarga
+      let archivoDescarga     = `mesas-invitados-${Date.now()}.xlsx`;
+      
+      const filePath = path.join(
+      exportsDir,
+      archivoDescarga,
+      );
+      
+      await workbook.xlsx.writeFile( filePath );
+      // ==============================================================
+
+      return {
+        data : invitados , archivo : `exports/${archivoDescarga}` , 
+        version : '1' , 
+        msg : { titulo : 'Correcto' , texto : 'Registros cargados' , clase : 'success' , call : 'tostada2' }
+      }
+
+    } catch (error) {
+
+      // Para depuración local
+      varDump(error); 
+
+      // SI EL ERROR YA ES DE NESTJS (ej. BadRequestException), LO RELANZAMOS DIRECTO
+      if (error instanceof HttpException) {
+        throw error;
+      }
+
+      // SI ES UN ERROR INESPERADO (ej. caída de BD, error de sintaxis), ENVIAMOS UN 500
+      throw new InternalServerErrorException({
+        message: 'Error en el servicio de Mesas Cab',
+        cause: error // Mantiene el rastro del error original en logs internos
+      });
+
+    }
+
+  }
   // ...................................................................
   // ...................................................................
   // ...................................................................

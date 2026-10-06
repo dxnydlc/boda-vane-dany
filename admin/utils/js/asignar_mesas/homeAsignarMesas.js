@@ -386,6 +386,10 @@ let optsLangDatatable = {
         });
         /* ------------------------------------------------------------- */
         /* ------------------------------------------------------------- */
+        $("#btnExportarMesas").on( "click", function(e) {
+            e.preventDefault();
+            ejecutarDoc( 'exportar-mesa' );
+        });
         /* ------------------------------------------------------------- */
         /* ------------------------------------------------------------- */
         /* ------------------------------------------------------------- */
@@ -578,6 +582,7 @@ function ejecutarDoc( tipoReq ) {
             case 'add-invitado'     : objCargando = `#wrapperMesas`; break;
             case 'rem-invitado'     : objCargando = `#wrapperMesas`; break;
             case 'color-mesa'       : objCargando = `#wrapperMesas`; break;
+            case 'exportar-mesa'    : objCargando = `#wrapperMesas`; break;
         }
 
         mostrarLoader( objCargando );
@@ -653,7 +658,7 @@ function prepararRequest( tipoReq ) {
         // -------------------------------------------------------------
         case 'get-invitados':
             idCab            = $('#cboBoda').val();
-            xUrl             = `${urlInvitados}get-lista/${idCab}`;
+            xUrl             = `${urlInvitados}get-activos/${idCab}`;
             xMetodo          = `GET`;
         break;
         // -------------------------------------------------------------
@@ -694,6 +699,11 @@ function prepararRequest( tipoReq ) {
         break;
         // -------------------------------------------------------------
         // -------------------------------------------------------------
+        case 'exportar-mesa':
+            xUrl            = `${urlMesaCab}exportar-mesas`;
+            xMetodo         = `POST`;
+            data            = { IdBoda : $('#cboBoda').val() };
+        break;
         // -------------------------------------------------------------
         // -------------------------------------------------------------
         // -------------------------------------------------------------
@@ -849,6 +859,10 @@ function handleSuccess( json , textStatus , xhr , tipoReq ) {
             break;
             // -------------------------------------------------------------
             // -------------------------------------------------------------
+            case 'exportar-mesa':
+                varDump(`> ${json.archivo}`);
+                descargarExcel( `${URL_API}${json.archivo}` , 'Invitados.xlsx' );
+            break;
             // -------------------------------------------------------------
             // -------------------------------------------------------------
             // -------------------------------------------------------------
@@ -1745,5 +1759,16 @@ function contarInvitadosPorMesa(IdMesa) {
 /* ------------------------------------------------------------- */
 /* ------------------------------------------------------------- */
 /* ------------------------------------------------------------- */
+// Descargar archivo url
+function descargarExcel( url , nombreDescarga ) {
+    // nombreDescarga con extensión | invitados-mesas.xlsx
+  const link        = document.createElement('a');
+  link.href         = url;
+  link.download     = nombreDescarga;
+
+  document.body.appendChild(link);
+  link.click();
+  document.body.removeChild(link);
+}
 /* ------------------------------------------------------------- */
 /* ------------------------------------------------------------- */
