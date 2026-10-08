@@ -23,6 +23,8 @@ import { MesasCabModel } from './entities/mesas_cab.entity';
 import { Repository } from 'typeorm';
 import { MesasDetService } from 'src/mesas_det/mesas_det.service';
 
+import PDFDocument from 'pdfkit';
+
 require('colors');
 
 
@@ -60,7 +62,9 @@ interface InvitadoMesa {
   Novio: string;
 }
 
-
+export interface InvitadoGenerado {
+  id: string | number;
+}
 
 // CreateMesasCabDto | UpdateMesasCabDto
 @Injectable()
@@ -691,9 +695,13 @@ export class MesasCabService {
   
       varDump(`>>> generar tarjetitas ${invitados.length}`);
       await this.generarImagenesConSharp( invitados );
+      // generar un pdf
+      let archivoSalida = `tarjetas_impresion_${Date.now()}.pdf`;
+      await this.generarGridPDF( invitados , 3 , archivoSalida );
 
       return {
         data : {} , 
+        archivo : `pdfs/${archivoSalida}` ,
         version : '1' , 
         msg : { titulo : 'Correcto' , texto : 'Tarjetitas generadas' , clase : 'success' , call : 'tostada2' }
       }
@@ -729,12 +737,12 @@ export class MesasCabService {
     }
 
     // Obtener dimensiones reales de la plantilla para el tamaño del SVG
-    const metadata = await sharp(rutaPlantilla).metadata();
-    const width = metadata.width || 1200;
-    const height = metadata.height || 800;
+    const metadata              = await sharp(rutaPlantilla).metadata();
+    const width                 = metadata.width || 1200;
+    const height                = metadata.height || 800;
 
     for (const dato of invitados) {
-      varDump(`||| Generando imagen de invitado ${dato.invitado} de ${invitados.length}`);
+      //varDump(`||| Generando imagen de invitado ${dato.invitado} de ${invitados.length}`);
       // Crear el texto como una imagen vectorial (SVG)
       // text-anchor: middle y x="50%" centran el texto automáticamente
       const svgText = `
@@ -780,6 +788,77 @@ export class MesasCabService {
   }
   // ...................................................................
   // ...................................................................
+  async generarGridPDF(
+    invitados: InvitadoGenerado[],
+    columnas: number = 3,
+    nombreArchivo: string = `tarjetas_impresion_${Date.now()}.pdf`
+  ): Promise<string> {
+    return new Promise((resolve, reject) => {
+      // Documento tamaño A4 sin márgenes automáticos
+      const doc = new PDFDocument({ size: 'A4', margin: 0 });
+      
+      const directorioSalida = path.join(process.cwd(), 'public', 'pdfs');
+      if (!fs.existsSync(directorioSalida)) {
+        fs.mkdirSync(directorioSalida, { recursive: true });
+      }
+
+      const rutaSalida = path.join(directorioSalida, nombreArchivo);
+      const stream = fs.createWriteStream(rutaSalida);
+
+      doc.pipe(stream);
+      stream.on('finish', () => resolve(rutaSalida));
+      stream.on('error', reject);
+      doc.on('error', reject);
+
+      // Constantes de dimensiones de una hoja A4 en puntos (PDFKit)
+      const anchoA4 = 595.28;
+      const altoA4 = 841.89;
+      
+      // Márgenes de la hoja para que la impresora no corte los bordes
+      const margenX = 20; 
+      const margenY = 30;
+
+      // Cálculo dinámico de dimensiones
+      const anchoDisponible = anchoA4 - (margenX * 2);
+      const tarjetaAncho = anchoDisponible / columnas;
+      // Mantenemos la proporción de la tarjeta original (120 de alto x 180 de ancho)
+      const tarjetaAlto = tarjetaAncho * (120 / 180); 
+
+      const altoDisponible = altoA4 - (margenY * 2);
+      const filasPorPagina = Math.floor(altoDisponible / tarjetaAlto);
+      const tarjetasPorPagina = columnas * filasPorPagina;
+
+      invitados.forEach((dato, index) => {
+        const rutaImagen = path.join(process.cwd(), 'public', 'tarjetas_generadas', `${dato.id}.png`);
+        
+        // Validación de seguridad por si una imagen no se generó
+        if (!fs.existsSync(rutaImagen)) {
+          console.warn(`Imagen no encontrada para ID: ${dato.id}`);
+          return; 
+        }
+
+        // Insertar salto de página cuando se llena la cuadrícula
+        if (index > 0 && index % tarjetasPorPagina === 0) {
+          doc.addPage();
+        }
+
+        // Calcular posición en la cuadrícula de la página actual
+        const indexEnPagina = index % tarjetasPorPagina;
+        const col = indexEnPagina % columnas;
+        const fila = Math.floor(indexEnPagina / columnas);
+
+        // Calcular coordenadas X e Y exactas
+        const x = margenX + (col * tarjetaAncho);
+        const y = margenY + (fila * tarjetaAlto);
+
+        // Estampar la imagen individual en el PDF
+        doc.image(rutaImagen, x, y, { width: tarjetaAncho, height: tarjetaAlto });
+      });
+
+      // Cerrar y guardar el documento
+      doc.end();
+    });
+  }
   // ...................................................................
   // ...................................................................
   // ...................................................................

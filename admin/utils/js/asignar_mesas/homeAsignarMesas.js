@@ -877,6 +877,7 @@ function handleSuccess( json , textStatus , xhr , tipoReq ) {
             // -------------------------------------------------------------
             case 'exportar-tarjetitas':
                 toastr["success"]( json.msg.texto , 'Correcto' );
+                descargarExcel( `${URL_API}${json.archivo}` , 'Invitados.pdf' );
             break;
             // -------------------------------------------------------------
             // -------------------------------------------------------------

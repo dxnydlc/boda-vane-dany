@@ -4,6 +4,7 @@
 /build
 /public/uploads/*
 /public/exports/*
+/public/tarjetas_generadas/*
 
 # Logs
 logs
