@@ -80,6 +80,9 @@ export class MesasCabService {
   // ...................................................................
   // Variables de control
   private readonly config = {
+    // Apuntamos exactamente al nombre que reconoce el sistema operativo
+    fuenteFamilia: "'Edu QLD Hand', cursive",
+
     tamanoTextoNombre : 130,
     tamanoTextoMesa   : 110,
     
@@ -769,7 +772,7 @@ export class MesasCabService {
           <style>
             .nombre { 
               fill: ${this.config.colorTexto}; 
-              font-family: '${this.config.fuenteCursiva}', sans-serif;
+              font-family: '${this.config.fuenteFamilia}', sans-serif;
               text-anchor: middle; 
             }
             .mesa { 
