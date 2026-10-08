@@ -84,7 +84,7 @@ export class MesasCabService {
     tamanoTextoMesa   : 110,
     
     // Coordenadas Y (El eje X se centrará automáticamente al 50%)
-    coordYNombre      : 850, 
+    coordYNombre      : 770, 
     coordYMesa        : 1300,   
     
     colorTexto: '#4a5e4b',
@@ -742,16 +742,34 @@ export class MesasCabService {
     const height                = metadata.height || 800;
 
     for (const dato of invitados) {
-      //varDump(`||| Generando imagen de invitado ${dato.invitado} de ${invitados.length}`);
-      // Crear el texto como una imagen vectorial (SVG)
-      // text-anchor: middle y x="50%" centran el texto automáticamente
+      let nombreLinea1 = dato.invitado;
+      let nombreLinea2 = '';
+      let tamanoFuenteActual = this.config.tamanoTextoNombre;
+
+      // Límite de caracteres antes de dividir la línea (ajústalo según el ancho de tu tarjeta)
+      const limiteCaracteres = 30; 
+
+      if (dato.invitado.length > limiteCaracteres && dato.invitado.includes(' ')) {
+        // Reducimos un poco el tamaño de letra general para nombres compuestos largos
+        tamanoFuenteActual = this.config.tamanoTextoNombre - 10; 
+        
+        const palabras = dato.invitado.split(' ');
+        // Encontrar la mitad aproximada de las palabras
+        const mitad = Math.ceil(palabras.length / 2);
+        
+        nombreLinea1 = palabras.slice(0, mitad).join(' ');
+        nombreLinea2 = palabras.slice(mitad).join(' ');
+      } else if (dato.invitado.length > limiteCaracteres) {
+        // Si es una sola palabra extremadamente larga, solo reducimos la fuente
+        tamanoFuenteActual = this.config.tamanoTextoNombre - 15;
+      }
+
       const svgText = `
         <svg width="${width}" height="${height}">
           <style>
             .nombre { 
               fill: ${this.config.colorTexto}; 
-              font-size: ${this.config.tamanoTextoNombre}px; 
-              font-family: ${this.config.fuenteCursiva};
+              font-family: '${this.config.fuenteCursiva}', sans-serif;
               text-anchor: middle; 
             }
             .mesa { 
@@ -761,7 +779,14 @@ export class MesasCabService {
               text-anchor: middle; 
             }
           </style>
-          <text x="50%" y="${this.config.coordYNombre}" class="nombre">${dato.invitado}</text>
+          
+          <!-- Primera línea del nombre -->
+          <text x="50%" y="${this.config.coordYNombre}" font-size="${tamanoFuenteActual}px" class="nombre">${nombreLinea1}</text>
+          
+          <!-- Segunda línea (solo se dibuja si nombreLinea2 tiene texto) -->
+          ${nombreLinea2 ? `<text x="50%" y="${this.config.coordYNombre + tamanoFuenteActual}" font-size="${tamanoFuenteActual}px" class="nombre">${nombreLinea2}</text>` : ''}
+          
+          <!-- Número de mesa -->
           <text x="50%" y="${this.config.coordYMesa}" class="mesa">${dato.mesa}</text>
         </svg>
       `;
@@ -777,23 +802,8 @@ export class MesasCabService {
             left: 0,
           },
         ])
-        // Exportar a JPEG acelerará enormemente la creación del PDF
         .jpeg({ quality: 95 }) 
         .toFile(rutaGuardado);
-      /*const nombreArchivo = `${dato.id}.png`;
-      const rutaGuardado = path.join(directorioSalida, nombreArchivo);
-
-      // Superponer el SVG generado sobre la imagen base y guardarla
-      await sharp(rutaPlantilla)
-        .composite([
-          {
-            input: Buffer.from(svgText),
-            top: 0,
-            left: 0,
-          },
-        ])
-        .png() // Exportar el resultado final como PNG
-        .toFile(rutaGuardado);*/
 
       rutasGeneradas.push(rutaGuardado);
     }
