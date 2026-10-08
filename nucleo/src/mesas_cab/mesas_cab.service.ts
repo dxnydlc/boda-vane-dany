@@ -742,23 +742,23 @@ export class MesasCabService {
     const height                = metadata.height || 800;
 
     for (const dato of invitados) {
-      let nombreLinea1 = dato.invitado;
-      let nombreLinea2 = '';
-      let tamanoFuenteActual = this.config.tamanoTextoNombre;
+      let nombreLinea1          = dato.invitado;
+      let nombreLinea2          = '';
+      let tamanoFuenteActual    = this.config.tamanoTextoNombre;
 
       // Límite de caracteres antes de dividir la línea (ajústalo según el ancho de tu tarjeta)
-      const limiteCaracteres = 30; 
+      const limiteCaracteres    = 25; 
 
       if (dato.invitado.length > limiteCaracteres && dato.invitado.includes(' ')) {
         // Reducimos un poco el tamaño de letra general para nombres compuestos largos
-        tamanoFuenteActual = this.config.tamanoTextoNombre - 10; 
+        tamanoFuenteActual      = this.config.tamanoTextoNombre - 10; 
         
         const palabras = dato.invitado.split(' ');
         // Encontrar la mitad aproximada de las palabras
-        const mitad = Math.ceil(palabras.length / 2);
+        const mitad             = Math.ceil(palabras.length / 2);
         
-        nombreLinea1 = palabras.slice(0, mitad).join(' ');
-        nombreLinea2 = palabras.slice(mitad).join(' ');
+        nombreLinea1            = palabras.slice(0, mitad).join(' ');
+        nombreLinea2            = palabras.slice(mitad).join(' ');
       } else if (dato.invitado.length > limiteCaracteres) {
         // Si es una sola palabra extremadamente larga, solo reducimos la fuente
         tamanoFuenteActual = this.config.tamanoTextoNombre - 15;
