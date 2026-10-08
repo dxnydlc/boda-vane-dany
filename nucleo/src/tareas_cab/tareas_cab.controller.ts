@@ -1,7 +1,9 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete, ValidationPipe, UseGuards, UsePipes, HttpCode, Req } from '@nestjs/common';
-import { MesasCabService } from './mesas_cab.service';
-import { CreateMesasCabDto } from './dto/create-mesas_cab.dto';
-import { UpdateMesasCabDto } from './dto/update-mesas_cab.dto';
+import { Controller, Get, Post, Body, Patch, Param, Delete, UseGuards, ValidationPipe, UsePipes, HttpCode, Req } from '@nestjs/common';
+import { TareasCabService } from './tareas_cab.service';
+import { CreateTareasCabDto } from './dto/create-tareas_cab.dto';
+import { UpdateTareasCabDto } from './dto/update-tareas_cab.dto';
+
+
 
 
 //import * as moment from 'moment';
@@ -21,19 +23,20 @@ import { JwtGuardGuard } from 'src/guards/jwt-guard/jwt-guard.guard';
 // Para activar el auth JwTokenAuth
 @UseGuards( JwtGuardGuard )
 
-@ApiTags('Datos')
+@ApiTags('Tareas')
 @ApiBearerAuth()
 @UsePipes( new ValidationPipe )
 
 
-// CreateMesasCabDto | UpdateMesasCabDto
-@Controller('mesas-cab')
-export class MesasCabController {
-  // constructor(private readonly mesasCabService: MesasCabService) {}
+
+// CreateTareasCabDto | UpdateTareasCabDto
+@Controller('tareas-cab')
+export class TareasCabController {
+  //constructor(private readonly tareasCabService: TareasCabService) {}
   // ................................................................
   // ................................................................
   constructor(
-    private readonly mesasCabService: MesasCabService , 
+    private readonly servicio: TareasCabService , 
     private readonly util : UtilidadesService , 
   ) {}
   // ................................................................
@@ -48,50 +51,24 @@ export class MesasCabController {
   // ................................................................
   // ................................................................
   // ................................................................
-  @Post('exportar-tarjetitas')
+  // ................................................................
+  // ................................................................
+  // ................................................................
+  // ................................................................
+  // ................................................................
+  // ................................................................
+  // ................................................................
+  // ................................................................
+  @Get('get-activos')
   @HttpCode(200)
-  async exportarMesasImagen(  @Body('IdBoda') IdBoda : number )
-  {
-    //
-    return this.mesasCabService.generarImagenesPeques( IdBoda );
-  }
-  // ................................................................
-  // ................................................................
-  @Post('exportar-mesas')
-  @HttpCode(200)
-  async exportarMesas(  @Body('IdBoda') IdBoda : number )
-  {
-    //
-    return this.mesasCabService.exportarExcel( IdBoda );
-  }
-  // ................................................................
-  // ................................................................
-  @Post('nro-invitados')
-  @HttpCode(200)
-  async setInvitados( @Body('IdMesa') IdMesa : number , @Body('Cantidad') Cantidad : number )
-  {
-    return this.mesasCabService.setNroInvitados( IdMesa , Cantidad );
-  }
-  // ................................................................
-  // ................................................................
-  @Post('color')
-  @HttpCode(200)
-  async setColor( @Body('IdMesa') IdMesa : number , @Body('Color') Color : string )
-  {
-    return this.mesasCabService.setColor( IdMesa , Color );
-  }
-  // ................................................................
-  // ................................................................
-  @Get('get-lista/:IdBoda')
-  @HttpCode(200)
-  async getMesasBoda( @Param('IdBoda') IdBoda : number = 0 ) {
-    return this.mesasCabService.getMesas( IdBoda );
+  async getActivos() {
+    return this.servicio.getActivos();
   }
   // ................................................................
   // ................................................................
   @Post('guardar')
   @HttpCode(200)
-  async guardar(@Body() dto : CreateMesasCabDto , @Req() req : express.Request ) {
+  async guardar(@Body() dto : CreateTareasCabDto , @Req() req : express.Request ) {
     
     const createdAt   = moment().format('YYYY-MM-DD HH:mm:ss');
     let Usuario       = '' , IdUsuario = '0';
@@ -114,27 +91,27 @@ export class MesasCabController {
       UsuarioMod: Usuario,
     };
 
-    return this.mesasCabService.guardar( bodyProocolo );
+    return this.servicio.guardar( bodyProocolo );
   }
   // ................................................................
   // ................................................................
   @Get('get-todos')
   @HttpCode(200)
   async getTodos() {
-    return this.mesasCabService.getTodos();
+    return this.servicio.getTodos();
   }
   // ................................................................
   // ................................................................
   @Get('get-by-id/:id')
   @HttpCode(200)
   async getbyId( @Param('id') id : number ) {
-    return this.mesasCabService.getbyId( id );
+    return this.servicio.getbyId( id );
   }
   // ................................................................
   // ................................................................
   @Patch('actualizar/:uuid')
   @HttpCode(200)
-  async Actualizar( @Param('uuid') uuid : string, @Body() dto : UpdateMesasCabDto , @Req() req : express.Request ) {
+  async Actualizar( @Param('uuid') uuid : string, @Body() dto : UpdateTareasCabDto , @Req() req : express.Request ) {
     
     const createdAt   = moment().format('YYYY-MM-DD HH:mm:ss');
     let Usuario       = '' , IdUsuario = '0';
@@ -154,14 +131,14 @@ export class MesasCabController {
       DniUsuarioMod: IdUsuario,
       UsuarioMod: Usuario,
     };
-    return this.mesasCabService.Actualizar( uuid , bodyProocolo);
+    return this.servicio.Actualizar( uuid , bodyProocolo);
   }
   // ................................................................
   // ................................................................
   @Delete('anular-by-id/:id')
   @HttpCode(200)
   async Anular( @Param('id') id  : number ) {
-    return this.mesasCabService.AnularbyId( id );
+    return this.servicio.AnularbyId( id );
   }
   // ................................................................
   // ................................................................

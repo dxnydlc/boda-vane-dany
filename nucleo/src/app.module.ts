@@ -24,6 +24,8 @@ import { PublicModule } from './public/public.module';
 import { ProgramaModule } from './programa/programa.module';
 import { HistoriaModule } from './historia/historia.module';
 import { FotosModule } from './fotos/fotos.module';
+import { TareasCabModule } from './tareas_cab/tareas_cab.module';
+import { TareasDetModule } from './tareas_det/tareas_det.module';
 
 
 @Module({
@@ -44,7 +46,7 @@ import { FotosModule } from './fotos/fotos.module';
       entities: [__dirname + '/**/*entity{.ts,.js}'],
       //logging  : true
     }),
-    InvitadosModule, RsvpModule, CompanionsModule, AccessLogModule, UsersModule, EventosModule, AdminLogModule, AuthModule, UtilidadesModule, NoviosModule, BodaModule, UsuariosBodaModule, MesasCabModule, MesasDetModule, PublicModule, ProgramaModule, HistoriaModule, FotosModule
+    InvitadosModule, RsvpModule, CompanionsModule, AccessLogModule, UsersModule, EventosModule, AdminLogModule, AuthModule, UtilidadesModule, NoviosModule, BodaModule, UsuariosBodaModule, MesasCabModule, MesasDetModule, PublicModule, ProgramaModule, HistoriaModule, FotosModule, TareasCabModule, TareasDetModule
   ],
   controllers: [AppController],
   providers: [

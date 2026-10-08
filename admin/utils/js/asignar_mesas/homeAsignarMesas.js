@@ -392,6 +392,10 @@ let optsLangDatatable = {
         });
         /* ------------------------------------------------------------- */
         /* ------------------------------------------------------------- */
+        $("#btnExportarTarjetitas").on( "click", function(e) {
+            e.preventDefault();
+            ejecutarDoc( 'exportar-tarjetitas' );
+        });
         /* ------------------------------------------------------------- */
         /* ------------------------------------------------------------- */
         /* ------------------------------------------------------------- */
@@ -583,6 +587,7 @@ function ejecutarDoc( tipoReq ) {
             case 'rem-invitado'     : objCargando = `#wrapperMesas`; break;
             case 'color-mesa'       : objCargando = `#wrapperMesas`; break;
             case 'exportar-mesa'    : objCargando = `#wrapperMesas`; break;
+            case 'exportar-tarjetitas'    : objCargando = `#wrapperMesas`; break;
         }
 
         mostrarLoader( objCargando );
@@ -706,6 +711,11 @@ function prepararRequest( tipoReq ) {
         break;
         // -------------------------------------------------------------
         // -------------------------------------------------------------
+        case 'exportar-tarjetitas':
+            xUrl            = `${urlMesaCab}exportar-tarjetitas`;
+            xMetodo         = `POST`;
+            data            = { IdBoda : $('#cboBoda').val() };
+        break;
         // -------------------------------------------------------------
         // -------------------------------------------------------------
         // -------------------------------------------------------------
@@ -865,6 +875,9 @@ function handleSuccess( json , textStatus , xhr , tipoReq ) {
             break;
             // -------------------------------------------------------------
             // -------------------------------------------------------------
+            case 'exportar-tarjetitas':
+                toastr["success"]( json.msg.texto , 'Correcto' );
+            break;
             // -------------------------------------------------------------
             // -------------------------------------------------------------
             // -------------------------------------------------------------
@@ -1575,7 +1588,7 @@ function renderMesas() {
 
         $divMesa.html(`
             <div class="mesa-header">
-                <span>${mesa.Nombre}</span>
+                <span>#${mesa.Nombre} | ${mesa.Descripcion}</span>
                 <input type="color" class="color-picker" data-mesa-id="${mesa.id}" value="${colorMesa}" title="Cambiar color">
                 <span>${mesa.invitados.length} invitados</span>
             </div>

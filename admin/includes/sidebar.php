@@ -72,6 +72,11 @@
                                     <span class="menu-title flex-grow-1" >Mesas</span>
                                 </a>
                             </li>
+                            <li class="app-sidebar-menu-item">
+                                <a href="/tareas" class="menu-link d-flex align-items-center">
+                                    <span class="menu-title flex-grow-1" >Tareas</span>
+                                </a>
+                            </li>
                         </ul>
                     </div>
                     <!-- app sidebar menu end -->

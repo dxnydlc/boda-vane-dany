@@ -39,6 +39,9 @@
                         <div class="demo-card-body">
                             
                             <button id="btnExportarMesas" >Exportar Mesas con invitados</button>
+
+                            <button id="btnExportarTarjetitas" >Exportar tarjetitas</button>
+
                             <div id="panelColores" class="mt-2"></div>
 
                         </div>

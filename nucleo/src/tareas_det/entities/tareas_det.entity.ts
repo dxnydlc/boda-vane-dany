@@ -1,28 +1,29 @@
 
 import { Column, Entity, Generated, Index, JoinColumn, ManyToOne, OneToOne, PrimaryGeneratedColumn } from "typeorm"
 
-@Entity({ name: 'tbl_mesas_cab' })
-export class MesasCabModel {
+@Entity({ name: 'tbl_tareas_det' })
+export class TareasDetModel {
 
     @PrimaryGeneratedColumn({ type: 'bigint', unsigned: true })
     id: number = 0;
 
     @Column({ type: 'varchar', length: 50, unique: true })
-    @Generated("uuid")
     uu_id: string = '';
 
-    @Index('idx_invitado_nombre')
-    @Column({ type: 'varchar', length: 150 })
-    Nombre: string = '';
+    // -----------------------------
+    // Relaciones
+    // -----------------------------
 
-    @Column({ type: 'varchar', length: 150 })
-    Descripcion: string = '';
+    @Index('fk_detalle_tarea')
+    @Column({ type: 'bigint', unsigned: true, nullable: true })
+    IdBoda: number = 0;
 
-    @Column({type : 'int'})
-    NroInvitados : number = 0
+    // -----------------------------
+    // Datos del invitado
+    // -----------------------------
 
     @Column({ type: 'varchar', length: 150, nullable: true })
-    Color : string = ''
+    Tarea : string = ''
 
     @Column({
         type: 'enum',
@@ -31,11 +32,11 @@ export class MesasCabModel {
     })
     Estado: string = '';
 
-    // Relaciones
-    // -----------------------------
+    @Column({ type: 'varchar', length: 50, nullable: true })
+    Inicio : string = ''
 
-    @Column({ type: 'bigint', unsigned: true, nullable: true })
-    IdBoda: number = 0;
+    @Column({ type: 'varchar', length: 100, nullable: true })
+    Fin : string = ''
 
     // -----------------------------
     // Auditoría

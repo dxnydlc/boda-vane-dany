@@ -1,41 +1,42 @@
 
-import { Column, Entity, Generated, Index, JoinColumn, ManyToOne, OneToOne, PrimaryGeneratedColumn } from "typeorm"
 
-@Entity({ name: 'tbl_mesas_cab' })
-export class MesasCabModel {
+import { Column, Entity, Generated, Index, JoinColumn, OneToOne, PrimaryGeneratedColumn } from "typeorm"
+
+
+@Entity({ name: 'orq_datos' })
+
+export class TareasCabModel {
 
     @PrimaryGeneratedColumn({ type: 'bigint', unsigned: true })
     id: number = 0;
 
     @Column({ type: 'varchar', length: 50, unique: true })
-    @Generated("uuid")
     uu_id: string = '';
 
-    @Index('idx_invitado_nombre')
-    @Column({ type: 'varchar', length: 150 })
-    Nombre: string = '';
+    // -----------------------------
+    // Relaciones
+    // -----------------------------
 
-    @Column({ type: 'varchar', length: 150 })
-    Descripcion: string = '';
+    @Index('fk_tarea_boda')
+    @Column({ type: 'bigint', unsigned: true, nullable: true })
+    IdBoda: number = 0;
 
-    @Column({type : 'int'})
-    NroInvitados : number = 0
+    // -----------------------------
+    // Datos del invitado
+    // -----------------------------
 
     @Column({ type: 'varchar', length: 150, nullable: true })
-    Color : string = ''
+    Nombre : string = ''
 
     @Column({
         type: 'enum',
-        enum: ['activo', 'anulado', 'pausado', 'no-podra', 'confirmado'],
+        enum: [ 'activo', 'anulado', 'realizado' ],
         default: 'activo',
     })
     Estado: string = '';
 
-    // Relaciones
-    // -----------------------------
-
-    @Column({ type: 'bigint', unsigned: true, nullable: true })
-    IdBoda: number = 0;
+    @Column({ type: 'text', unsigned: true})
+    Descripcion : string = ''
 
     // -----------------------------
     // Auditoría

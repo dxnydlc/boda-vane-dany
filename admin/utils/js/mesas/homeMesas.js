@@ -37,10 +37,10 @@ let arrBodas = [];
 let dataJson = [];
 /* ------------------------------------------------------------- */
 // columnas que se mostrarán en la tabla (1)
-const columnasVisibles  = [ "id" , "Nombre" , "Boda" , "Color" , "Estado" ];
+const columnasVisibles  = [ "id" , "Nombre" , "Descripcion" , "Boda" , "Color" , "Estado" ];
 
 // campos que tendrá el formulario
-const formFields        = [ "Nombre" , "IdBoda" , "Color" , "Estado" ];
+const formFields        = [ "Nombre" , "Descripcion" , "IdBoda" , "Color" , "Estado" ];
 
 // campos hidden
 const hiddenFields      = ["id", "uu_id"];
@@ -1094,7 +1094,7 @@ function renderFormInTab( rowData , formId ) {
                 htmlForm += `
                 <div class="col-md-6">
                     <label class="form-label" >Nombre:</label>
-                    <input type="text" class="form-control" name="${field}" value="${rowData[field] ? rowData[field] : defaultValues[field]}" placeholder="-" />
+                    <input type="text" class="form-control" name="${field}" name="${field}" value="${rowData[field] ? rowData[field] : defaultValues[field]}" placeholder="-" />
                 </div>
                 `;
             break;
@@ -1103,7 +1103,7 @@ function renderFormInTab( rowData , formId ) {
                 htmlForm += `
                 <div class=" col-md-2 ">
                     <label class="form-label" >Color:</label>
-                    <input type="color" class="form-control" name="${field}" value="${rowData[field] ? rowData[field] : defaultValues[field]}" />
+                    <input type="color" class="form-control" name="${field}" name="${field}" value="${rowData[field] ? rowData[field] : defaultValues[field]}" />
                 </div>
                 `;
             break;
@@ -1131,16 +1131,16 @@ function renderFormInTab( rowData , formId ) {
                 htmlForm += `
                 <div class=" col-md-6 ">
                     <label class="form-label" >Link mapa:</label>
-                    <input type="text" class="form-control" name="${field}" value="${rowData[field] || defaultValues[field] || ""}" />
+                    <input type="text" class="form-control" name="${field}" name="${field}" value="${rowData[field] || defaultValues[field] || ""}" />
                 </div>
                 `;
             break;
             // -----------------------------------------
-            case 'Direccion':
+            case 'Descripcion':
                 htmlForm += `
                 <div class=" col-md-6 ">
-                    <label class="form-label" >Dirección:</label>
-                    <input type="text" class="form-control" name="${field}" value="${rowData[field] ? rowData[field] : defaultValues[field]}" />
+                    <label class="form-label" >Descripcion:</label>
+                    <input type="text" class="form-control" name="${field}" name="${field}" value="${rowData[field] ? rowData[field] : defaultValues[field]}" />
                 </div>
                 `;
             break;

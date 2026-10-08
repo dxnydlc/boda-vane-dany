@@ -185,6 +185,12 @@ switch ( $ruta_base ) {
         $content                = 'pages/fotos/homeFotos.php';
         $archivoJS              = "<script src='/utils/js/fotos/homeFotos.js?v=$semilla'></script>";
     break;
+    case 'tareas':
+        $title                  = 'Fotos';
+        $content                = 'pages/fotos/homeFotos.php';
+        $archivoJS              = "<script src='/utils/js/fotos/homeFotos.js?v=$semilla'></script>";
+    break;
+    # ---------------------------
     default:
         http_response_code( 404 );
         $title                  = 'Página No Encontrada';

@@ -26,6 +26,16 @@ import { MesasDetService } from 'src/mesas_det/mesas_det.service';
 require('colors');
 
 
+
+import sharp from 'sharp';
+
+
+export interface InvitadoData {
+  id: string | number;
+  invitado: string;
+  mesa: number;
+}
+
 export interface Invitado {
   id: number;
   Nombre: string;
@@ -64,6 +74,20 @@ export class MesasCabService {
   ){}
   // ...................................................................
   // ...................................................................
+  // Variables de control
+  private readonly config = {
+    tamanoTextoNombre : 130,
+    tamanoTextoMesa   : 110,
+    
+    // Coordenadas Y (El eje X se centrará automáticamente al 50%)
+    coordYNombre      : 850, 
+    coordYMesa        : 1300,   
+    
+    colorTexto: '#4a5e4b',
+    
+    // Nombre de la fuente instalada en el sistema
+    fuenteCursiva: 'Great Vibes, cursive', 
+  };
   // ...................................................................
   // ...................................................................
   // ...................................................................
@@ -197,6 +221,7 @@ export class MesasCabService {
         "c.NroInvitados as NroInvitados" , 
         "c.IdBoda as IdBoda" ,
         "b.Nombre as Boda" , 
+        "c.Descripcion as Descripcion" , 
         "c.Color as Color" , 
         "c.Estado as Estado" , 
         "DATE_FORMAT( c.created_at , '%Y-%m-%d %H:%i:%s') as created_at" , 
@@ -278,6 +303,7 @@ export class MesasCabService {
 
       if( data1!.Estado != 'activo' )throw new HttpException( 'Documento no disponible', HttpStatus.CONFLICT);
 
+      delete dto.id;
       await this.datosModel.update({ uu_id : uuID } , dto );
       let dataP = await this.datosModel.findOne({
         where : {
@@ -373,7 +399,8 @@ export class MesasCabService {
             Nombre  :  rsD.Nombre , 
             Tipo    : rsD.Tipo , 
             Foto    : rsD.Foto , 
-            Estado  : rsD.Estado
+            Estado  : rsD.Estado , 
+            
           };
           invitados.push( i );
         }
@@ -381,7 +408,8 @@ export class MesasCabService {
           id : rs.id , 
           Nombre : rs.Nombre , 
           color : rs.Color , 
-          invitados : invitados 
+          invitados : invitados , 
+          Descripcion : rs.Descripcion 
         };
         mesas.push( m );
       }
@@ -644,25 +672,126 @@ export class MesasCabService {
   // ...................................................................
   // ...................................................................
   // ...................................................................
-  // ...................................................................
-  // ...................................................................
-  // ...................................................................
-  // ...................................................................
-  // ...................................................................
-  // ...................................................................
-  // ...................................................................
-  // ...................................................................
-  // ...................................................................
-  // ...................................................................
-  // ...................................................................
-  // ...................................................................
-  // ...................................................................
-  // ...................................................................
-  async maxId()
-  {
-    let MaxId = await this.datosModel.createQueryBuilder('areas').select("MAX(areas.CodArea)", "max").getRawOne();
-    return MaxId.max + 1;
+  // generar imagen mesa mini
+  async generarImagenesPeques( IdBoda : number = 0 ) {
+    
+
+    try {
+      
+      let invitados = await this.datosModel.createQueryBuilder('c')
+      .select([
+        "d.IdInvitado as id" , 
+        "c.Nombre as mesa", 
+        "i.Nombre as invitado" , 
+      ])
+      .innerJoin( "tbl_mesas_det" , "d" , " d.IdMesa = c.id " )
+      .innerJoin( "tbl_invitados" , "i" , " i.id = d.IdInvitado " )
+      .where(" c.IdBoda = :IdBoda " , { IdBoda } )
+      .getRawMany();
+  
+      varDump(`>>> generar tarjetitas ${invitados.length}`);
+      await this.generarImagenesConSharp( invitados );
+
+      return {
+        data : {} , 
+        version : '1' , 
+        msg : { titulo : 'Correcto' , texto : 'Tarjetitas generadas' , clase : 'success' , call : 'tostada2' }
+      }
+
+    } catch (error) {
+
+      // Para depuración local
+      varDump(error); 
+
+      // SI EL ERROR YA ES DE NESTJS (ej. BadRequestException), LO RELANZAMOS DIRECTO
+      if (error instanceof HttpException) {
+        throw error;
+      }
+
+      // SI ES UN ERROR INESPERADO (ej. caída de BD, error de sintaxis), ENVIAMOS UN 500
+      throw new InternalServerErrorException({
+        message: 'Error en el servicio de Mesas Cab',
+        cause: error // Mantiene el rastro del error original en logs internos
+      });
+
+    }
+
   }
+  // ...................................................................
+  // ...................................................................
+  async generarImagenesConSharp( invitados: InvitadoData[]): Promise<string[]> {
+    const rutaPlantilla         = path.join(process.cwd(), 'public/img', 'plantilla-tarjetita.jpeg' );
+    const directorioSalida      = path.join(process.cwd(), 'public', 'tarjetas_generadas');
+    const rutasGeneradas: string[] = [];
+
+    if (!fs.existsSync(directorioSalida)) {
+      fs.mkdirSync(directorioSalida, { recursive: true });
+    }
+
+    // Obtener dimensiones reales de la plantilla para el tamaño del SVG
+    const metadata = await sharp(rutaPlantilla).metadata();
+    const width = metadata.width || 1200;
+    const height = metadata.height || 800;
+
+    for (const dato of invitados) {
+      varDump(`||| Generando imagen de invitado ${dato.invitado} de ${invitados.length}`);
+      // Crear el texto como una imagen vectorial (SVG)
+      // text-anchor: middle y x="50%" centran el texto automáticamente
+      const svgText = `
+        <svg width="${width}" height="${height}">
+          <style>
+            .nombre { 
+              fill: ${this.config.colorTexto}; 
+              font-size: ${this.config.tamanoTextoNombre}px; 
+              font-family: ${this.config.fuenteCursiva};
+              text-anchor: middle; 
+            }
+            .mesa { 
+              fill: ${this.config.colorTexto}; 
+              font-size: ${this.config.tamanoTextoMesa}px; 
+              font-family: Arial, serif;
+              text-anchor: middle; 
+            }
+          </style>
+          <text x="50%" y="${this.config.coordYNombre}" class="nombre">${dato.invitado}</text>
+          <text x="50%" y="${this.config.coordYMesa}" class="mesa">${dato.mesa}</text>
+        </svg>
+      `;
+
+      const nombreArchivo = `${dato.id}.png`;
+      const rutaGuardado = path.join(directorioSalida, nombreArchivo);
+
+      // Superponer el SVG generado sobre la imagen base y guardarla
+      await sharp(rutaPlantilla)
+        .composite([
+          {
+            input: Buffer.from(svgText),
+            top: 0,
+            left: 0,
+          },
+        ])
+        .png() // Exportar el resultado final como PNG
+        .toFile(rutaGuardado);
+
+      rutasGeneradas.push(rutaGuardado);
+    }
+
+    return rutasGeneradas;
+  }
+  // ...................................................................
+  // ...................................................................
+  // ...................................................................
+  // ...................................................................
+  // ...................................................................
+  // ...................................................................
+  // ...................................................................
+  // ...................................................................
+  // ...................................................................
+  // ...................................................................
+  // ...................................................................
+  // ...................................................................
+  // ...................................................................
+  // ...................................................................
   // ...................................................................
   // ...................................................................
   // ...................................................................
