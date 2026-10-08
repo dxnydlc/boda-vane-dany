@@ -5,6 +5,7 @@
 /public/uploads/*
 /public/exports/*
 /public/tarjetas_generadas/*
+/public/pdfs/*
 
 # Logs
 logs

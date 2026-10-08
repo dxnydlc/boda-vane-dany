@@ -766,7 +766,21 @@ export class MesasCabService {
         </svg>
       `;
 
-      const nombreArchivo = `${dato.id}.png`;
+      const nombreArchivo = `${dato.id}.jpg`;
+      const rutaGuardado = path.join(directorioSalida, nombreArchivo);
+
+      await sharp(rutaPlantilla)
+        .composite([
+          {
+            input: Buffer.from(svgText),
+            top: 0,
+            left: 0,
+          },
+        ])
+        // Exportar a JPEG acelerará enormemente la creación del PDF
+        .jpeg({ quality: 95 }) 
+        .toFile(rutaGuardado);
+      /*const nombreArchivo = `${dato.id}.png`;
       const rutaGuardado = path.join(directorioSalida, nombreArchivo);
 
       // Superponer el SVG generado sobre la imagen base y guardarla
@@ -779,7 +793,7 @@ export class MesasCabService {
           },
         ])
         .png() // Exportar el resultado final como PNG
-        .toFile(rutaGuardado);
+        .toFile(rutaGuardado);*/
 
       rutasGeneradas.push(rutaGuardado);
     }
@@ -829,7 +843,11 @@ export class MesasCabService {
       const tarjetasPorPagina = columnas * filasPorPagina;
 
       invitados.forEach((dato, index) => {
-        const rutaImagen = path.join(process.cwd(), 'public', 'tarjetas_generadas', `${dato.id}.png`);
+        // CAMBIA ESTO:
+        // const rutaImagen = path.join(process.cwd(), 'public', 'tarjetas_generadas', `${dato.id}.png`);
+
+        // POR ESTO:
+        const rutaImagen = path.join(process.cwd(), 'public', 'tarjetas_generadas', `${dato.id}.jpg`);
         
         // Validación de seguridad por si una imagen no se generó
         if (!fs.existsSync(rutaImagen)) {
