@@ -942,7 +942,8 @@ function handleSuccess( json , textStatus , xhr , tipoReq ) {
                 /**/
 
                 // Boda : 
-                fechaBoda               = moment(dataBoda.Fecha).format('YYYY-MM-DD');
+                let mFecha              = moment(dataBoda.Fecha ).format('YYYY-MM-DD');
+                fechaBoda               = moment(mFecha+' '+dataBoda.Hora ).format('YYYY-MM-DD HH:mm');
                 $('#lblFecha1').html(`${moment(dataBoda.Fecha).format('DD.MM.YYYY')}`);
 
                 $('#txtFecha2').html(`${fechaRecep}`);
